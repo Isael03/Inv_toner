@@ -15,12 +15,9 @@
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
   <!-- Page level plugin CSS-->
-  <!-- <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet"> -->
   <link rel="stylesheet" href="vendor/datatables/datatables.min.css">
 
   <!--<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"> -->
-
-  <!-- <link rel="stylesheet" href="vendor/datatables/datatables.min.css"> -->
 
   <!-- Custom styles for this template-->
   <link href="resources/css/sb-admin.css" rel="stylesheet">
@@ -66,7 +63,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="./views/historial.php">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Historial</span>
         </a>
@@ -118,13 +115,13 @@
         </div>
 
         <ul class="nav nav-tabs mt-5 mb-3" id="myTab" role="tablist">
-          <li class="nav-item">
+          <li class="nav-item" id="tabAll">
             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Todos</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" id="tabINF">
             <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Informática</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" id="tabMO">
             <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Manuel Orella</a>
           </li>
         </ul>
@@ -150,7 +147,7 @@
                     <th>Tipo</th>
                     <th>Cantidad</th>
                     <th>Impresora</th>
-                    <!--   <th>Bodega</th> -->
+
                   </tr>
                 </thead>
                 <tfoot>
@@ -160,7 +157,6 @@
                     <th>Tipo</th>
                     <th>Cantidad</th>
                     <th>Impresora</th>
-                    <!--  <th>Bodega</th> -->
                   </tr>
                 </tfoot>
                 <tbody>
@@ -291,6 +287,7 @@
   include "./components/modalDelete.php";
   include "./components/modalWithdraw.php";
   include "./components/modalUpdate.php";
+  include "./components/modalTransfer.php";
   ?>
 
   <!-- Bootstrap core JavaScript-->
@@ -306,13 +303,12 @@
   <!-- Page level plugin JavaScript-->
   <script src="vendor/datatables/jquery.dataTables.js"></script>
   <script src="vendor/datatables/datatables.min.js"></script>
-  <!-- <script src="vendor/datatables/datatables.min.js"></script> -->
 
   <!-- Custom scripts for all pages-->
   <script src="resources/js/sb-admin.min.js"></script>
 
   <!-- Demo scripts for this page-->
-  <!-- <script src="js/demo/datatables-demo.js"></script> -->
+
   <script src="resources/js/datatableES.js"></script>
   <script src="resources/js/main.js"></script>
   <script src="resources/js/index-datatable.js"></script>

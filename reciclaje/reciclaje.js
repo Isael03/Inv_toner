@@ -218,3 +218,23 @@ var getDataWithdraw = function(tbody, table) {
 /* document.getElementById("btnWithdraw").addEventListener("click", () => {
     getDataWithdraw(tableINF);
   }); */
+
+switch (data.Id_bodega) {
+  case "1":
+    bodega.value = "Bodega 1";
+    break;
+  case "2":
+    bodega.value = "Bodega 2";
+    break;
+  case "3":
+    bodega.value = "Informatica";
+    break;
+
+  default:
+    bodega.value = "No hay datos";
+    break;
+}
+table
+  .row(".selected")
+  .remove()
+  .draw(false);

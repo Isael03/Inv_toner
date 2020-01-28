@@ -22,7 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tipo = $_POST['tipo'];
     $cantidad = (int) $_POST['cantidad'];
     $impresora = strtoupper($_POST['impresora']);
+    $bodega = $_POST['bodega'];
 
 
-    $retiro->insertWithdraw($cantidad, $usuarioRetira, $usuarioRecibe, $departamento, $marca, $modelo, $tipo, $impresora);
+    $retiro->insertWithdrawINF_MO($cantidad, $usuarioRetira, $usuarioRecibe, $departamento, $marca, $modelo, $tipo, $impresora, $bodega);
 }

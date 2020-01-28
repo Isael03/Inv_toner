@@ -49,21 +49,10 @@
                          </div>
                          <div class="col-md-6 col-sm-12">
                              <div class="form-group">
-                                 <label for="mCodigo" class="col-form-label">Código</label>
-                                 <input type="text" class="form-control" id="mCodigo" readonly placeholder="Código de barra">
+                                 <label for="mCantidad" class="col-form-label">Cantidad</label>
+                                 <input type="number" class="form-control" id="mCantidad" placeholder="Cantidad a retirar" min="1">
                              </div>
                          </div>
-                     </div>
-
-                     <div class="form-group">
-                         <label for="mBodega" class="col-form-label">Bodega</label>
-                         <input type="text" class="form-control" id="mBodega" readonly>
-
-                         <!--  <option value="" selected>Seleccione...</option>
-                             <option value="1">Bodega 1</option>
-                             <option value="2">Bodega 2</option>
-                             <option value="3">Informática</option> -->
-
                      </div>
                  </form>
              </div>

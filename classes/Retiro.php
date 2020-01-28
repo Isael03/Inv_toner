@@ -1,7 +1,5 @@
 <?php
 
-
-
 class Retiro
 {
 
@@ -16,7 +14,7 @@ class Retiro
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT DATE_FORMAT(Fecha, '%d-%m-%Y') AS Fecha, Usuario_retira as Retira, Usuario_entrega AS Entrega, Departamento, Marca, Modelo, Tipo, Codigo_barra AS Codigo, Bodega FROM Retiro ORDER BY Fecha DESC";
+        $sql = "SELECT DATE_FORMAT(Fecha, '%d/%m/%Y %H:%i:%s') AS Fecha, Usuario_retira as Retira, Usuario_recibe AS Recibe, Departamento, Marca, Modelo, Tipo, Cantidad, Impresora FROM Retiro ORDER BY Fecha DESC";
         $result =  $conn->query($sql);
 
         if ($result->num_rows > 0) {
@@ -25,32 +23,39 @@ class Retiro
             }
             echo json_encode($arreglo);
         } else {
-            /* $arreglo["data"][]=["Fecha"=>"", "Retira"=>"", "Entrega"=>"","Marca"=>"","Modelo"=>"","Tipo"=>"", "Codigo"=>"", "Lugar"=>""]; */
-            die("Error");
+            $arreglo["data"][] = ["Fecha" => "", "Retira" => "", "Recibe" => "", "Departamento" => "", "Marca" => "", "Modelo" => "", "Tipo" => "", "Cantidad" => "", "Impresora" => ""];
+            // die("Error");
         }
 
-        /* $result = mysqli_query($conn, $sql);
-        if(!$result){
-            die("Error");
-        }else{
-            while($data = mysqli_fetch_assoc($result)){
-                $arreglo["data"][]=array_map("utf8_encode", $data);  
-            }
-            echo json_encode($arreglo);
-        }      
-        mysqli_close($result); */
         mysqli_free_result($result);
         $conn->close();
     }
 
-    public function insertWithdraw(string $usuarioRetira, string $usuarioRecibe, string $departamento, string $marca, string $modelo, string $tipo, string $codigoBarra, string $bodega, int $id)
+    public function insertWithdraw(int $cantidad, string $usuarioRetira, string $usuarioRecibe, string $departamento,  string $marca, string $modelo, string $tipo, string $impresora)
     {
         $conn = $this->conn->connect();
 
-        $sql = "INSERT INTO Retiro (Usuario_retira, Usuario_entrega, Departamento, Marca, Modelo, Tipo, Codigo_barra, Bodega) VALUES ('$usuarioRetira','$usuarioRecibe','$departamento','$marca','$modelo', '$tipo','$codigoBarra','$bodega')";
+        $sql = "INSERT INTO Retiro (Usuario_retira, Usuario_recibe, Departamento, Marca, Modelo, Tipo, Cantidad, Impresora) VALUES ('$usuarioRetira','$usuarioRecibe','$departamento','$marca','$modelo', '$tipo', '$cantidad', '$impresora')";
+
 
         if ($conn->query($sql)) {
-            $this->consumible->delete($id);
+            $this->consumible->deleteCon($cantidad, $modelo, $marca, $tipo);
+        } else {
+            $arreglo = array('status' => 'bad');
+            echo json_encode($arreglo);
+            //echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+        $conn->close();
+    }
+
+    public function insertWithdrawINF_MO(int $cantidad, string $usuarioRetira, string $usuarioRecibe, string $departamento,  string $marca, string $modelo, string $tipo, string $impresora, string $bodega)
+    {
+        $conn = $this->conn->connect();
+
+        $sql = "INSERT INTO Retiro (Usuario_retira, Usuario_recibe, Departamento, Marca, Modelo, Tipo, Cantidad, Impresora) VALUES ('$usuarioRetira','$usuarioRecibe','$departamento','$marca','$modelo', '$tipo', '$cantidad', '$impresora')";
+
+        if ($conn->query($sql)) {
+            $this->consumible->deleteConsumables($cantidad, $marca, $tipo, $modelo, $bodega);
         } else {
             $arreglo = array('status' => 'bad');
             echo json_encode($arreglo);

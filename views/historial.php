@@ -1,126 +1,183 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <meta name="description" content="Inventario de tóner de Informática" />
-    <meta name="author" content="" />
 
-    <title>Historial de retiros</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-    <!-- Bootstrap core CSS -->
-    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+  <title>Inicio</title>
 
-    <!-- FontAwesome -->
-    <link href="../vendor/font-awesome/fontawesome.min.css" rel="stylesheet" />
+  <!-- Custom fonts for this template-->
+  <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
-    <!-- Datatable -->
-    <link rel="stylesheet" type="text/css" href="../vendor/datatable/css/datatables.min.css" />
+  <!-- Page level plugin CSS-->
+  <link rel="stylesheet" href="../vendor/datatables/datatables.min.css">
 
+  <!-- <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"> -->
 
-    <!-- Custom styles -->
-    <link href="../resources/styles/simple-sidebar.css" rel="stylesheet" />
-    <link href="../resources/styles/main.css" rel="stylesheet" />
+  <!-- Custom styles for this template-->
+  <link href="../resources/css/sb-admin.css" rel="stylesheet">
+
+  <!-- toastr -->
+  <link rel="../stylesheet" href="vendor/toastr/toastr.min.css">
+
 </head>
 
-<body>
-    <div class="d-flex" id="wrapper">
-        <!-- /#sidebar-wrapper -->
-        <div class="bg-dark border-right" id="sidebar-wrapper">
-            <div class="sidebar-heading text-center pb-3 bg-dark  font-weight-bold"><a href="../index.php" class="text-decoration-none text-white">
-                    Inventario</a></div>
-            <div class="list-group list-group-flush ">
-                <a href="../index.php" class="list-group-item list-group-item-action bg-dark text-white">Inventario</a>
-                <a href="./nuevo.php" class="list-group-item list-group-item-action bg-dark text-white">Añadir
-                </a>
-                <a href="./retiro.php" class="list-group-item list-group-item-action bg-dark text-white">Retirar
-                </a>
-                <a href="./historial.php" class="list-group-item list-group-item-action bg-dark text-white">Historial de
-                    retiros</a>
-            </div>
+<body id="page-top">
+
+  <nav class="navbar navbar-expand navbar-dark bg-dark static-top shadow-sm">
+
+    <a class="navbar-brand mr-1" href="index.html">Inventario</a>
+
+    <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Navbar -->
+    <ul class="nav navbar-nav d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+      <li class="nav-item">
+        <a class="btn nav-link menu-btn" href="views/login.php"><i class="fas fa-sign-out-alt text-white"></i></a>
+      </li>
+    </ul>
+
+  </nav>
+
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="sidebar navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="../">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Inicio</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="index.html">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Retiro</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="./historial.php">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Historial</span>
+        </a>
+      </li>
+    </ul>
+
+    <div id="content-wrapper">
+
+      <div class="container-fluid">
+
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb mb-5">
+          <li class="breadcrumb-item">
+            <a href="#" class="text-decoration-none text-dark">Historial</a>
+          </li>
+        </ol>
+
+        <div class="table-responsive">
+          <table class="table table-bordered" id="tableHist" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Entrega</th>
+                <th>Recibe</th>
+                <th>Departamento</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+                <th>Impresora</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Fecha</th>
+                <th>Entrega</th>
+                <th>Recibe</th>
+                <th>Departamento</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+                <th>Impresora</th>
+              </tr>
+            </tfoot>
+            <tbody>
+            </tbody>
+          </table>
+
+
         </div>
+        <!-- /.container-fluid -->
 
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-            <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg  border-bottom shadow-sm">
-                <button class="btn" id="menu-toggle">
-                    <span class="fas fa-angle-left fa-lg" id="icon-sidebar"></span>
-                </button>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="fas fa-bars text-white"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-                        <li class="nav-item active">
-                            <a class="btn nav-link menu-btn" href="./login.php"><span class="fas fa-sign-out-alt "></span></a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-
-            <div class="container-fluid bg-light">
-                <section>
-                    <h1 class="pt-3 mb-5">Historial de Retiros</h1>
-
-                    <table id="tableHistorial" class=" table table-striped table-bordered display responsive nowrap " style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Retira</th>
-                                <th>Entrega</th>
-                                <th>Departamento</th>
-                                <th>Marca</th>
-                                <th>Modelo</th>
-                                <th>Tipo</th>
-                                <th>Código</th>
-                                <th>Bodega</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!--Content table  -->
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Retira</th>
-                                <th>Entrega</th>
-                                <th>Departamento</th>
-                                <th>Marca</th>
-                                <th>Modelo</th>
-                                <th>Tipo</th>
-                                <th>Código</th>
-                                <th>Bodega</th>
-                            </tr>
-                        </tfoot>
-                    </table>
-
-                </section>
+        <!-- Sticky Footer -->
+        <footer class="sticky-footer">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <!-- <span>Copyright © Your Website 2019</span> -->
             </div>
-            <!-- /#page-content-wrapper -->
-        </div>
+          </div>
+        </footer>
+
+      </div>
+      <!-- /.content-wrapper -->
+
     </div>
     <!-- /#wrapper -->
 
-    <!-- Bootstrap core JavaScript -->
-    <script src="../vendor/jquery-v3.4.1.js"></script>
-    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
 
-    <!-- Fontawesome -->
-    <script src="../vendor/font-awesome/font-awesome-all.js"></script>
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="login.html">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <!-- Own -->
-    <script src="../resources/scripts/sidebar-views.js"></script>
 
 
-    <!-- Datatable -->
-    <script src="../vendor/datatable/js/datatables.min.js"></script>
-    <script src="../resources/scripts/datatableES.js"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <script src="../resources/scripts/main.js"></script>
-    <script src="../resources/scripts/historial.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Toastr -->
+    <script src="../vendor/toastr/toastr.min.js"></script>
+
+    <!-- Page level plugin JavaScript-->
+
+    <script src="../vendor/datatables/jquery.dataTables.js"></script>
+    <script src="../vendor/datatables/datatables.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="../resources/js/sb-admin.min.js"></script>
+
+    <!-- OWN-->
+    <script src="../resources/js/datatableES.js"></script>
+    <script src="../resources/js/historial.js"></script>
+
+    <script src="../resources/js/main.js"></script>
+
 
 </body>
 
