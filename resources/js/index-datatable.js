@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const tableMO = listMO();
   const tableAll = listALL();
   amountHeld();
+  autocompletar();
 
   /*------------------------- Botones de modals ----------------------------*/
 
@@ -28,7 +29,6 @@ document.addEventListener("DOMContentLoaded", function() {
     if (tableINF.row(".selected").length > 0) {
       confirmWithdrawINF_MO(tableINF);
     }
-    
   });
 
   document.querySelector("#btnModalTransfer").addEventListener("click", () => {
@@ -53,7 +53,6 @@ document.addEventListener("DOMContentLoaded", function() {
     tableAll.rows().deselect();
     tableINF.rows().deselect();
   });
- 
 });
 
 /* Acción modificar */
@@ -230,9 +229,9 @@ function getDataWithdraw(table) {
 /* Pasar datos a los input del modal */
 function setModalWithdraw(table) {
   var data = table.row(".selected").data();
-  console.log(data);
 
   document.querySelector("#submitter").value = "Falta";
+  document.querySelector("#receivedBy").value = "";
   document.querySelector("#mMarca").value = data.Marca;
   document.querySelector("#mModelo").value = data.Modelo;
   document.querySelector("#mTipo").value = data.Tipo;
@@ -243,6 +242,7 @@ function setModalWithdraw(table) {
 function confirmWithdraw(table) {
   var data = table.row(".selected").data();
   let receivedBy = document.querySelector("#receivedBy");
+
   let cantidad = document.querySelector("#mCantidad").value.trim();
 
   if (receivedBy.value.trim() === "" || parseInt(data.Cantidad) < cantidad) {
@@ -290,7 +290,10 @@ function confirmWithdraw(table) {
           table.ajax.reload();
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        alertError();
+        console.log(err);
+      });
   }
 }
 
@@ -322,17 +325,20 @@ function transfer(table) {
 
     /* Titulo del modal transferir a .... */
     data.Lugar === "Manuel Orella"
-      ? (document.querySelector("#titleTransfer").innerHTML = " Informática")
-      : " Manuel Orella";
+      ? (document.querySelector("#titleTransfer").innerHTML = "Informática")
+      : (document.querySelector("#titleTransfer").innerHTML = "Manuel Orella");
 
     jQuery.noConflict();
     jQuery("#modalTransfer");
     $("#modalTransfer").modal("show");
+
+    document.querySelector("#amountTtoINF").value = 1;
   } else {
     customAlertError("Seleccione un elemento");
   }
 }
 
+/* Boton confirmar del  modal transferir del modal */
 function confirmTransfer(table, table2) {
   let cantidad = document.querySelector("#amountTtoINF").value;
   if (cantidad != "") {
@@ -350,8 +356,6 @@ function confirmTransfer(table, table2) {
       if (data.Lugar === "Informatica") {
         destino = "Manuel Orella";
       }
-
-      console.log(destino);
 
       formData.append("cantidad", cantidad);
       formData.append("marca", data.Marca);
@@ -389,7 +393,6 @@ function confirmTransfer(table, table2) {
     alertErrorFormEmpty();
   }
 }
-
 
 /* -------------------------------------------------------------------------------------------------- */
 /* Confirmar retiro */
@@ -442,14 +445,11 @@ function confirmWithdrawINF_MO(table) {
           table.ajax.reload();
         } else {
           alertError();
-        
         }
       })
       .catch(err => console.log(err));
   }
 }
-
-
 
 /* Datatable Todos */
 function listALL() {

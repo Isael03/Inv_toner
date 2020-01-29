@@ -166,8 +166,6 @@ class Consumible
 
                 if ($cantidad <=  $arreglo['Cantidad'] && $arreglo['Cantidad'] != 0) {
                     self::deleteConsumables($cantidad, $marca, $tipo, $modelo, 'Informatica');
-                    $status = array("status" => "ok");
-                    echo json_encode($status);
                 }
                 /* Si la cantidad a eliminar es menor a la que existe en informatica */
                 if ($cantidad > $arreglo['Cantidad']) {

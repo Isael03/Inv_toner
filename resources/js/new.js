@@ -35,7 +35,6 @@ async function sendData() {
   let impresora = document.getElementById("inputModeloImpresora").value.trim();
 
   modelo = modelo.toUpperCase().replace(/ /g, "-");
-  console.log(modelo);
 
   const data = new FormData();
 

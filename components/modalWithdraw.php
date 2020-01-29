@@ -20,7 +20,10 @@
                          <div class="col-md-6 col-sm-12">
                              <div class="form-group">
                                  <label for="receivedBy" class="col-form-label">Recibido por:</label>
-                                 <input type="text" class="form-control is-invalid" id="receivedBy" placeholder="Quién recibe" required>
+                                 <div class="autocomplete">
+                                     <input type="text" class="form-control is-invalid" id="receivedBy" name="receivedBy" placeholder="Quién recibe" required>
+                                 </div>
+
                              </div>
                          </div>
                      </div>

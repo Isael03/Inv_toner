@@ -14,15 +14,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cantidad = (int) $_POST['cantidad'];
     $marca = strtoupper($_POST['marca']);
     $modelo = strtoupper($_POST['modelo']);
-    $tipo = ucwords(strtolower($_POST['tipo']));
+    //$tipo = ucwords(strtolower($_POST['tipo']));
+    $tipo = $_POST['tipo'];
     $bodega = (int) $_POST['bodega'];
     $impresora = strtoupper($_POST['impresora']);
 
     header('Content-Type: application/json');
-
-    /* $arreglo = array("cantidad" => $_POST['cantidad'], "marca" => $marca);
-
-    echo json_encode($arreglo); */
 
     $consumible->addPrinterConsumables($cantidad, $marca, $tipo, $modelo, $bodega, $impresora);
 }

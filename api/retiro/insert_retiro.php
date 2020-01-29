@@ -13,12 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $retiro->consumible = $consumible;
 
     $marca = strtoupper($_POST['marca']);
-    $usuarioRetira = strtoupper($_POST['usuarioRetira']);
-    $usuarioRecibe = strtoupper($_POST['usuarioRecibe']);
-    //$departamento = strtoupper($_POST['departamento']);
+    $usuarioRetira = $_POST['usuarioRetira'];
+    $usuarioRecibe = $_POST['usuarioRecibe'];
     $departamento = strtoupper("Todavia falta");
     $modelo = strtoupper($_POST['modelo']);
-    //$tipo = ucfirst(strtolower($_POST['tipo']));
     $tipo = $_POST['tipo'];
     $cantidad = (int) $_POST['cantidad'];
     $impresora = strtoupper($_POST['impresora']);

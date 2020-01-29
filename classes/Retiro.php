@@ -48,11 +48,12 @@ class Retiro
         $conn->close();
     }
 
-    public function insertWithdrawINF_MO(int $cantidad, string $usuarioRetira, string $usuarioRecibe, string $departamento,  string $marca, string $modelo, string $tipo, string $impresora, string $bodega)
+    public function insertWithdrawINF_MO(int $cantidad, string $usuarioRetira, string $usuarioRecibe, string $marca, string $modelo, string $tipo, string $impresora, string $bodega)
     {
         $conn = $this->conn->connect();
 
-        $sql = "INSERT INTO Retiro (Usuario_retira, Usuario_recibe, Departamento, Marca, Modelo, Tipo, Cantidad, Impresora) VALUES ('$usuarioRetira','$usuarioRecibe','$departamento','$marca','$modelo', '$tipo', '$cantidad', '$impresora')";
+
+        $sql = "INSERT INTO Retiro (Usuario_retira, Usuario_recibe, Departamento, Marca, Modelo, Tipo, Cantidad, Impresora) VALUES ('$usuarioRetira','$usuarioRecibe','','$marca','$modelo', '$tipo', '$cantidad', '$impresora')";
 
         if ($conn->query($sql)) {
             $this->consumible->deleteConsumables($cantidad, $marca, $tipo, $modelo, $bodega);

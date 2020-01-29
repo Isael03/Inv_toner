@@ -24,6 +24,7 @@
 
   <!-- toastr -->
   <link rel="stylesheet" href="vendor/toastr/toastr.min.css">
+  <link rel="stylesheet" href="resources/css/main.css">
 
 </head>
 
