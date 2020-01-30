@@ -5,6 +5,12 @@ function alertSuccess() {
     timeOut: "3500"
   });
 }
+function alertWarning(mensaje) {
+  toastr.warning(mensaje, "Advertencia", {
+    positionClass: "toast-bottom-right",
+    timeOut: "3500"
+  });
+}
 
 /**Funcion para llamar al toast de error  */
 function alertError() {

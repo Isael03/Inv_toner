@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
 
@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Inicio</title>
+  <title>Historial</title>
 
   <!-- Custom fonts for this template-->
   <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -17,13 +17,14 @@
   <!-- Page level plugin CSS-->
   <link rel="stylesheet" href="../vendor/datatables/datatables.min.css">
 
-  <!-- <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"> -->
+
 
   <!-- Custom styles for this template-->
   <link href="../resources/css/sb-admin.css" rel="stylesheet">
 
   <!-- toastr -->
-  <link rel="../stylesheet" href="vendor/toastr/toastr.min.css">
+  <link rel="stylesheet" href="../vendor/toastr/toastr.min.css">
+
 
 </head>
 
@@ -57,14 +58,8 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="index.html">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Retiro</span>
-        </a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link" href="./historial.php">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <i class="fas fa-history"></i>
           <span>Historial</span>
         </a>
       </li>
@@ -81,6 +76,64 @@
           </li>
         </ol>
 
+        <div class="row">
+          <div class="col-md-4 col-xs-12">
+            <!-- Select para seleccionar filtro -->
+            <div class="form-group">
+              <label>Filtrar por:</label>
+              <select class="custom-select my-1 mr-sm-2 col-md-8 col-xs-4 form-control" id="filter">
+                <option value="" selected>Seleccione...</option>
+                <option value="mes">Mes</option>
+                <option value="rango">Rango de fechas</option>
+              </select>
+            </div>
+          </div>
+
+
+          <div class="col-md-6 col-xs-12">
+            <!-- Formulario para el mes-->
+
+            <form class="form-inline mb-5 collapse" id="formMesHistorial">
+              <div class="form-group">
+                <label for="mes" class="my-1 mr-2">Mes</label>
+                <select class="custom-select my-1 mr-sm-2" id="mes">
+                  <option value="" selected>Seleccione el mes...</option>
+                  <option value="01">Enero</option>
+                  <option value="02">Febrero</option>
+                  <option value="03">Marzo</option>
+                  <option value="04">Abril</option>
+                  <option value="05">Mayo</option>
+                  <option value="06">Junio</option>
+                  <option value="07">Julio</option>
+                  <option value="08">Agosto</option>
+                  <option value="09">Septiembre</option>
+                  <option value="10">Obtubre</option>
+                  <option value="11">Noviembre</option>
+                  <option value="12">Diciembre</option>
+                </select>
+              </div>
+              <button type="button" class="btn btn-primary my-1" id="btnBuscarMes">Buscar</button>
+            </form>
+
+            <!-- Formulario por rango de fecha -->
+            <form class="form-inline mb-5 collapse" id="formRange">
+              <div class="form-group">
+                <label for="dateFrom">Desde</label>
+                <input type="date" id="dateFrom" name="dateFrom" class="form-control mx-sm-3" aria-describedby="dateFrom">
+              </div>
+              <div class="form-group">
+                <label for="dateTo">Hasta</label>
+                <input type="date" id="dateTo" name="dateTo" class="form-control mx-sm-3" aria-describedby="dateTo">
+              </div>
+              <button type="button" class="btn btn-primary my-1" id="btnBuscarRango">Buscar</button>
+            </form>
+          </div>
+
+        </div>
+
+
+
+        <!-- Tabla -->
         <div class="table-responsive">
           <table class="table table-bordered" id="tableHist" width="100%" cellspacing="0">
             <thead>
@@ -96,19 +149,6 @@
                 <th>Impresora</th>
               </tr>
             </thead>
-            <tfoot>
-              <tr>
-                <th>Fecha</th>
-                <th>Entrega</th>
-                <th>Recibe</th>
-                <th>Departamento</th>
-                <th>Marca</th>
-                <th>Modelo</th>
-                <th>Tipo</th>
-                <th>Cantidad</th>
-                <th>Impresora</th>
-              </tr>
-            </tfoot>
             <tbody>
             </tbody>
           </table>
@@ -133,24 +173,6 @@
     <!-- /#wrapper -->
 
 
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-          <div class="modal-footer">
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
-          </div>
-        </div>
-      </div>
-    </div>
 
 
 

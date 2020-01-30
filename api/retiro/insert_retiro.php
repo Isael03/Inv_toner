@@ -3,6 +3,7 @@
 include "../../config/Database.php";
 include "../../classes/Retiro.php";
 include "../../classes/Consumible.php";
+include "../../classes/Funcionario.php";
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -11,16 +12,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $consumible = new Consumible($db);
     $retiro = new Retiro($db);
     $retiro->consumible = $consumible;
+    $funcionario = new Funcionario($db);
 
     $marca = strtoupper($_POST['marca']);
     $usuarioRetira = $_POST['usuarioRetira'];
     $usuarioRecibe = $_POST['usuarioRecibe'];
-    $departamento = strtoupper("Todavia falta");
     $modelo = strtoupper($_POST['modelo']);
     $tipo = $_POST['tipo'];
     $cantidad = (int) $_POST['cantidad'];
     $impresora = strtoupper($_POST['impresora']);
 
+    $data = $funcionario->officialData($usuarioRecibe);
 
-    $retiro->insertWithdraw($cantidad, $usuarioRetira, $usuarioRecibe, $departamento, $marca, $modelo, $tipo, $impresora);
+    $idRecibe = (int) $data['IdFuncionario'];
+    $idDir = (int) $data['IdDireccion'];
+    $idDepart = (int) $data['ID_departamento'];
+    $nombreDepartamento = $data['Departamento'];
+
+
+    $retiro->insertWithdraw($cantidad, $usuarioRetira, $usuarioRecibe, $marca, $modelo, $tipo, $impresora, $idDir, $idDepart, $idRecibe, $nombreDepartamento);
 }

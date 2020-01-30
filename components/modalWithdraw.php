@@ -11,13 +11,7 @@
              <div class="modal-body">
                  <form>
                      <div class="row">
-                         <div class="col-md-6 col-sm-12">
-                             <div class="form-group">
-                                 <label for="submitter" class="col-form-label">Entregado por:</label>
-                                 <input type="text" class="form-control" readonly id="submitter" placeholder="Quién entrega">
-                             </div>
-                         </div>
-                         <div class="col-md-6 col-sm-12">
+                         <div class="col-md-12 col-sm-12">
                              <div class="form-group">
                                  <label for="receivedBy" class="col-form-label">Recibido por:</label>
                                  <div class="autocomplete">

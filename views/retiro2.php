@@ -81,71 +81,50 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb mb-5">
           <li class="breadcrumb-item">
-            <a href="#" class="text-decoration-none text-dark">Ingresar</a>
+            <a href="#" class="text-decoration-none text-dark">En construccion</a>
           </li>
         </ol>
 
         <!-- Form-->
-
-
-        <form class="mx-5 mt-5 needs-validation" id="formNuevo" novalidate>
-          <div class="form-group row">
-            <label for="inputCantidad" class="col-sm-2 col-form-label">Cantidad</label>
-            <div class="col-sm-10">
-              <input type="number" name="cantidad" class="form-control col-md-6 mb-2 col-lg-4" id="inputCantidad" required />
+        <form class="mx-5 mt-5 mb-5" id="formMesHistorial">
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="fecha">Fecha</label>
+              <input type="date" class="form-control" id="fecha" name="fecha" />
             </div>
           </div>
-          <div class="form-group row">
-            <label for="inputMarca" class="col-sm-2 col-form-label">Marca</label>
-            <div class="col-sm-10">
-              <input type="text" name="marca" class="form-control col-md-6 mb-2 col-lg-4" id="inputMarca" required />
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="inputModelo" class="col-sm-2 col-form-label">Modelo</label>
-            <div class="col-sm-10">
-              <input type="text" name="modelo" class="form-control mb-2 col-md-6 mb-2 col-lg-4" id="inputModelo" required />
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="selectTipo" class="col-sm-2 col-form-label">Tipo</label>
-            <div class="col-sm-10">
-              <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="selectTipo" name="tipo" required>
-                <option value="" selected>Seleccione...</option>
-                <option value="Fusor">Fusor</option>
-                <option value="Tinta">Tinta</option>
-                <option value="Tambor">Tambor</option>
-                <option value="Toner">Tóner</option>
-                <option value="Tambor de residuo">Tambor de residuo</option>
-                <option value="Tambor de arrastre">Tambor de arrastre</option>
-                <option value="Correa de arrastre">Correa de arrastre</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="inputModeloImpresora" class="col-sm-2 col-form-label">Impresora</label>
-            <div class="col-sm-10">
-              <input type="text" name="impresora" class="form-control mb-2 col-md-6 mb-2 col-lg-4" id="inputModeloImpresora" required />
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="selectUbicacion" class="col-sm-2 col-form-label">Ubicación</label>
-            <div class="col-sm-10">
-              <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="selectUbicacion" name="ubicacion" required>
-                <option value="" selected>Seleccione...</option>
-                <option value="1">Manuel Orella</option>
-                <option value="2">Informática</option>
-              </select>
-            </div>
-          </div>
-          <div class="mt-4">
-            <a href="../index.php" class="mr-3">Volver</a>
-            <button type="submit" class="btn btn-primary px-4" id="btnNuevoToner">
-              Añadir
-            </button>
-          </div>
+          <button type="submit" class="btn btn-primary mx-auto px-5" id="btnBuscarRetiro">
+            Buscar
+          </button>
         </form>
 
+        <div class="table-responsive">
+          <table class="table table-bordered" id="tableMO" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+                <th>Impresora</th>
+                <!--                   <th>Bodega</th> -->
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+                <th>Impresora</th>
+                <!--      <th>Bodega</th> -->
+              </tr>
+            </tfoot>
+            <tbody>
+
+            </tbody>
+          </table>
+        </div>
       </div>
       <!-- /.container-fluid -->
 
@@ -163,8 +142,6 @@
 
   </div>
   <!-- /#wrapper -->
-
-
 
 
   <!-- Bootstrap core JavaScript-->

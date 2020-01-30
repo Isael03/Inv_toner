@@ -32,7 +32,7 @@ class Consumible
         $conn->close();
     }
 
-    /* Mostrar todo lo de Manuel Orella */
+    /* Mostrar todos los consumibles del Manuel Orella */
 
     public function showAllMO()
     {
@@ -56,7 +56,7 @@ class Consumible
         $conn->close();
     }
 
-    /**Mostrar todo de informaticaa */
+    /**Mostrar todos los consumibles de informatica */
     public function showAllINF()
     {
         $conn = $this->conn->connect();
@@ -79,6 +79,7 @@ class Consumible
         $conn->close();
     }
 
+    /* Mostrar el contenido de la tabla consumible sin importar la bodega */
     public function showAll()
     {
         $conn = $this->conn->connect();
@@ -148,7 +149,7 @@ class Consumible
         $conn->close();
     }
 
-
+    /* Funcion qie borra primero los de informatica y si falta los del manuel orella */
     public function deleteCon(int $cantidad, string $modelo, string $marca, string $tipo)
     {
         $conn = $this->conn->connect();
@@ -171,12 +172,15 @@ class Consumible
                 if ($cantidad > $arreglo['Cantidad']) {
                     $resto = $cantidad - $arreglo['Cantidad'];
                     self::deleteConsumables($arreglo['Cantidad'], $marca, $tipo, $modelo, 'Informatica');
+
+
                     self::deleteConsumables($resto, $marca, $tipo, $modelo, 'Manuel Orella');
-                    $status = array("status" => "ok");
-                    echo json_encode($status);
+                    /*          $status = array("status" => "ok");
+                    echo json_encode($status); */
                 }
             }
-
+            $status = array("status" => "ok");
+            echo json_encode($status);
             mysqli_free_result($result);
             $conn->close();
 
@@ -205,8 +209,8 @@ class Consumible
                     $conn->query("DELETE FROM Consumible WHERE Id_consumible=$id");
                 }
             }
-            $status = array("status" => "ok");
-            echo json_encode($status);
+            /*  $status = array("status" => "ok");
+            echo json_encode($status); */
         }
         mysqli_free_result($result);
         $conn->commit();

@@ -230,7 +230,7 @@ function getDataWithdraw(table) {
 function setModalWithdraw(table) {
   var data = table.row(".selected").data();
 
-  document.querySelector("#submitter").value = "Falta";
+  //document.querySelector("#submitter").value = "Falta";
   document.querySelector("#receivedBy").value = "";
   document.querySelector("#mMarca").value = data.Marca;
   document.querySelector("#mModelo").value = data.Modelo;

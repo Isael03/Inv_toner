@@ -58,14 +58,8 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="index.html">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Retiro</span>
-        </a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link" href="./views/historial.php">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <i class="fas fa-history"></i>
           <span>Historial</span>
         </a>
       </li>
@@ -99,7 +93,7 @@
                 <div class="text-center font-weight-bold" id="amount-inf">Calculando...</div>
               </div>
               <a class="card-footer text-white clearfix small z-1" href="#">
-                <span class="float-left font-weight-bold">Informatica</span>
+                <span class="float-left font-weight-bold">Informática</span>
               </a>
             </div>
           </div>
@@ -128,16 +122,6 @@
         </ul>
         <div class="tab-content  mb-4" id="myTabContent">
           <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-            <!-- Datatable ALL -->
-            <!-- <div class='btn-group mb-2' role='group' aria-label='Basic example'>
-              <button class='btn btn-info' id='btnWithdraw'><span class='fas fa-box-open'></span>
-              </button>
-              <button id='btnUpdate' class='btn btn-warning mx-2'><span class='fas fa-wrench text-white'></span>
-              </button>
-              <button class='btn btn-danger' id='btnDelete'>
-                <span class='fas fa-trash'></span>
-              </button>
-            </div> -->
 
             <div class="table-responsive">
               <table class="table table-bordered" id="tableALL" width="100%" cellspacing="0">
@@ -151,15 +135,6 @@
 
                   </tr>
                 </thead>
-                <tfoot>
-                  <tr>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Tipo</th>
-                    <th>Cantidad</th>
-                    <th>Impresora</th>
-                  </tr>
-                </tfoot>
                 <tbody>
 
                 </tbody>
@@ -263,25 +238,6 @@
   </div>
   <!-- /#wrapper -->
 
-
-  <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <?php
 
