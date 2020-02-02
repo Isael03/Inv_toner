@@ -59,8 +59,7 @@ class Bodega
             die("Error");
         }
 
-        //$test = array('MO' => $arreglo[0], 'INF' => $arreglo[1]);
-        //echo json_encode($test);
+
         echo json_encode($arreglo);
 
 

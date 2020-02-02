@@ -100,4 +100,108 @@ class Retiro
 
         $conn->close();
     }
+
+    public function filterRangeHistorial(string $inicio, string $termino)
+    {
+        $conn = $this->conn->connect();
+
+        $sql = "SELECT DATE_FORMAT(Fecha, '%d/%m/%Y %H:%i:%s') AS Fecha, Usuario_retira as Retira, Usuario_recibe AS Recibe, Departamento, Marca, Modelo, Tipo, Cantidad, Impresora FROM Retiro WHERE Fecha BETWEEN '$inicio' AND '$termino' ORDER BY Fecha DESC ";
+
+        $result =  $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            while ($data = mysqli_fetch_assoc($result)) {
+                $arreglo["data"][] = array_map("utf8_encode", $data);
+            }
+        } else {
+            $arreglo["data"][] = ["Fecha" => "", "Retira" => "", "Recibe" => "", "Departamento" => "", "Marca" => "", "Modelo" => "", "Tipo" => "", "Cantidad" => "", "Impresora" => ""];
+            // die("Error");
+        }
+        echo json_encode($arreglo);
+        mysqli_free_result($result);
+
+        $conn->close();
+    }
+
+    public function general_Report($inicio, $termino)
+    {
+        $general_Report['fecha_inicio'] = $inicio;
+        $general_Report['fecha_termino'] = $termino;
+        $general_Report['depart'] = self::department_Orders($inicio, $termino);
+        $general_Report['model'] = self::count_Orders($inicio, $termino);
+
+        return $general_Report;
+    }
+
+    private function department_Orders(string $inicio, string $termino)
+    {
+        $conn = $this->conn->connect();
+
+        $sql = "SELECT DE.depart, COUNT(R.Departamento) AS Cantidad from departamentos DE INNER JOIN Retiro R ON DE.iddepart=R.Id_departamento WHERE R.Fecha BETWEEN '$inicio' AND '$termino' GROUP BY DE.depart ORDER BY Cantidad DESC";
+
+        $result =  $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            while ($data = mysqli_fetch_assoc($result)) {
+                $arreglo["data"][] = array_map("utf8_encode", $data);
+            }
+        } else {
+            // die("Error");
+        }
+        mysqli_free_result($result);
+
+        $conn->close();
+
+        if (isset($arreglo['data'])) {
+            return $arreglo['data'];
+        }
+    }
+
+    private function count_Orders(string $inicio, string $termino)
+    {
+        $conn = $this->conn->connect();
+
+        $sql = "SELECT Marca, Modelo, Tipo, COUNT(Id_retiro) AS Cantidad from Retiro WHERE Fecha BETWEEN '$inicio' AND '$termino' GROUP BY Modelo ORDER BY Cantidad DESC";
+
+        $result =  $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            while ($data = mysqli_fetch_assoc($result)) {
+                $arreglo["data"][] = array_map("utf8_encode", $data);
+            }
+        } else {
+            // die("Error");
+        }
+        mysqli_free_result($result);
+
+        $conn->close();
+
+        if (isset($arreglo['data'])) {
+            return $arreglo['data'];
+        }
+    }
+
+    public function getDepartament(string $inicio, string $termino)
+    {
+        $conn = $this->conn->connect();
+
+        $sql = "SELECT Id_departamento, Departamento FROM Retiro WHERE Fecha BETWEEN '$inicio' AND '$termino' GROUP BY Departamento";
+
+        $result =  $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            while ($data = mysqli_fetch_assoc($result)) {
+                $arreglo["data"][] = array_map("utf8_encode", $data);
+            }
+        } else {
+            // die("Error");
+        }
+        mysqli_free_result($result);
+
+        $conn->close();
+
+        if (isset($arreglo['data'])) {
+            return $arreglo['data'];
+        }
+    }
 }

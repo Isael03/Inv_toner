@@ -32,11 +32,11 @@
 
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top shadow-sm">
 
-    <a class="navbar-brand mr-1" href="index.html">Inventario</a>
-
-    <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
+    <button class="btn btn-link btn-sm text-white order-0 order-sm-0" id="sidebarToggle" href="#">
       <i class="fas fa-bars"></i>
     </button>
+
+    <a class="navbar-brand ml-2" href="../index.php">Inventario</a>
 
     <!-- Navbar -->
     <ul class="nav navbar-nav d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
@@ -60,7 +60,13 @@
       <li class="nav-item">
         <a class="nav-link" href="./historial.php">
           <i class="fas fa-history"></i>
-          <span>Historial</span>
+          <span>Historial de entregas</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="./reporte.php">
+          <i class="fas fa-table"></i>
+          <span>Reporte de entregas</span>
         </a>
       </li>
     </ul>
@@ -72,7 +78,7 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb mb-5">
           <li class="breadcrumb-item">
-            <a href="#" class="text-decoration-none text-dark">Historial</a>
+            <a href="#" class="text-decoration-none text-dark">Historial de entregas</a>
           </li>
         </ol>
 
@@ -118,12 +124,12 @@
             <!-- Formulario por rango de fecha -->
             <form class="form-inline mb-5 collapse" id="formRange">
               <div class="form-group">
-                <label for="dateFrom">Desde</label>
-                <input type="date" id="dateFrom" name="dateFrom" class="form-control mx-sm-3" aria-describedby="dateFrom">
+                <label for="dateFrom" class="my-1">Desde</label>
+                <input type="date" id="dateFrom" name="dateFrom" class="form-control mx-3 my-1" aria-describedby="dateFrom">
               </div>
               <div class="form-group">
                 <label for="dateTo">Hasta</label>
-                <input type="date" id="dateTo" name="dateTo" class="form-control mx-sm-3" aria-describedby="dateTo">
+                <input type="date" id="dateTo" name="dateTo" class="form-control mx-3 my-1 " aria-describedby="dateTo">
               </div>
               <button type="button" class="btn btn-primary my-1" id="btnBuscarRango">Buscar</button>
             </form>
@@ -135,7 +141,7 @@
 
         <!-- Tabla -->
         <div class="table-responsive">
-          <table class="table table-bordered" id="tableHist" width="100%" cellspacing="0">
+          <table class="table table-bordered " id="tableHist" width="100%" cellspacing="0">
             <thead>
               <tr>
                 <th>Fecha</th>

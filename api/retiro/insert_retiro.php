@@ -15,7 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $funcionario = new Funcionario($db);
 
     $marca = strtoupper($_POST['marca']);
-    $usuarioRetira = $_POST['usuarioRetira'];
+    //$usuarioRetira = $_POST['usuarioRetira'];
+    $usuarioRetira = 'Falta';
     $usuarioRecibe = $_POST['usuarioRecibe'];
     $modelo = strtoupper($_POST['modelo']);
     $tipo = $_POST['tipo'];

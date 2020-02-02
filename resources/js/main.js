@@ -177,4 +177,11 @@ function httpRequest(url, callback) {
   };
 }
 
-//autocompletar();
+async function fetchUrl(url, config) {
+  let response = await fetch(url, config);
+  if (response.ok) {
+    var json = await response.json();
+  }
+
+  return json;
+}

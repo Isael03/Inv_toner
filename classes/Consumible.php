@@ -17,17 +17,36 @@ class Consumible
 
         $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
 
+        $valid = true;
+
         for ($i = 0; $i < $cantidad; $i++) {
 
             if ($conn->query($sql)) {
+
                 $last_idConsumible = $conn->insert_id;
-                $conn->query("INSERT INTO Bodega_Consumible VALUES (NULL, $bodega, $last_idConsumible)");
+
+                $sql = "INSERT INTO Bodega_Consumible VALUES (NULL, $bodega, $last_idConsumible)";
+
+                if ($conn->query($sql) === false) {
+                    $valid = false;
+                    $conn->rollback();
+                    break;
+                }
             } else {
                 // echo "Error: " . $sql . "<br>" . $conn->error;
-                $arreglo = array('status' => 'BAD');
-                echo json_encode($arreglo);
+                $valid = false;
             }
         }
+
+        /* Enviar respuesta del proceso */
+        if ($valid) {
+            $arreglo = array('status' => 'ok');
+            echo json_encode($arreglo);
+        } else {
+            $arreglo = array('status' => 'bad');
+            echo json_encode($arreglo);
+        }
+
         $conn->commit();
         $conn->close();
     }
@@ -175,8 +194,6 @@ class Consumible
 
 
                     self::deleteConsumables($resto, $marca, $tipo, $modelo, 'Manuel Orella');
-                    /*          $status = array("status" => "ok");
-                    echo json_encode($status); */
                 }
             }
             $status = array("status" => "ok");

@@ -52,12 +52,21 @@ async function sendData() {
   })
     .then(response => {
       if (response.ok) {
+        return response.json();
+      } else {
+        alertError();
+        //throw "Error en la llamada fetch";
+      }
+    })
+    .then(json => {
+      console.log(json);
+
+      if (json.status === "ok") {
         alertSuccess();
         document.getElementById("formNuevo").reset();
         setTimeout(() => document.location.reload(), 1000);
       } else {
         alertError();
-        //throw "Error en la llamada fetch";
       }
     })
     .catch(err => {
@@ -65,12 +74,3 @@ async function sendData() {
       console.log(err);
     });
 }
-
-function cleanForm() {
-  let input = document
-    .querySelector("#inputMarca")
-    .classList.contains(".is-invalid");
-  console.log(input);
-}
-
-function validationForm() {}

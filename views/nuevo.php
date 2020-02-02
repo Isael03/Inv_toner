@@ -36,11 +36,11 @@
 
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top shadow-sm">
 
-    <a class="navbar-brand mr-1" href="index.html">Inventario</a>
-
-    <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
+    <button class="btn btn-link btn-sm text-white order-0 order-sm-0" id="sidebarToggle" href="#">
       <i class="fas fa-bars"></i>
     </button>
+
+    <a class="navbar-brand ml-2" href="../index.php">Inventario</a>
 
     <!-- Navbar -->
     <ul class="nav navbar-nav d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">

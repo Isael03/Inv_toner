@@ -250,10 +250,10 @@ function confirmWithdraw(table) {
       "La cantidad sobrepasa a la existente o hay algún campo vacío"
     );
   } else {
-    let usuarioRetira = document.querySelector("#submitter").value.trim();
+    //let usuarioRetira = document.querySelector("#submitter").value.trim();
 
     let form = new FormData();
-    form.append("usuarioRetira", usuarioRetira);
+    //form.append("usuarioRetira", usuarioRetira);
     form.append("usuarioRecibe", receivedBy.value.trim());
     form.append("marca", data.Marca);
     form.append("modelo", data.Modelo);
@@ -406,10 +406,10 @@ function confirmWithdrawINF_MO(table) {
       "La cantidad sobrepasa a la existente o hay algún campo vacío"
     );
   } else {
-    let usuarioRetira = document.querySelector("#submitter").value.trim();
+    //let usuarioRetira = document.querySelector("#submitter").value.trim();
 
     let form = new FormData();
-    form.append("usuarioRetira", usuarioRetira);
+    // form.append("usuarioRetira", usuarioRetira);
     form.append("usuarioRecibe", receivedBy.value.trim());
     form.append("marca", data.Marca);
     form.append("modelo", data.Modelo);
@@ -555,7 +555,7 @@ function listMO() {
         titleAttr: "PDF",
         className: "btn btn-success",
         title:
-          "En existencia " +
+          "Elementos en informática " +
           new Date().getDate() +
           "/" +
           new Date().getMonth() +
@@ -611,7 +611,7 @@ function listINF() {
         titleAttr: "PDF",
         className: "btn btn-success",
         title:
-          "En existencia " +
+          "Elementos en bodega " +
           new Date().getDate() +
           "/" +
           new Date().getMonth() +

@@ -13,7 +13,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $mes = (int) $_POST['mes'];
 
-    $retiro->filterByMonth($mes);
+    $caso = (int) $_POST['case'];
+
+    switch ($caso) {
+        case 1:
+            $mes = (int) $_POST['mes'];
+            $retiro->filterByMonth($mes);
+            break;
+        case 2:
+            $inicio = $_POST['inicio'];
+            $termino = $_POST['termino'];
+            $retiro->filterRangeHistorial($inicio,  $termino);
+            break;
+
+        default:
+            # code...
+            break;
+    }
 }

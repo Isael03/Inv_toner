@@ -32,16 +32,16 @@
 
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top shadow-sm">
 
-    <a class="navbar-brand mr-1" href="index.html">Inventario</a>
-
-    <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
+    <button class="btn btn-link btn-sm text-white order-0 order-sm-0" id="sidebarToggle" href="#">
       <i class="fas fa-bars"></i>
     </button>
+
+    <a class="navbar-brand ml-2" href="index.php">Inventario</a>
 
     <!-- Navbar -->
     <ul class="nav navbar-nav d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
       <li class="nav-item">
-        <a class="btn nav-link menu-btn" href="views/login.php"><i class="fas fa-sign-out-alt text-white"></i></a>
+        <a class="btn nav-link menu-btn" href="#"><i class="fas fa-sign-out-alt text-white"></i></a>
       </li>
     </ul>
 
@@ -60,7 +60,13 @@
       <li class="nav-item">
         <a class="nav-link" href="./views/historial.php">
           <i class="fas fa-history"></i>
-          <span>Historial</span>
+          <span>Historial de entregas</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="./views/reporte.php">
+          <i class="fas fa-table"></i>
+          <span>Reporte de entregas</span>
         </a>
       </li>
     </ul>
@@ -111,20 +117,24 @@
 
         <ul class="nav nav-tabs mt-5 mb-3" id="myTab" role="tablist">
           <li class="nav-item" id="tabAll">
-            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Todos</a>
+            <a class="nav-link active" id="view-all" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Todos</a>
           </li>
           <li class="nav-item" id="tabINF">
-            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Informática</a>
+            <a class="nav-link" id="view-inf" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Informática</a>
           </li>
           <li class="nav-item" id="tabMO">
-            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Manuel Orella</a>
+            <a class="nav-link" id="view-str" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Manuel Orella</a>
           </li>
         </ul>
-        <div class="tab-content  mb-4" id="myTabContent">
-          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 
+        <!-- Pestañas -->
+        <div class="tab-content  mb-4" id="myTabContent">
+
+
+          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <!-- Datatable total -->
             <div class="table-responsive">
-              <table class="table table-bordered" id="tableALL" width="100%" cellspacing="0">
+              <table class="table table-bordered display nowrap" id="tableALL" width="100%" cellspacing="0">
                 <thead>
                   <tr>
                     <th>Marca</th>
@@ -132,7 +142,6 @@
                     <th>Tipo</th>
                     <th>Cantidad</th>
                     <th>Impresora</th>
-
                   </tr>
                 </thead>
                 <tbody>
@@ -140,23 +149,13 @@
                 </tbody>
               </table>
             </div>
-
           </div>
+
           <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
 
-            <!-- DataTable INF -->
-
-            <!--   <div class='btn-group mb-2' role='group' aria-label='Basic example'>
-              <button class='btn btn-info' id='btnWithdrawINF'><span class='fas fa-box-open'></span>
-              </button>
-              <button id='btnUpdate' class='btn btn-warning mx-2'><span class='fas fa-wrench text-white'></span>
-              </button>
-              <button class='btn btn-danger' id='btnDeleteINF'>
-                <span class='fas fa-trash'></span>
-              </button>
-            </div> -->
+            <!-- Datatable de informatica -->
             <div class="table-responsive">
-              <table class="table table-bordered" id="tableINF" width="100%" cellspacing="0">
+              <table class="table table-bordered display nowrap" id="tableINF" width="100%" cellspacing="0">
                 <thead>
                   <tr>
                     <th>Marca</th>
@@ -167,16 +166,6 @@
                     <!--   <th>Bodega</th> -->
                   </tr>
                 </thead>
-                <tfoot>
-                  <tr>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Tipo</th>
-                    <th>Cantidad</th>
-                    <th>Impresora</th>
-                    <!--  <th>Bodega</th> -->
-                  </tr>
-                </tfoot>
                 <tbody>
 
                 </tbody>
@@ -187,10 +176,8 @@
           <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
 
             <!-- DataTable MO-->
-            <!-- 
-            <div class='btn-group mb-2' role='group' aria-label='Basic example'><button class='btn btn-info' id='btnWithdraw'><span class='fas fa-box-open'></span></button><button id='btnUpdate' class='btn btn-warning mx-2'><span class='fas fa-wrench text-white'></span></button> <button class='btn btn-danger' id='btnDeleteMO'><span class='fas fa-trash'></span></button></div> -->
             <div class="table-responsive">
-              <table class="table table-bordered" id="tableMO" width="100%" cellspacing="0">
+              <table class="table table-bordered display nowrap" id="tableMO" width="100%" cellspacing="0">
                 <thead>
                   <tr>
                     <th>Marca</th>
@@ -201,16 +188,7 @@
                     <!--                   <th>Bodega</th> -->
                   </tr>
                 </thead>
-                <tfoot>
-                  <tr>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Tipo</th>
-                    <th>Cantidad</th>
-                    <th>Impresora</th>
-                    <!--      <th>Bodega</th> -->
-                  </tr>
-                </tfoot>
+
                 <tbody>
 
                 </tbody>

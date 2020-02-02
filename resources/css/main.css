@@ -1,19 +1,21 @@
-/* :root {
+:root {
   --custom-bg-primary: #3f51b5;
   --custom-bg-danger: #e74a3b;
   --custom-bg-warning: #f6c23e;
   --custom-bg-info: #36b9cc;
   --custom-bg-secondary: #858796;
   --custom-bg-success: #1cc88a;
-} */
+}
+
+* {
+  box-sizing: border-box;
+}
 /* 
 .p-card {
   font-size: xx-large;
 }
 
-h1 {
-  font-size: 1.9em;
-}
+
 
 .left-bottom {
   position: fixed;
@@ -49,7 +51,9 @@ h1 {
   background-color: ghostwhite;
 }
  */
-
+h1 {
+  font-size: 1.9em;
+}
 .autocomplete {
   position: relative;
   display: inline-block;
