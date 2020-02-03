@@ -126,7 +126,9 @@
               </div>
             </form>
 
-            <section class="mt-5 container-sm">
+            <div id="linkToPdf" class="text-center mt-3"></div>
+
+            <section class="mt-3 container-sm">
               <h1 class="text-center mb-5 container-sm" id="title_report">
                 Entregas
               </h1>
@@ -137,7 +139,6 @@
                     <table class="table table-sm table-hover table-striped">
                       <thead>
                         <tr>
-
                           <th scope="col">Departamento</th>
                           <th scope="col">Cant. de elementos entregados</th>
                         </tr>
@@ -147,7 +148,6 @@
                       </tbody>
                     </table>
                   </div>
-
                 </div>
               </div>
 
@@ -209,7 +209,7 @@
                   <table class="table table-sm table-hover table-striped">
                     <thead>
                       <tr>
-                        <th scope="col">Departamento</th>
+                        <th scope="col">Dirección</th>
                         <th scope="col">Acción</th>
                       </tr>
                     </thead>

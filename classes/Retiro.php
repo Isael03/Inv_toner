@@ -185,7 +185,9 @@ class Retiro
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT Id_departamento, Departamento FROM Retiro WHERE Fecha BETWEEN '$inicio' AND '$termino' GROUP BY Departamento";
+        /*  $sql = "SELECT Id_departamento, Departamento FROM Retiro WHERE Fecha BETWEEN '$inicio' AND '$termino' GROUP BY Departamento"; */
+
+        $sql = "SELECT iddireccion, direccion FROM direcciones";
 
         $result =  $conn->query($sql);
 

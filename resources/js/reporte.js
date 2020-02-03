@@ -52,6 +52,10 @@ function reportGeneral() {
           document.getElementById("tbody-depart").innerHTML = "";
           document.getElementById("tbody-model").innerHTML = "";
 
+          document.getElementById(
+            "linkToPdf"
+          ).innerHTML = `<a class="btn btn-secondary mb-2 text-white" href="reporte_pdf.php?inicio=${inicio.value}&&termino=${termino.value}" target="_blank">PDF</a>`;
+
           for (const dep of json.depart) {
             document.getElementById(
               "tbody-depart"
@@ -122,7 +126,7 @@ function listDepart() {
           for (const dep of json) {
             document.getElementById(
               "tbody-dep"
-            ).innerHTML += `<tr><td id=${dep.Id_departamento}>${dep.Departamento}</td><td><a href='#'>Generar pdf</a></td></tr>`;
+            ).innerHTML += `<tr><td id=${dep.iddireccion}>${dep.direccion}</td><td><a href='./reporte_dep.php?iddir=${dep.iddireccion}&&nombre_dir=${dep.direccion}&&inicio_dep=${inicio.value}&&termino_dep=${termino.value}'>Generar pdf</a></td></tr>`;
           }
 
           inicio.value = "";
