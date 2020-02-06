@@ -59,6 +59,12 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="./impresoras.php">
+          <i class="fas fa-print"></i>
+          <span>Impresoras</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="./historial.php">
           <i class="fas fa-history"></i>
           <span>Historial de entregas</span>
@@ -89,7 +95,7 @@
             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">General</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Departamentos</a>
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Dirección</a>
           </li>
           <!-- <li class="nav-item">
             <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>

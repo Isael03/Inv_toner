@@ -23,7 +23,3 @@ class ConexionData
         return $conn;
     }
 }
-/* 
-$db = new ConexionData();
-
-$conn = $db->connect(); */

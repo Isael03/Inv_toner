@@ -57,6 +57,12 @@
           <span>Inicio</span>
         </a>
       </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="./views/impresoras.php">
+          <i class="fas fa-print"></i>
+          <span>Impresoras</span>
+        </a>
+      </li>
       <li class="nav-item">
         <a class="nav-link" href="./views/historial.php">
           <i class="fas fa-history"></i>

@@ -181,11 +181,9 @@ class Retiro
         }
     }
 
-    public function getDepartament(string $inicio, string $termino)
+    public function getDir(string $inicio, string $termino)
     {
         $conn = $this->conn->connect();
-
-        /*  $sql = "SELECT Id_departamento, Departamento FROM Retiro WHERE Fecha BETWEEN '$inicio' AND '$termino' GROUP BY Departamento"; */
 
         $sql = "SELECT iddireccion, direccion FROM direcciones";
 
@@ -205,5 +203,50 @@ class Retiro
         if (isset($arreglo['data'])) {
             return $arreglo['data'];
         }
+    }
+
+    public function getDepart(int $iddir, string $inicio, string $termino)
+    {
+        $conn = $this->conn->connect();
+
+        $sql = "SELECT iddepart AS Id_dep, depart AS Departamento FROM departamentos where direccion=$iddir";
+
+        $result =  $conn->query($sql);
+
+
+        if ($result->num_rows > 0) {
+            while ($data = mysqli_fetch_assoc($result)) {
+                $dep[] = array_map("utf8_encode", $data);
+            }
+        }
+
+        foreach ($dep as $key => $depValue) {
+
+            $id = (int) $depValue['Id_dep'];
+
+            /* $sql = "SELECT DATE_FORMAT(Fecha, '%d/%m/%Y %H:%i:%s') AS Fecha, Usuario_recibe, Marca, Modelo, Tipo, Cantidad FROM Retiro WHERE Fecha BETWEEN '$inicio' AND '$termino' AND Id_departamento=$id"; */
+            $sql = "SELECT  Marca, COUNT(Modelo) AS Cantidad, Modelo, Tipo FROM Retiro WHERE Fecha BETWEEN '$inicio' AND '$termino' AND Id_departamento=$id GROUP BY Modelo";
+
+            $result =  $conn->query($sql);
+
+            echo "----------------------------------------------------" . $depValue['Departamento'] . "---------------------------------------------------------";
+            // var_dump($result->num_rows);
+            if ($result->num_rows > 0) {
+                while ($data = mysqli_fetch_assoc($result)) {
+                    $Retiro_dep[$depValue['Departamento']][] = array_map("utf8_encode", $data);
+                }
+                echo json_encode($Retiro_dep[$depValue['Departamento']]);
+            } else {
+                $Retiro_dep[$depValue['Departamento']][]  = "-------------->>No hay nada---------------";
+                echo json_encode($Retiro_dep[$depValue['Departamento']]);
+            }
+        }
+        mysqli_free_result($result);
+
+        $conn->close();
+
+        /* if (isset($Retiro_dep)) {
+            return $Retiro_dep;
+        } */
     }
 }

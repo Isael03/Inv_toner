@@ -40,27 +40,6 @@ function alertErrorFormEmpty() {
   });
 }
 
-function validClass(selector) {
-  let input = document.querySelector(selector);
-
-  if (input.value === "") {
-    if (input.classList.contains("is-valid")) {
-      input.classList.remove("is-valid");
-      input.classList.add("is-invalid");
-    }
-    input.classList.add("is-invalid");
-
-    // return false;
-  } else {
-    if (input.classList.contains("is-invalid")) {
-      input.classList.remove("is-invalid");
-      input.classList.add("is-valid");
-    }
-    input.classList.add("is-valid");
-    //return true;
-  }
-}
-
 function autocompletar() {
   const inputFuncionarios = document.querySelector("#receivedBy");
   let indexFocus = -1;

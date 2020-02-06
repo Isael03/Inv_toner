@@ -157,22 +157,13 @@ $termino = explode('-', $termino);
 <?php
 
 
-
-// Definimos el tamaño y orientación del papel que queremos.
 $pdf->set_paper("A4", "portrait");
-
-
-
 
 //$pdf->set_option('defaultFont', 'Helvetica');
 
-
-// Cargamos el contenido HTML.
 $pdf->load_html(ob_get_clean());
 
-// Renderizamos el documento PDF.
 $pdf->render();
 
-// Enviamos el fichero PDF al navegador.
 $pdf->stream('document.pdf', array('Attachment' => 0));
 ?>

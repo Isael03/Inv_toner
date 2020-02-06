@@ -58,6 +58,12 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="./impresoras.php">
+          <i class="fas fa-print"></i>
+          <span>Impresoras</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="./historial.php">
           <i class="fas fa-history"></i>
           <span>Historial de entregas</span>

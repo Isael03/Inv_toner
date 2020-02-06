@@ -62,15 +62,21 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="index.html">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Retiro</span>
+        <a class="nav-link" href="./impresoras.php">
+          <i class="fas fa-print"></i>
+          <span>Impresoras</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="./historial.php">
           <i class="fas fa-history"></i>
-          <span>Historial</span>
+          <span>Historial de entregas</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="./reporte.php">
+          <i class="fas fa-table"></i>
+          <span>Reporte de entregas</span>
         </a>
       </li>
     </ul>
@@ -98,13 +104,20 @@
           <div class="form-group row">
             <label for="inputMarca" class="col-sm-2 col-form-label">Marca</label>
             <div class="col-sm-10">
-              <input type="text" name="marca" class="form-control col-md-6 mb-2 col-lg-4" id="inputMarca" required />
+              <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="inputMarca" name="marca" required>
+                <option value="" selected>Seleccione...</option>
+
+              </select>
             </div>
           </div>
           <div class="form-group row">
-            <label for="inputModelo" class="col-sm-2 col-form-label">Modelo</label>
+            <label for="modelo_con" class="col-sm-2 col-form-label">Modelo</label>
             <div class="col-sm-10">
-              <input type="text" name="modelo" class="form-control mb-2 col-md-6 mb-2 col-lg-4" id="inputModelo" required />
+              <!-- <input type="text" name="modelo" class="form-control mb-2 col-md-6 mb-2 col-lg-4" id="inputModelo" required /> -->
+              <input list="inputModelo" name="modelo" class="form-control mb-2 col-md-6 mb-2 col-lg-4" autocomplete="off" id="modelo_con" required>
+              <datalist id="inputModelo">
+              </datalist>
+
             </div>
           </div>
           <div class="form-group row">
@@ -123,9 +136,16 @@
             </div>
           </div>
           <div class="form-group row">
-            <label for="inputModeloImpresora" class="col-sm-2 col-form-label">Impresora</label>
+            <label for="modelo_imp" class="col-sm-2 col-form-label">Impresora</label>
             <div class="col-sm-10">
-              <input type="text" name="impresora" class="form-control mb-2 col-md-6 mb-2 col-lg-4" id="inputModeloImpresora" required />
+              <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="modelo_imp" name="impresora" required>
+                <option value="" selected>Seleccione...</option>
+                <!--<option value="1">Manuel Orella</option>
+                <option value="2">Informática</option> -->
+              </select>
+              <!--  <input list="inputModeloImpresora" name="impresora" class="form-control mb-2 col-md-6 mb-2 col-lg-4" id="modelo_imp" autocomplete="off" required>
+              <datalist id="inputModeloImpresora">
+              </datalist> -->
             </div>
           </div>
           <div class="form-group row">
@@ -144,6 +164,7 @@
               Añadir
             </button>
           </div>
+
         </form>
 
       </div>

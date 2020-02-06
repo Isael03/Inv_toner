@@ -9,11 +9,24 @@ class Consumible
         $this->conn = $db;
     }
 
-    /* Insertar nuevo  */
+    /* Insertar nuevos Consumibles  */
     public function addPrinterConsumables(int $cantidad, string $marca, string $tipo, string $modelo, int $bodega, string $impresora)
     {
         $conn = $this->conn->connect();
-        $sql = "INSERT INTO Consumible (Marca, Modelo, Tipo, Modelo_impresora) VALUES ('$marca', '$modelo', '$tipo', '$impresora')";
+
+        $query = "SELECT Id_impresora from Impresora WHERE Modelo_impresora='$impresora' AND Marca_impresora='$marca'";
+        $result = $conn->query($query);
+
+        if ($result->num_rows > 0) {
+            while ($data = $result->fetch_assoc()) {
+                $arreglo = array_map('utf8_encode', $data);
+            }
+        } else {
+            $valid = false;
+        }
+        $Id_impresora = (int) $arreglo['Id_impresora'];
+
+        $sql = "INSERT INTO Consumible (Marca, Modelo, Tipo, Id_impresora) VALUES ('$marca', '$modelo', '$tipo', '$Id_impresora')";
 
         $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
 
@@ -25,16 +38,18 @@ class Consumible
 
                 $last_idConsumible = $conn->insert_id;
 
-                $sql = "INSERT INTO Bodega_Consumible VALUES (NULL, $bodega, $last_idConsumible)";
-
-                if ($conn->query($sql) === false) {
+                $sql2 = "INSERT INTO Bodega_Consumible (Id_bodega, Id_consumible) VALUES ($bodega, $last_idConsumible)";
+                if ($conn->query($sql2) === false) {
                     $valid = false;
                     $conn->rollback();
+                    //echo "Error: " . $sql . "<br>" . $conn->error;
                     break;
                 }
             } else {
-                // echo "Error: " . $sql . "<br>" . $conn->error;
+                //echo "Error: " . $sql . "<br>" . $conn->error;
+                $conn->rollback();
                 $valid = false;
+                break;
             }
         }
 
@@ -57,7 +72,7 @@ class Consumible
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, C.Modelo_impresora AS Impresora, COUNT(C.Modelo) AS Cantidad, B.Lugar FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON BC.Id_bodega=B.Id_bodega AND B.Lugar='Manuel Orella' GROUP BY C.Modelo";
+        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo,  CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, COUNT(C.Modelo) AS Cantidad, B.Lugar FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON BC.Id_bodega=B.Id_bodega INNER JOIN Impresora I ON C.Id_impresora=I.Id_impresora AND B.Lugar='Manuel Orella' GROUP BY C.Modelo";
 
         $result = $conn->query($sql);
 
@@ -80,7 +95,7 @@ class Consumible
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, C.Modelo_impresora AS Impresora, COUNT(C.Modelo) AS Cantidad, B.Lugar FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON BC.Id_bodega=B.Id_bodega AND B.Lugar='Informatica' GROUP BY C.Modelo";
+        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, COUNT(C.Modelo) AS Cantidad, B.Lugar FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON BC.Id_bodega=B.Id_bodega INNER JOIN Impresora I ON C.Id_impresora=I.Id_impresora AND B.Lugar='Informatica' GROUP BY C.Modelo";
 
         $result = $conn->query($sql);
 
@@ -103,7 +118,7 @@ class Consumible
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, C.Modelo_impresora AS Impresora, COUNT(C.Modelo) AS Cantidad FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON BC.Id_bodega=B.Id_bodega GROUP BY C.Modelo";
+        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, COUNT(C.Modelo) AS Cantidad FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON BC.Id_bodega=B.Id_bodega INNER JOIN Impresora I ON C.Id_impresora=I.Id_impresora GROUP BY C.Modelo ";
 
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
@@ -120,7 +135,7 @@ class Consumible
         $conn->close();
     }
 
-
+    /**@deprecated */
     /* Mostrar algunos segun la marca, modelo o bodega*/
     public function showSome($array)
     {
@@ -150,7 +165,7 @@ class Consumible
             $condicion .= "T.Modelo='$modelo'";
         }
 
-        $sql = "SELECT T.Id_consumible, T.Marca, T.Modelo, T.Tipo, T.Codigo_barra, T.Modelo_impresora, T.Id_bodega, B.Lugar FROM Consumible T INNER JOIN Bodega B WHERE $condicion AND T.Id_bodega=B.Id_bodega";
+        $sql = "SELECT T.Id_consumible, T.Marca, T.Modelo, T.Tipo, T.Codigo_barra, T.Id_impresora, T.Id_bodega, B.Lugar FROM Consumible T INNER JOIN Bodega B WHERE $condicion AND T.Id_bodega=B.Id_bodega";
 
         $result = $conn->query($sql);
 
@@ -168,7 +183,7 @@ class Consumible
         $conn->close();
     }
 
-    /* Funcion qie borra primero los de informatica y si falta los del manuel orella */
+    /* Funcion que borra primero los de informatica y si falta los del manuel orella */
     public function deleteCon(int $cantidad, string $modelo, string $marca, string $tipo)
     {
         $conn = $this->conn->connect();
@@ -346,7 +361,7 @@ class Consumible
     {
         $conn = $this->conn->connect();
 
-        $sql = "UPDATE Consumible SET Marca='$marca_new', Modelo='$modelo_new', Tipo='$tipo_new', Modelo_impresora='$impresora_new' WHERE Marca='$marca_old' AND Modelo='$modelo_old' AND Tipo='$tipo_old' AND Modelo_impresora='$impresora_old'";
+        $sql = "UPDATE Consumible SET Marca='$marca_new', Modelo='$modelo_new', Tipo='$tipo_new', Id_impresora='$impresora_new' WHERE Marca='$marca_old' AND Modelo='$modelo_old' AND Tipo='$tipo_old' AND Id_impresora='$impresora_old'";
 
         $arreglo = array("status" => "ok");
 

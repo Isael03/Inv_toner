@@ -29,7 +29,7 @@ function list() {
     destroy: true,
     //responsive: true,
     select: true,
-    order: [[0, "desc"]],
+    order: [[0, "asc"]],
     /*  pageLength: 5,
     lengthMenu: [
       [5, 10, 20, -1],

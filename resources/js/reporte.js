@@ -126,7 +126,7 @@ function listDepart() {
           for (const dep of json) {
             document.getElementById(
               "tbody-dep"
-            ).innerHTML += `<tr><td id=${dep.iddireccion}>${dep.direccion}</td><td><a href='./reporte_dep.php?iddir=${dep.iddireccion}&&nombre_dir=${dep.direccion}&&inicio_dep=${inicio.value}&&termino_dep=${termino.value}'>Generar pdf</a></td></tr>`;
+            ).innerHTML += `<tr><td id=${dep.iddireccion}>${dep.direccion}</td><td><a href='./reporte_dep_pdf.php?iddir=${dep.iddireccion}&&nombre_dir=${dep.direccion}&&inicio_dep=${inicio.value}&&termino_dep=${termino.value}' target="_blank">Generar pdf</a></td></tr>`;
           }
 
           inicio.value = "";

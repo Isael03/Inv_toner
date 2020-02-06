@@ -7,9 +7,9 @@ include "../../classes/Bodega.php";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $conn = new ConexionData();
+
     new Bodega($conn);
     $consumible = new Consumible($conn);
-
 
     $cantidad = (int) $_POST['cantidad'];
     $marca = strtoupper($_POST['marca']);
@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $impresora = strtoupper($_POST['impresora']);
 
     header('Content-Type: application/json');
+
 
     $consumible->addPrinterConsumables($cantidad, $marca, $tipo, $modelo, $bodega, $impresora);
 }
