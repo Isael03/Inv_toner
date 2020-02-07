@@ -126,4 +126,46 @@ class Impresora
             return $arreglo;
         }
     }
+
+    public function showId(string $impresora)
+    {
+        $conn = $this->conn->connect();
+
+        $sql = "SELECT Id_impresora from Impresora WHERE CONCAT(Marca_impresora, ' ', Modelo_impresora)='$impresora'";
+
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+
+            while ($data = $result->fetch_assoc()) {
+                $arreglo = array_map('utf8_encode', $data);
+            }
+        }
+
+        $conn->close();
+        if (isset($arreglo)) {
+            return $arreglo['Id_impresora'];
+        }
+    }
+
+    public function NamePrinter(string $marca)
+    {
+        $conn = $this->conn->connect();
+
+        $sql = "SELECT CONCAT(Marca_impresora, ' ', Modelo_impresora) AS Impresora from Impresora WHERE Marca_impresora='$marca'";
+
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+
+            while ($data = $result->fetch_assoc()) {
+                $arreglo[] = array_map('utf8_encode', $data);
+            }
+        }
+
+        $conn->close();
+        if (isset($arreglo)) {
+            return $arreglo;
+        }
+    }
 }

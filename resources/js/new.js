@@ -42,13 +42,6 @@ async function sendData() {
 
   modelo = modelo.toUpperCase().replace(/ /g, "-");
 
-  console.log(cantidad);
-  console.log(marca);
-  console.log(modelo);
-  console.log(tipo);
-  console.log(bodega);
-  console.log(impresora);
-
   const data = new FormData();
 
   data.append("cantidad", parseInt(cantidad));

@@ -357,22 +357,21 @@ class Consumible
     }
 
     /*  Actualizar  */
-    public function update(string $marca_new, string $modelo_new, string $tipo_new, string $impresora_new, string $marca_old, string $modelo_old, string $tipo_old, string $impresora_old)
+    public function update(string $marca_new, string $modelo_new, string $tipo_new, int $impresora_new, string $marca_old, string $modelo_old, string $tipo_old, int $impresora_old)
     {
         $conn = $this->conn->connect();
 
+
         $sql = "UPDATE Consumible SET Marca='$marca_new', Modelo='$modelo_new', Tipo='$tipo_new', Id_impresora='$impresora_new' WHERE Marca='$marca_old' AND Modelo='$modelo_old' AND Tipo='$tipo_old' AND Id_impresora='$impresora_old'";
 
-        $arreglo = array("status" => "ok");
 
         if ($conn->query($sql)) {
-            echo json_encode($arreglo);
+            $valid = true;
         } else {
-            $arreglo = array("status" => "bad");
-            echo json_encode($arreglo);
+            $valid = false;
             //echo "Error updating record: " . $conn->error;
         }
-
+        return $valid;
         $conn->close();
     }
 }

@@ -30,6 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idDepart = (int) $data['ID_departamento'];
     $nombreDepartamento = $data['Departamento'];
 
+    /* echo  $idRecibe . " ";
+    echo  $idDir . " ";
+    echo  $idDepart . " ";
+    echo  $nombreDepartamento . " "; */
+
 
     $retiro->insertWithdraw($cantidad, $usuarioRetira, $usuarioRecibe, $marca, $modelo, $tipo, $impresora, $idDir, $idDepart, $idRecibe, $nombreDepartamento);
 }

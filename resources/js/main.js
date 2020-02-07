@@ -156,11 +156,63 @@ function httpRequest(url, callback) {
   };
 }
 
-async function fetchUrl(url, config) {
-  let response = await fetch(url, config);
-  if (response.ok) {
-    var json = await response.json();
-  }
+/**@param {array} selectores */
 
-  return json;
+function validClass(selectores) {
+  for (let index = 0; index < selectores.length; index++) {
+    let input = document.querySelector(selectores[index]);
+
+    if (input.value === "") {
+      if (input.classList.contains("is-valid")) {
+        input.classList.remove("is-valid");
+        input.classList.add("is-invalid");
+      }
+      input.classList.add("is-invalid");
+
+      // return false;
+    } else {
+      if (input.classList.contains("is-invalid")) {
+        input.classList.remove("is-invalid");
+        input.classList.add("is-valid");
+      }
+      input.classList.add("is-valid");
+      //return true;
+    }
+  }
+}
+
+function clean_Validations(selectores) {
+  for (let index = 0; index < selectores.length; index++) {
+    let input = document.querySelector(selectores[index]);
+    if (input.classList.contains("is-valid")) {
+      input.classList.remove("is-valid");
+    }
+    if (input.classList.contains("is-invalid")) {
+      input.classList.remove("is-invalid");
+    }
+  }
+}
+
+async function fetchURL(url, method = "GET", data = {}) {
+  let config = {
+    method: method,
+    headers: {
+      Accept: "application/json"
+    },
+    body: data
+  };
+
+  try {
+    const response = await fetch(url, config);
+
+    if (response.ok) {
+      const json = await response.json();
+      return json;
+    } else {
+      alertError();
+    }
+  } catch (error) {
+    alertError();
+    console.log(error);
+  }
 }

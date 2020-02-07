@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const tableAll = listALL();
   amountHeld();
   autocompletar();
+  printMarcaPrinter();
 
   /*------------------------- Botones de modals ----------------------------*/
 
@@ -44,15 +45,23 @@ document.addEventListener("DOMContentLoaded", function() {
   document.querySelector("#tabAll").addEventListener("click", () => {
     tableMO.rows().deselect();
     tableINF.rows().deselect();
+    tableAll.ajax.reload();
   });
   document.querySelector("#tabINF").addEventListener("click", () => {
     tableMO.rows().deselect();
     tableAll.rows().deselect();
+    tableINF.ajax.reload();
   });
   document.querySelector("#tabMO").addEventListener("click", () => {
     tableAll.rows().deselect();
     tableINF.rows().deselect();
+    tableMO.ajax.reload();
   });
+
+  document.querySelector("#updMarca").addEventListener("input", () => {
+    printModelPrinter();
+  });
+  //btnupdate(tableAll);
 });
 
 /* Acción modificar */
@@ -64,6 +73,7 @@ function getDataUpdate(table) {
     jQuery.noConflict();
     jQuery("#modalUpdate");
     $("#modalUpdate").modal("show");
+    console.log(data);
 
     let marca = data.Marca;
     let modelo = data.Modelo;
@@ -101,21 +111,9 @@ function confirmDelete(table) {
     dataDelete.append("marca", data.Marca.toUpperCase());
     dataDelete.append("tipo", data.Tipo);
 
-    fetch("./api/consumible/delete_consumible.php", {
-      method: "POST",
-      headers: { Accept: "application/json" },
-      body: dataDelete
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          alertError();
-          throw "Error en la llamada";
-        }
-      })
-      .then(json => {
-        if (json.status === "ok") {
+    fetchURL("./api/consumible/delete_consumible.php", "POST", dataDelete)
+      .then(res => {
+        if (res.status === "ok") {
           customAlertSuccess("Elemento eliminado");
           table.ajax.reload();
           //Ocultar modal
@@ -125,18 +123,18 @@ function confirmDelete(table) {
           alertError();
         }
       })
-      .catch(err => {
-        console.log(err);
-        alertError();
-      });
+      .catch(err => console.log(err));
   } else {
     customAlertError("La cantidad seleccionada sobrepasa la que existe");
   }
 }
 
 /* Pasar datos al modal de modificar */
+/**@param {string} marca,  @param {string} modelo, @param {string} tipo, @param {string} impresora*/
+
 function setModalUpdate(marca, modelo, tipo, impresora) {
   document.getElementById("updMarca").value = marca;
+  printModelPrinter();
   document.getElementById("updModelo").value = modelo;
   document.getElementById("updTipo").value = tipo;
   document.getElementById("updImpresora").value = impresora;
@@ -157,8 +155,10 @@ function validFields() {
 }
 
 /* Botón confirmación del modal modificar */
+/**@param {object} table */
 async function confirmUpdate(table) {
   var datatable = table.row(".selected").data();
+
   if (validFields()) {
     let _marca = document.getElementById("updMarca").value.trim();
     let _modelo = document.getElementById("updModelo").value.trim();
@@ -178,36 +178,18 @@ async function confirmUpdate(table) {
     data.append("tipo_old", datatable.Tipo);
     data.append("impresora_old", datatable.Impresora);
 
-    await fetch("./api/consumible/update_consumible.php", {
-      method: "POST",
-      headers: {
-        Accept: "application/json"
-      },
-      body: data
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          alertError();
-          console.log("Error en la llamada");
-        }
-      })
-      .then(json => {
-        if (json.status === "ok") {
+    fetchURL("./api/consumible/update_consumible.php", "POST", data)
+      .then(res => {
+        if (res.status === "ok") {
           customAlertSuccess("Elemento actualizado");
 
           $("#modalUpdate").modal("hide");
           table.ajax.reload();
-          // setTimeout(() => document.location.reload(), 1000);
         } else {
           alertError();
         }
       })
-      .catch(err => {
-        console.log(err);
-        alertError();
-      });
+      .catch(err => console.log(err));
   } else {
     alertErrorFormEmpty();
   }
@@ -261,25 +243,9 @@ function confirmWithdraw(table) {
     form.append("impresora", data.Impresora);
     form.append("cantidad", parseInt(cantidad));
 
-    let config = {
-      method: "POST",
-      headers: {
-        Accept: "application/json"
-      },
-      body: form
-    };
-
-    fetch("./api/retiro/insert_retiro.php", config)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          console.log("Error en la llamada");
-          alertError();
-        }
-      })
-      .then(json => {
-        if (json.status === "bad") {
+    fetchURL("./api/retiro/insert_retiro.php", "POST", form)
+      .then(res => {
+        if (res.status === "bad") {
           alertError();
         } else {
           jQuery.noConflict();
@@ -290,10 +256,7 @@ function confirmWithdraw(table) {
           table.ajax.reload();
         }
       })
-      .catch(err => {
-        alertError();
-        console.log(err);
-      });
+      .catch(err => console.log(err));
   }
 }
 
@@ -344,7 +307,6 @@ function confirmTransfer(table, table2) {
   if (cantidad != "") {
     var data = table.row(".selected").data();
     cantidad = parseInt(cantidad);
-    console.log(data);
 
     if (cantidad <= parseInt(data.Cantidad)) {
       let formData = new FormData();
@@ -454,11 +416,9 @@ function confirmWithdrawINF_MO(table) {
 /* Datatable Todos */
 function listALL() {
   /**Configuración Datatable*/
-  /** Variable Datatable_ES se encuentra en /scripts/main.js */
   var table = $("#tableALL").DataTable({
     destroy: true,
     //responsive: true,
-    //scrollX: true,
     order: [[0, "desc"]],
     select: true,
     dom: "Bfrtip",
@@ -466,16 +426,33 @@ function listALL() {
       {
         extend: "pdf",
         text: "<span class='fas fa-file-pdf'></span>",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4]
+          //columns: ":not(.no-exportar)"
+        },
         titleAttr: "PDF",
         className: "btn btn-success",
-        title:
-          "En existencia " +
-          new Date().getDate() +
-          "/" +
-          new Date().getMonth() +
-          1 +
-          "/" +
-          new Date().getFullYear()
+        title: "Total en existencia",
+        customize: function(doc) {
+          doc.content[1].margin = [100, 10, 100, 0];
+          doc.defaultStyle.alignment = "center";
+          doc.footer = function(currentPage, pageCount) {
+            return currentPage.toString() + " de " + pageCount;
+          };
+          doc.header = function() {
+            return {
+              text:
+                "Emitido el " +
+                new Date().getDate() +
+                "/" +
+                new Date().getMonth() +
+                1 +
+                "/" +
+                new Date().getFullYear(),
+              alignment: "left"
+            };
+          };
+        }
       },
       {
         text: " <span class='fas fa-box-open text-white'></span>",
@@ -507,12 +484,23 @@ function listALL() {
       method: "GET",
       url: "./api/consumible/get_consumibleALL.php"
     },
+
     columns: [
       { data: "Marca" },
       { data: "Modelo" },
       { data: "Tipo" },
       { data: "Cantidad" },
-      { data: "Impresora" }
+      {
+        data: "Impresora"
+      } /* ,
+      {
+        defaultContent:
+          "<div class='btn-group btn-group-sm' role='group' aria-label='Basic example'>" +
+          "<button class='btn btn-info' id='btnWithdraw'><span class='fas fa-box-open'></span></button>" +
+          "<button  id='btnUpdate' class='btn btn-warning mx-2'><span class='fas fa-wrench text-white'></span>" +
+          "</button > <button class='btn btn-danger' id='btnDelete'>" +
+          "<span class='fas fa-trash'></span></button></div>"
+      } */
     ]
   });
 
@@ -522,6 +510,15 @@ function listALL() {
 
   return table;
 }
+
+/**@description Experimental */
+/* function btnupdate(table) {
+  $("tbody").on("click", "#btnUpdate", function() {
+    var data = table.row($(this).parents("tr")).data();
+
+    getDataUpdate(table);
+  });
+} */
 
 /* Datatable Manuel Orella */
 function listMO() {
@@ -554,14 +551,27 @@ function listMO() {
         text: "<span class='fas fa-file-pdf'></span>",
         titleAttr: "PDF",
         className: "btn btn-success",
-        title:
-          "Elementos en informática " +
-          new Date().getDate() +
-          "/" +
-          new Date().getMonth() +
-          1 +
-          "/" +
-          new Date().getFullYear()
+        title: "Elementos en bodega",
+        customize: function(doc) {
+          doc.content[1].margin = [100, 10, 100, 0];
+          doc.defaultStyle.alignment = "center";
+          doc.footer = function(currentPage, pageCount) {
+            return currentPage.toString() + " de " + pageCount;
+          };
+          doc.header = function() {
+            return {
+              text:
+                "Emitido el " +
+                new Date().getDate() +
+                "/" +
+                new Date().getMonth() +
+                1 +
+                "/" +
+                new Date().getFullYear(),
+              alignment: "left"
+            };
+          };
+        }
       },
       {
         text: " <span class='fas fa-box-open text-white'></span>",
@@ -591,7 +601,6 @@ function listMO() {
 
 function listINF() {
   /**Configuración Datatable*/
-  /** Variable Datatable_ES se encuentra en /scripts/main.js */
   var table = $("#tableINF").DataTable({
     destroy: true,
     //responsive: true,
@@ -610,14 +619,27 @@ function listINF() {
         text: "<span class='fas fa-file-pdf'></span>",
         titleAttr: "PDF",
         className: "btn btn-success",
-        title:
-          "Elementos en bodega " +
-          new Date().getDate() +
-          "/" +
-          new Date().getMonth() +
-          1 +
-          "/" +
-          new Date().getFullYear()
+        title: "Consumibles en Informática",
+        customize: function(doc) {
+          doc.content[1].margin = [100, 10, 100, 0];
+          doc.defaultStyle.alignment = "center";
+          doc.footer = function(currentPage, pageCount) {
+            return currentPage.toString() + " de " + pageCount;
+          };
+          doc.header = function() {
+            return {
+              text:
+                "Emitido el " +
+                new Date().getDate() +
+                "/" +
+                new Date().getMonth() +
+                1 +
+                "/" +
+                new Date().getFullYear(),
+              alignment: "left"
+            };
+          };
+        }
       },
       {
         text: " <span class='fas fa-box-open text-white'></span>",
@@ -650,4 +672,65 @@ function listINF() {
   }, 100000);
 
   return table;
+}
+
+async function printModelPrinter() {
+  //case: namePrinter
+
+  /* resetear select */
+  document.querySelector(
+    "#updImpresora"
+  ).innerHTML = `<option value=''>Seleccione...</option>`;
+
+  let marca = document.querySelector("#updMarca");
+
+  /*Consulta y llenar select con resultados */
+  await fetch(
+    `./api/impresora/impresora.php?case=namePrinter&&marca=${marca.value.toUpperCase()}`
+  )
+    .then(response => {
+      return response.json();
+    })
+    .then(json => {
+      for (const impresora of json) {
+        console.log(impresora);
+
+        document.querySelector(
+          "#updImpresora"
+        ).innerHTML += `<option value=${impresora.Impresora}>${impresora.Impresora}</option>`;
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}
+
+async function printMarcaPrinter() {
+  //case:printersBrand
+  await fetch("./api/impresora/impresora.php?case=printersBrand")
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        alertError();
+        //throw "Error en la llamada fetch";
+      }
+    })
+    .then(json => {
+      if (json.marca[0].Marca_impresora != "") {
+        for (const impresora of json.marca) {
+          document.querySelector(
+            "#updMarca"
+          ).innerHTML += `<option value=${impresora.Marca_impresora}>${impresora.Marca_impresora}</option>`;
+        }
+      } else {
+        document.querySelector(
+          "#updMarca"
+        ).innerHTML += `<option value="">No hay impresoras en el sistema</option>`;
+      }
+    })
+    .catch(err => {
+      alertError();
+      console.log(err);
+    });
 }

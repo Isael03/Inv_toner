@@ -259,3 +259,200 @@ function validClass(selector) {
     //return true;
   }
 }
+
+/* Insertar impresora */
+await fetch("../api/impresora/impresora.php", {
+  method: "POST",
+  headers: {
+    Accept: "application/json"
+  },
+  body: data
+})
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      alertError();
+      console.log("Error en la llamada");
+    }
+  })
+  .then(json => {
+    if (json.status === "ok") {
+      alertSuccess();
+
+      cleanFormPrinter();
+      table.ajax.reload();
+    } else {
+      alertError();
+    }
+  })
+  .catch(err => {
+    console.log(err);
+    alertError();
+  });
+
+/* Actualizar impresora */
+
+await fetch("../api/impresora/impresora.php", {
+  method: "POST",
+  headers: {
+    Accept: "application/json"
+  },
+  body: data
+})
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      alertError();
+      console.log("Error en la llamada");
+    }
+  })
+  .then(json => {
+    if (json.status === "ok") {
+      alertSuccess();
+
+      cleanFormPrinter();
+
+      table.ajax.reload();
+    } else {
+      alertError();
+    }
+  })
+  .catch(err => {
+    console.log(err);
+    alertError();
+  });
+
+/* Borrar impresora */
+
+await fetch("../api/impresora/impresora.php", {
+  method: "POST",
+  headers: {
+    Accept: "application/json"
+  },
+  body: data
+})
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      alertError();
+      console.log("Error en la llamada");
+    }
+  })
+  .then(json => {
+    if (json.status === "ok") {
+      alertSuccess();
+      jQuery.noConflict();
+      $("#modalDeletePrinter").modal("hide");
+      cleanFormPrinter();
+
+      table.ajax.reload();
+    } else {
+      alertError();
+    }
+  })
+  .catch(err => {
+    console.log(err);
+    alertError();
+  });
+
+/* Borrar consumible */
+
+/*  fetch("./api/consumible/delete_consumible.php", {
+      method: "POST",
+      headers: { Accept: "application/json" },
+      body: dataDelete
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          alertError();
+          throw "Error en la llamada";
+        }
+      })
+      .then(json => {
+        if (json.status === "ok") {
+          customAlertSuccess("Elemento eliminado");
+          table.ajax.reload();
+          //Ocultar modal
+          $("#modalDelete").modal("hide");
+          amountHeld();
+        } else {
+          alertError();
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        alertError();
+      }); */
+
+/* Actualizar consumible */
+
+/* await fetch("./api/consumible/update_consumible.php", {
+      method: "POST",
+      headers: {
+        Accept: "application/json"
+      },
+      body: data
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          alertError();
+          console.log("Error en la llamada");
+        }
+      })
+      .then(json => {
+        if (json.status === "ok") {
+          customAlertSuccess("Elemento actualizado");
+
+          $("#modalUpdate").modal("hide");
+          table.ajax.reload();
+          // setTimeout(() => document.location.reload(), 1000);
+        } else {
+          alertError();
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        alertError();
+      }); */
+
+/* Retirar consumible */
+let config = {
+  method: "POST",
+  headers: {
+    Accept: "application/json"
+  },
+  body: form
+};
+
+fetch("./api/retiro/insert_retiro.php", config)
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      console.log("Error en la llamada");
+      alertError();
+    }
+  })
+  .then(json => {
+    if (json.status === "bad") {
+      alertError();
+    } else {
+      jQuery.noConflict();
+      jQuery("#modalWithdraw");
+      $("#modalWithdraw").modal("hide");
+
+      alertSuccess();
+      table.ajax.reload();
+    }
+  })
+  .catch(err => {
+    alertError();
+    console.log(err);
+  });

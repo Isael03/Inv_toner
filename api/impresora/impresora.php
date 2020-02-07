@@ -90,6 +90,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
             break;
 
+        case 'namePrinter':
+
+            $marca = strtoupper($_GET['marca']);
+            $data = $impresora->NamePrinter($marca);
+            echo json_encode($data);
+
+            break;
+
         default:
             # code...
             break;

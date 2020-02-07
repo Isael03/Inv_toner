@@ -29,7 +29,7 @@ function list() {
     destroy: true,
     //responsive: true,
     select: true,
-    order: [[0, "asc"]],
+    order: [[0, "desc"]],
     /*  pageLength: 5,
     lengthMenu: [
       [5, 10, 20, -1],
@@ -43,14 +43,34 @@ function list() {
         titleAttr: "PDF",
         className: "btn btn-success",
         //title: `Historial de consumibles`,
-        messageTop:
+        /*   messageTop:
           "Emitido el " +
           new Date().getDate() +
           "/" +
           new Date().getMonth() +
           1 +
           "/" +
-          new Date().getFullYear()
+          new Date().getFullYear(), */
+        customize: function(doc) {
+          doc.content[1].margin = [0, 0, 0, 0];
+          doc.defaultStyle.alignment = "center";
+          doc.footer = function(currentPage, pageCount) {
+            return currentPage.toString() + " de " + pageCount;
+          };
+          doc.header = function() {
+            return {
+              text:
+                "Emitido el " +
+                new Date().getDate() +
+                "/" +
+                new Date().getMonth() +
+                1 +
+                "/" +
+                new Date().getFullYear(),
+              alignment: "left"
+            };
+          };
+        }
       }
     ],
     language: Datatable_ES,

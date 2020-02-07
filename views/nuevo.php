@@ -87,13 +87,11 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb mb-5">
           <li class="breadcrumb-item">
-            <a href="#" class="text-decoration-none text-dark">Ingresar</a>
+            <a href="#" class="text-decoration-none text-dark">Añadir consumibles</a>
           </li>
         </ol>
 
         <!-- Form-->
-
-
         <form class="mx-5 mt-5 needs-validation" id="formNuevo" novalidate>
           <div class="form-group row">
             <label for="inputCantidad" class="col-sm-2 col-form-label">Cantidad</label>

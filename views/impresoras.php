@@ -19,7 +19,7 @@
 
   <!-- Custom styles for this template-->
   <link href="../resources/css/sb-admin.css" rel="stylesheet">
-
+  <link rel="stylesheet" href="../resources/css/main.css">
   <!-- toastr -->
   <link rel="stylesheet" href="../vendor/toastr/toastr.min.css">
 
@@ -87,24 +87,24 @@
 
         <div class="row">
 
-          <form class="col-lg-12 mb-5 collapse show" id="insertPrinter">
+          <form class="col-lg-12 mb-5 collapse show" id="insertPrinter" novalidate>
             <legend class="h5">Añadir impresora</legend>
             <div class="form-row">
-              <div class="col-auto">
+              <div class="col-md-6 col-xs-12 col-lg-3">
                 <div class="input-group mb-3">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">Marca</span>
                   </div>
-                  <input type="text" id="nuevaMarca" class="form-control" placeholder="Marca" aria-label="Marca" aria-describedby="basic-addon1">
+                  <input type="text" id="nuevaMarca" class="form-control" placeholder="Marca" aria-label="Marca" aria-describedby="basic-addon1" required>
                 </div>
               </div>
 
-              <div class="col-auto">
+              <div class="col-md-6 col-xs-12 col-lg-3">
                 <div class="input-group mb-3">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">Modelo</span>
                   </div>
-                  <input type="text" class="form-control" id="nuevoModelo" placeholder="Modelo" aria-label="Modelo" aria-describedby="basic-addon1">
+                  <input type="text" class="form-control" id="nuevoModelo" placeholder="Modelo" aria-label="Modelo" aria-describedby="basic-addon1" required>
                 </div>
               </div>
 
@@ -115,7 +115,7 @@
             </div>
           </form>
 
-          <form class="col-lg-12 mb-5 collapse" id="updatePrinter">
+          <form class="col-lg-12 mb-5 collapse" id="updatePrinter" novalidate>
             <legend class="h5">Modificar impresora</legend>
             <div class="form-row">
               <div class="col-auto">
@@ -123,7 +123,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">Marca</span>
                   </div>
-                  <input type="text" class="form-control" id="updateMarcaPrinter" placeholder="Marca" aria-label="Marca" aria-describedby="basic-addon1">
+                  <input type="text" class="form-control" id="updateMarcaPrinter" placeholder="Marca" aria-label="Marca" aria-describedby="basic-addon1" required>
                 </div>
               </div>
 
@@ -132,7 +132,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">Modelo</span>
                   </div>
-                  <input type="text" class="form-control" id="updateModeloPrinter" placeholder="Modelo" aria-label="Modelo" aria-describedby="basic-addon1">
+                  <input type="text" class="form-control" id="updateModeloPrinter" placeholder="Modelo" aria-label="Modelo" aria-describedby="basic-addon1" required>
                 </div>
               </div>
 
@@ -145,7 +145,7 @@
 
 
           <!-- Tabla -->
-          <div class="table-responsive col-md-7 col-xs-12">
+          <div class="table-responsive col-md-7 col-xs-12" id="contentTable">
             <table class="table table-bordered " id="tablePrinters" width="100%" cellspacing="0">
               <thead>
                 <tr>
@@ -183,7 +183,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Confirmar eliminación</h5>
+            <h5 class="modal-title">Confirmar la eliminación de la impresora</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>

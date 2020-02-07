@@ -84,7 +84,7 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
-            <a href="#" class="text-decoration-none text-dark">Inventario</a>
+            <a href="#" class="text-decoration-none text-dark">Inventario de consumibles</a>
           </li>
         </ol>
         <div class="text-right mb-1">
@@ -140,7 +140,7 @@
           <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
             <!-- Datatable total -->
             <div class="table-responsive">
-              <table class="table table-bordered display nowrap" id="tableALL" width="100%" cellspacing="0">
+              <table class="table table-bordered display nowrap text-center" id="tableALL" width="100%" cellspacing="0">
                 <thead>
                   <tr>
                     <th>Marca</th>
@@ -148,6 +148,7 @@
                     <th>Tipo</th>
                     <th>Cantidad</th>
                     <th>Impresora</th>
+                    <!--  <th class="no-exportar">Acciones</th> -->
                   </tr>
                 </thead>
                 <tbody>
@@ -161,7 +162,7 @@
 
             <!-- Datatable de informatica -->
             <div class="table-responsive">
-              <table class="table table-bordered display nowrap" id="tableINF" width="100%" cellspacing="0">
+              <table class="table table-bordered display nowrap text-center" id="tableINF" width="100%" cellspacing="0">
                 <thead>
                   <tr>
                     <th>Marca</th>
@@ -183,7 +184,7 @@
 
             <!-- DataTable MO-->
             <div class="table-responsive">
-              <table class="table table-bordered display nowrap" id="tableMO" width="100%" cellspacing="0">
+              <table class="table table-bordered display nowrap text-center" id="tableMO" width="100%" cellspacing="0">
                 <thead>
                   <tr>
                     <th>Marca</th>

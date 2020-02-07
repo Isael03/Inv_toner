@@ -16,12 +16,9 @@ document.addEventListener("DOMContentLoaded", () => {
       deletePrinter(table);
     });
 
-  document.addEventListener("click", () => {
-    if (table.row(".selected").length > 0) {
-      const data = table.row(".selected").data();
-      printDataUpdate(data);
-    }
-  });
+  document
+    .querySelector("#contentTable")
+    .addEventListener("click", () => dataForm(table));
 });
 
 function tablePrinter() {
@@ -103,9 +100,11 @@ function showDelete(table) {
 /**@description Enviar datos del formulario  */
 /**@param table object  */
 
-async function insertNewPrinter(table) {
+function insertNewPrinter(table) {
   let marca = document.querySelector("#nuevaMarca").value;
   let modelo = document.querySelector("#nuevoModelo").value;
+
+  validClass(["#nuevaMarca", "#nuevoModelo"]);
 
   if (marca != "" && modelo != "") {
     let data = new FormData();
@@ -114,36 +113,15 @@ async function insertNewPrinter(table) {
     data.append("modelo", modelo.toUpperCase());
     data.append("case", "newPrinter");
 
-    await fetch("../api/impresora/impresora.php", {
-      method: "POST",
-      headers: {
-        Accept: "application/json"
-      },
-      body: data
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          alertError();
-          console.log("Error en la llamada");
-        }
-      })
-      .then(json => {
-        if (json.status === "ok") {
-          alertSuccess();
-
-          cleanFormPrinter();
-
-          table.ajax.reload();
-        } else {
-          alertError();
-        }
-      })
-      .catch(err => {
-        console.log(err);
+    fetchURL("../api/impresora/impresora.php", "POST", data).then(res => {
+      if (res.status === "ok") {
+        alertSuccess();
+        cleanFormPrinter();
+        table.ajax.reload();
+      } else {
         alertError();
-      });
+      }
+    });
   } else {
     alertErrorFormEmpty();
   }
@@ -154,9 +132,10 @@ function cleanFormPrinter() {
   document.querySelector("#nuevoModelo").value = "";
   document.querySelector("#updateMarcaPrinter").value = "";
   document.querySelector("#updateModeloPrinter").value = "";
+  clean_Validations(["#nuevaMarca", "#nuevoModelo"]);
 }
 
-async function updatePrinter(table) {
+function updatePrinter(table) {
   let marca = document.querySelector("#updateMarcaPrinter").value.trim();
   let modelo = document.querySelector("#updateModeloPrinter").value.trim();
 
@@ -170,36 +149,15 @@ async function updatePrinter(table) {
     data.append("modelo", modelo.toUpperCase());
     data.append("case", "updatePrinter");
 
-    await fetch("../api/impresora/impresora.php", {
-      method: "POST",
-      headers: {
-        Accept: "application/json"
-      },
-      body: data
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          alertError();
-          console.log("Error en la llamada");
-        }
-      })
-      .then(json => {
-        if (json.status === "ok") {
-          alertSuccess();
-
-          cleanFormPrinter();
-
-          table.ajax.reload();
-        } else {
-          alertError();
-        }
-      })
-      .catch(err => {
-        console.log(err);
+    fetchURL("../api/impresora/impresora.php", "POST", data).then(res => {
+      if (res.status === "ok") {
+        alertSuccess();
+        cleanFormPrinter();
+        table.ajax.reload();
+      } else {
         alertError();
-      });
+      }
+    });
   } else {
     alertErrorFormEmpty();
   }
@@ -223,7 +181,7 @@ function printDataUpdate(data) {
   document.querySelector("#updateModeloPrinter").value = data.Modelo_impresora;
 }
 
-async function deletePrinter(table) {
+function deletePrinter(table) {
   const dataTable = table.row(".selected").data();
 
   let data = new FormData();
@@ -231,34 +189,22 @@ async function deletePrinter(table) {
   data.append("id", parseInt(dataTable.Id_impresora));
   data.append("case", "deletePrinter");
 
-  await fetch("../api/impresora/impresora.php", {
-    method: "POST",
-    headers: {
-      Accept: "application/json"
-    },
-    body: data
-  })
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        alertError();
-        console.log("Error en la llamada");
-      }
-    })
-    .then(json => {
-      if (json.status === "ok") {
-        alertSuccess();
-
-        cleanFormPrinter();
-
-        table.ajax.reload();
-      } else {
-        alertError();
-      }
-    })
-    .catch(err => {
-      console.log(err);
+  fetchURL("../api/impresora/impresora.php", "POST", data).then(res => {
+    if (res.status === "ok") {
+      alertSuccess();
+      cleanFormPrinter();
+      table.ajax.reload();
+      jQuery.noConflict();
+      $("#modalDeletePrinter").modal("hide");
+    } else {
       alertError();
-    });
+    }
+  });
+}
+
+function dataForm(table) {
+  if (table.row(".selected").length > 0) {
+    const data = table.row(".selected").data();
+    printDataUpdate(data);
+  }
 }
