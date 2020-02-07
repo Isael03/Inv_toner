@@ -47,10 +47,10 @@
                         <div class="col-md-6 col-sm-12">
                             <div class="form-group">
                                 <label for="updImpresora">Impresora</label>
-                                <input type="text" class="form-control" id="updImpresora" placeholder="Modelo de impresora" required>
-                                <!--  <select class="custom-select" id="updImpresora" name="updImpresora" required>
-
-                                </select> -->
+                                <!-- <input type="text" class="form-control" id="updImpresora" placeholder="Modelo de impresora" required> -->
+                                <select class="custom-select" id="updImpresora" name="updImpresora" required>
+                                    <option value="" selected>Seleccione...</option>
+                                </select>
                             </div>
                         </div>
                     </div>

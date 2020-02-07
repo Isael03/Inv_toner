@@ -1,4 +1,4 @@
-/**Funcion para llamar al toast de exito  */
+/**@description Funciones para llamar a los toast */
 function alertSuccess() {
   toastr.success("Operación exitosa", "Exito", {
     positionClass: "toast-bottom-right",
@@ -12,7 +12,6 @@ function alertWarning(mensaje) {
   });
 }
 
-/**Funcion para llamar al toast de error  */
 function alertError() {
   toastr.error("Operación fallida", "Error", {
     positionClass: "toast-bottom-right"
@@ -39,6 +38,8 @@ function alertErrorFormEmpty() {
     timeOut: "3500"
   });
 }
+//--------------------------------------------------------------------------------------------------------
+/**@description  lista de autocompletado del modal retirar*/
 
 function autocompletar() {
   const inputFuncionarios = document.querySelector("#receivedBy");
@@ -142,7 +143,6 @@ function cerrarLista() {
   }
   indexFocus = -1;
 }
-//autocompletar(["perro", "gato", "conejo", "pez"]);
 
 function httpRequest(url, callback) {
   const http = new XMLHttpRequest();
@@ -155,9 +155,10 @@ function httpRequest(url, callback) {
     }
   };
 }
+//-------------------------------------------------------------
 
-/**@param {array} selectores */
-
+/**@description marcar bordes para indicar si el input es valido o no
+ * @param {array} selectores */
 function validClass(selectores) {
   for (let index = 0; index < selectores.length; index++) {
     let input = document.querySelector(selectores[index]);
@@ -181,6 +182,8 @@ function validClass(selectores) {
   }
 }
 
+/**@description limpiar bordes de los input validados
+ * @param {array} selectores */
 function clean_Validations(selectores) {
   for (let index = 0; index < selectores.length; index++) {
     let input = document.querySelector(selectores[index]);
@@ -193,14 +196,25 @@ function clean_Validations(selectores) {
   }
 }
 
+/**@description funcion generica para hacer peticiones a la bd  */
 async function fetchURL(url, method = "GET", data = {}) {
-  let config = {
-    method: method,
-    headers: {
-      Accept: "application/json"
-    },
-    body: data
-  };
+  if (method === "GET") {
+    var config = {
+      method: method,
+      headers: {
+        Accept: "application/json"
+      }
+    };
+  }
+  if (method === "POST") {
+    var config = {
+      method: method,
+      headers: {
+        Accept: "application/json"
+      },
+      body: data
+    };
+  }
 
   try {
     const response = await fetch(url, config);

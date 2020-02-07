@@ -63,6 +63,12 @@
           <span>Impresoras</span>
         </a>
       </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="./views/bodega.php">
+          <i class="fas fa-warehouse"></i>
+          <span>Bodegas</span>
+        </a>
+      </li>
       <li class="nav-item">
         <a class="nav-link" href="./views/historial.php">
           <i class="fas fa-history"></i>
@@ -88,20 +94,20 @@
           </li>
         </ol>
         <div class="text-right mb-1">
-          <a class='btn btn-primary text-white px-4 py-1 ' id='btnAdd' href="./views/nuevo.php" title="Añadir" role="button">
+          <a class='btn btn-primary text-white px-4 py-1 rounded-pill' id='btnAdd' href="./views/nuevo.php" title="Añadir" role="button">
             <span class="fas fa-plus"></span>
           </a>
         </div>
 
 
         <!-- Icon Cards-->
-        <div class="row justify-content-center">
-          <div class="col-xl-3 col-sm-6 mb-3">
+        <div class="row justify-content-center" id="rowCards">
+          <!--  <div class="col-xl-3 col-sm-6 mb-3">
             <div class="card text-white bg-primary o-hidden h-100">
               <div class="card-body">
-                <!--   <div class="card-body-icon">
-                  <i class="fas fa-fw fa-comments"></i>
-                </div> -->
+                <div class="card-body-icon">
+                  <i class="fas fa-boxes"></i>
+                </div>
                 <div class="text-center font-weight-bold" id="amount-inf">Calculando...</div>
               </div>
               <a class="card-footer text-white clearfix small z-1" href="#">
@@ -118,7 +124,7 @@
                 <span class="float-left font-weight-bold">Manuel Orella</span>
               </a>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <ul class="nav nav-tabs mt-5 mb-3" id="myTab" role="tablist">

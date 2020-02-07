@@ -456,3 +456,70 @@ fetch("./api/retiro/insert_retiro.php", config)
     alertError();
     console.log(err);
   });
+
+/* Ingresar nuevo consumible */
+await fetch("../api/consumible/insert_consumible.php", {
+  method: "POST",
+  headers: { Accept: "application/json" },
+  body: data
+})
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      alertError();
+      //throw "Error en la llamada fetch";
+    }
+  })
+  .then(json => {
+    console.log(json);
+
+    if (json.status === "ok") {
+      alertSuccess();
+      document.getElementById("formNuevo").reset();
+      setTimeout(() => document.location.reload(), 1000);
+    } else {
+      alertError();
+    }
+  })
+  .catch(err => {
+    alertError();
+    console.log(err);
+  });
+
+/* Mostrar marcas de impresoras en el insert */
+
+await fetch("../api/impresora/impresora.php?case=printersBrand")
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      alertError();
+      //throw "Error en la llamada fetch";
+    }
+  })
+  .then(json => {
+    if (json.marca[0].Marca_impresora != "") {
+      for (const impresora of json.marca) {
+        document.querySelector(
+          "#inputMarca"
+        ).innerHTML += `<option value=${impresora.Marca_impresora}>${impresora.Marca_impresora}</option>`;
+      }
+
+      if (json.modelo_con !== undefined) {
+        for (const modelo of json.modelo_con) {
+          document.querySelector(
+            "#inputModelo"
+          ).innerHTML += `<option value=${modelo.Modelo}>`;
+        }
+      }
+    } else {
+      document.querySelector(
+        "#inputMarca"
+      ).innerHTML += `<option value="">No hay impresoras en el sistema</option>`;
+    }
+  })
+  .catch(err => {
+    alertError();
+    console.log(err);
+  });

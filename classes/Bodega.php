@@ -66,4 +66,81 @@ class Bodega
         mysqli_free_result($result);
         $conn->close();
     }
+
+    /**Listar nombres de bodega y la cantidad que tienen alamacenada*/
+    public function listStorage()
+    {
+
+
+        $conn = $this->conn->connect();
+
+        $sql = "SELECT B.Id_bodega, B.Lugar, if(COUNT(BC.Id_bodega)=0,0, COUNT(BC.Id_bodega)) AS Cantidad FROM Bodega B left JOIN Bodega_Consumible BC ON B.Id_bodega=BC.Id_bodega GROUP by B.Id_bodega ";
+
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            while ($data = mysqli_fetch_assoc($result)) {
+                $arreglo['data'][] = array_map("utf8_encode", $data);
+            }
+        } else {
+            //die("Error");
+            $arreglo['data'][] = array("Id_bodega" => "", "Lugar" => "", "Cantidad" => "");
+        }
+
+        mysqli_free_result($result);
+        $conn->close();
+
+        if (isset($arreglo['data'])) {
+            return  $arreglo;
+        } /* else {
+            return $arreglo['data'][] = array("Id_bodega" => "", "Lugar" => "", "Cantidad" => "");
+        } */
+    }
+
+    public function addStorage(string $nameStorage)
+    {
+        $conn = $this->conn->connect();
+        $sql = "INSERT INTO Bodega (Lugar) VALUES('$nameStorage')";
+
+        if ($conn->query($sql)) {
+            $valid = true;
+        } else {
+            //echo $conn->error;
+            $valid = false;
+        }
+        $conn->close();
+        return $valid;
+    }
+
+    public function updateStorage(int $id, string $nuevoNombre)
+    {
+        $conn = $this->conn->connect();
+
+        $sql = "UPDATE Bodega SET Lugar='$nuevoNombre' WHERE Id_bodega=$id";
+
+        if ($conn->query($sql)) {
+            $valid = true;
+        } else {
+            //echo $conn->error;
+            $valid = false;
+        }
+        $conn->close();
+        return $valid;
+    }
+
+    public function deleteStorage(int $id)
+    {
+        $conn = $this->conn->connect();
+
+        $sql = "DELETE FROM Bodega WHERE Id_bodega=$id";
+
+        if ($conn->query($sql)) {
+            $valid = true;
+        } else {
+            //echo $conn->error;
+            $valid = false;
+        }
+        $conn->close();
+        return $valid;
+    }
 }

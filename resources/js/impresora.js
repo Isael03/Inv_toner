@@ -1,4 +1,3 @@
-"use strict";
 document.addEventListener("DOMContentLoaded", () => {
   let table = tablePrinter();
 
@@ -99,7 +98,6 @@ function showDelete(table) {
 
 /**@description Enviar datos del formulario  */
 /**@param table object  */
-
 function insertNewPrinter(table) {
   let marca = document.querySelector("#nuevaMarca").value;
   let modelo = document.querySelector("#nuevoModelo").value;
@@ -127,6 +125,7 @@ function insertNewPrinter(table) {
   }
 }
 
+/**@description Limpiar input de los formularios ingresar y actualizar */
 function cleanFormPrinter() {
   document.querySelector("#nuevaMarca").value = "";
   document.querySelector("#nuevoModelo").value = "";
@@ -135,6 +134,7 @@ function cleanFormPrinter() {
   clean_Validations(["#nuevaMarca", "#nuevoModelo"]);
 }
 
+/**@description Modificar impresora */
 function updatePrinter(table) {
   let marca = document.querySelector("#updateMarcaPrinter").value.trim();
   let modelo = document.querySelector("#updateModeloPrinter").value.trim();
@@ -165,7 +165,6 @@ function updatePrinter(table) {
 
 /**@description Verificar que alguna fila de la tabla este seleccionada antes de mostrar el formulario para actualizar */
 /**@param table object  */
-
 function showFormUpdate(table) {
   if (table.row(".selected").length > 0) {
     changeForm();
@@ -176,11 +175,13 @@ function showFormUpdate(table) {
   }
 }
 
+/**@description Pasar datos al formulario actualizar */
 function printDataUpdate(data) {
   document.querySelector("#updateMarcaPrinter").value = data.Marca_impresora;
   document.querySelector("#updateModeloPrinter").value = data.Modelo_impresora;
 }
 
+/**@description Borrar impresora */
 function deletePrinter(table) {
   const dataTable = table.row(".selected").data();
 

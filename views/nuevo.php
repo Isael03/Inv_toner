@@ -67,6 +67,12 @@
           <span>Impresoras</span>
         </a>
       </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="./bodega.php">
+          <i class="fas fa-warehouse"></i>
+          <span>Bodegas</span>
+        </a>
+      </li>
       <li class="nav-item">
         <a class="nav-link" href="./historial.php">
           <i class="fas fa-history"></i>
@@ -151,8 +157,8 @@
             <div class="col-sm-10">
               <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="selectUbicacion" name="ubicacion" required>
                 <option value="" selected>Seleccione...</option>
-                <option value="1">Manuel Orella</option>
-                <option value="2">Informática</option>
+                <!-- <option value="1">Manuel Orella</option>
+                <option value="2">Informática</option> -->
               </select>
             </div>
           </div>

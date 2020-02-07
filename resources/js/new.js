@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
   var forms = document.getElementsByClassName("needs-validation");
   printMarcaPrinter();
+  selectStorage();
 
   document.querySelector("#inputMarca").addEventListener("input", () => {
     document.querySelector(
@@ -32,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 });
 
+/**@description Enviar datos a la bd */
 async function sendData() {
   let cantidad = document.getElementById("inputCantidad").value.trim();
   let marca = document.getElementById("inputMarca").value.trim();
@@ -51,23 +53,9 @@ async function sendData() {
   data.append("bodega", parseInt(bodega));
   data.append("impresora", impresora.toUpperCase());
 
-  await fetch("../api/consumible/insert_consumible.php", {
-    method: "POST",
-    headers: { Accept: "application/json" },
-    body: data
-  })
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        alertError();
-        //throw "Error en la llamada fetch";
-      }
-    })
-    .then(json => {
-      console.log(json);
-
-      if (json.status === "ok") {
+  fetchURL("../api/consumible/insert_consumible.php", "POST", data)
+    .then(res => {
+      if (res.status === "ok") {
         alertSuccess();
         document.getElementById("formNuevo").reset();
         setTimeout(() => document.location.reload(), 1000);
@@ -75,33 +63,24 @@ async function sendData() {
         alertError();
       }
     })
-    .catch(err => {
-      alertError();
-      console.log(err);
-    });
+    .catch(err => console.log(err));
 }
 
+/**@description Listar marcas de impresoras en el input marca*/
 async function printMarcaPrinter() {
   //case:printersBrand
-  await fetch("../api/impresora/impresora.php?case=printersBrand")
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        alertError();
-        //throw "Error en la llamada fetch";
-      }
-    })
-    .then(json => {
-      if (json.marca[0].Marca_impresora != "") {
-        for (const impresora of json.marca) {
+
+  fetchURL("../api/impresora/impresora.php?case=printersBrand")
+    .then(res => {
+      if (res.marca[0].Marca_impresora != "") {
+        for (const impresora of res.marca) {
           document.querySelector(
             "#inputMarca"
           ).innerHTML += `<option value=${impresora.Marca_impresora}>${impresora.Marca_impresora}</option>`;
         }
 
-        if (json.modelo_con !== undefined) {
-          for (const modelo of json.modelo_con) {
+        if (res.modelo_con !== undefined) {
+          for (const modelo of res.modelo_con) {
             document.querySelector(
               "#inputModelo"
             ).innerHTML += `<option value=${modelo.Modelo}>`;
@@ -113,12 +92,10 @@ async function printMarcaPrinter() {
         ).innerHTML += `<option value="">No hay impresoras en el sistema</option>`;
       }
     })
-    .catch(err => {
-      alertError();
-      console.log(err);
-    });
+    .catch(err => console.log(err));
 }
 
+/**@description Listar modelos de impresoras en el input impresora */
 async function printModelPrinter() {
   //case: showModelPrinter
   let marca = document.querySelector("#inputMarca");
@@ -135,6 +112,21 @@ async function printModelPrinter() {
           "#modelo_imp"
         ).innerHTML += `<option value=${modelo.Modelo_impresora}>${modelo.Modelo_impresora}</option>`;
       }
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}
+
+/**Mostrar bodegas en el select de Ubicacion */
+function selectStorage() {
+  fetchURL("../api/bodega/bodegaGet.php?case=listStorage")
+    .then(res => {
+      res.data.forEach(bodega => {
+        document.getElementById(
+          "selectUbicacion"
+        ).innerHTML += `<option value=${bodega.Id_bodega}>${bodega.Lugar}</option>`;
+      });
     })
     .catch(err => {
       console.log(err);

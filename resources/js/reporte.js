@@ -1,4 +1,3 @@
-"use strict";
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("inicio-gral").value = "";
   document.getElementById("termino-gral").value = "";
@@ -72,7 +71,7 @@ function reportGeneral() {
         } else {
           cleanDataGeneral();
 
-          alertWarning("Nada encontrado");
+          alertWarning("No se encontraron datos");
         }
       })
       .catch(err => {
@@ -133,14 +132,11 @@ function listDepart() {
           termino.value = "";
         } else {
           document.getElementById("tbody-dep").innerHTML = "";
-          alertWarning("Nada encontrado");
+          alertWarning("No se encontraron datos");
         }
       })
       .catch(err => {
         console.log(err);
-        /* document.getElementById(
-          "tbody-dep"
-        ).innerHTML = `<td colspan='2'>No hay datos</td>`; */
         alertError();
       });
   } else {
