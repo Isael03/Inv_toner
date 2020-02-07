@@ -4,11 +4,31 @@ include "../../config/Database.php";
 include "../../classes/Retiro.php";
 
 
-
 $db = new ConexionData();
 $retiro = new Retiro($db);
 
 
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $retiro->showAll();
+}
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-$retiro->showAll();
+    $caso = (int) $_POST['case'];
+
+    switch ($caso) {
+        case 1:
+            $mes = (int) $_POST['mes'];
+            $retiro->filterByMonth($mes);
+            break;
+        case 2:
+            $inicio = $_POST['inicio'];
+            $termino = $_POST['termino'];
+            $retiro->filterRangeHistorial($inicio,  $termino);
+            break;
+
+        default:
+            # code...
+            break;
+    }
+}

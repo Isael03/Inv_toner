@@ -36,11 +36,11 @@
 
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top shadow-sm">
 
-    <a class="navbar-brand mr-1" href="index.html">Inventario</a>
-
-    <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
+    <button class="btn btn-link btn-sm text-white order-0 order-sm-0" id="sidebarToggle" href="#">
       <i class="fas fa-bars"></i>
     </button>
+
+    <a class="navbar-brand ml-2" href="../index.php">Inventario</a>
 
     <!-- Navbar -->
     <ul class="nav navbar-nav d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
@@ -62,15 +62,21 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="index.html">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Retiro</span>
+        <a class="nav-link" href="./impresoras.php">
+          <i class="fas fa-print"></i>
+          <span>Impresoras</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="index.html">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Historial</span>
+        <a class="nav-link" href="./historial.php">
+          <i class="fas fa-history"></i>
+          <span>Historial de entregas</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="./reporte.php">
+          <i class="fas fa-table"></i>
+          <span>Reporte de entregas</span>
         </a>
       </li>
     </ul>
@@ -78,68 +84,87 @@
     <div id="content-wrapper">
 
       <div class="container-fluid pb-3">
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb mb-5">
+          <li class="breadcrumb-item">
+            <a href="#" class="text-decoration-none text-dark">Añadir consumibles</a>
+          </li>
+        </ol>
 
         <!-- Form-->
-        <section>
-          <h1 class="pt-3">Ingresar</h1>
-          <form class="mx-5 mt-5 needs-validation" id="formNuevo" novalidate>
-            <div class="form-group row">
-              <label for="inputCantidad" class="col-sm-2 col-form-label">Cantidad</label>
-              <div class="col-sm-10">
-                <input type="number" name="cantidad" class="form-control col-md-6 mb-2 col-lg-4" id="inputCantidad" required />
-              </div>
+        <form class="mx-5 mt-5 needs-validation" id="formNuevo" novalidate>
+          <div class="form-group row">
+            <label for="inputCantidad" class="col-sm-2 col-form-label">Cantidad</label>
+            <div class="col-sm-10">
+              <input type="number" name="cantidad" class="form-control col-md-6 mb-2 col-lg-4" id="inputCantidad" required />
             </div>
-            <div class="form-group row">
-              <label for="inputMarca" class="col-sm-2 col-form-label">Marca</label>
-              <div class="col-sm-10">
-                <input type="text" name="marca" class="form-control col-md-6 mb-2 col-lg-4" id="inputMarca" required />
-              </div>
+          </div>
+          <div class="form-group row">
+            <label for="inputMarca" class="col-sm-2 col-form-label">Marca</label>
+            <div class="col-sm-10">
+              <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="inputMarca" name="marca" required>
+                <option value="" selected>Seleccione...</option>
+
+              </select>
             </div>
-            <div class="form-group row">
-              <label for="inputModelo" class="col-sm-2 col-form-label">Modelo</label>
-              <div class="col-sm-10">
-                <input type="text" name="modelo" class="form-control mb-2 col-md-6 mb-2 col-lg-4" id="inputModelo" required />
-              </div>
+          </div>
+          <div class="form-group row">
+            <label for="modelo_con" class="col-sm-2 col-form-label">Modelo</label>
+            <div class="col-sm-10">
+              <!-- <input type="text" name="modelo" class="form-control mb-2 col-md-6 mb-2 col-lg-4" id="inputModelo" required /> -->
+              <input list="inputModelo" name="modelo" class="form-control mb-2 col-md-6 mb-2 col-lg-4" autocomplete="off" id="modelo_con" required>
+              <datalist id="inputModelo">
+              </datalist>
+
             </div>
-            <div class="form-group row">
-              <label for="selectTipo" class="col-sm-2 col-form-label">Tipo</label>
-              <div class="col-sm-10">
-                <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="selectTipo" name="tipo" required>
-                  <option value="" selected>Seleccione...</option>
-                  <option value="Fusor">Fusor</option>
-                  <option value="Tinta">Tinta</option>
-                  <option value="Tambor">Tambor</option>
-                  <option value="Toner">Tóner</option>
-                  <option value="Tambor de residuo">Tambor de residuo</option>
-                  <option value="Tambor de arrastre">Tambor de arrastre</option>
-                  <option value="Correa de arrastre">Correa de arrastre</option>
-                </select>
-              </div>
+          </div>
+          <div class="form-group row">
+            <label for="selectTipo" class="col-sm-2 col-form-label">Tipo</label>
+            <div class="col-sm-10">
+              <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="selectTipo" name="tipo" required>
+                <option value="" selected>Seleccione...</option>
+                <option value="Fusor">Fusor</option>
+                <option value="Tinta">Tinta</option>
+                <option value="Tambor">Tambor</option>
+                <option value="Toner">Tóner</option>
+                <option value="Tambor de residuo">Tambor de residuo</option>
+                <option value="Tambor de arrastre">Tambor de arrastre</option>
+                <option value="Correa de arrastre">Correa de arrastre</option>
+              </select>
             </div>
-            <div class="form-group row">
-              <label for="inputModeloImpresora" class="col-sm-2 col-form-label">Impresora</label>
-              <div class="col-sm-10">
-                <input type="text" name="impresora" class="form-control mb-2 col-md-6 mb-2 col-lg-4" id="inputModeloImpresora" required />
-              </div>
+          </div>
+          <div class="form-group row">
+            <label for="modelo_imp" class="col-sm-2 col-form-label">Impresora</label>
+            <div class="col-sm-10">
+              <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="modelo_imp" name="impresora" required>
+                <option value="" selected>Seleccione...</option>
+                <!--<option value="1">Manuel Orella</option>
+                <option value="2">Informática</option> -->
+              </select>
+              <!--  <input list="inputModeloImpresora" name="impresora" class="form-control mb-2 col-md-6 mb-2 col-lg-4" id="modelo_imp" autocomplete="off" required>
+              <datalist id="inputModeloImpresora">
+              </datalist> -->
             </div>
-            <div class="form-group row">
-              <label for="selectUbicacion" class="col-sm-2 col-form-label">Ubicación</label>
-              <div class="col-sm-10">
-                <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="selectUbicacion" name="ubicacion" required>
-                  <option value="" selected>Seleccione...</option>
-                  <option value="1">Manuel Orella</option>
-                  <option value="2">Informática</option>
-                </select>
-              </div>
+          </div>
+          <div class="form-group row">
+            <label for="selectUbicacion" class="col-sm-2 col-form-label">Ubicación</label>
+            <div class="col-sm-10">
+              <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="selectUbicacion" name="ubicacion" required>
+                <option value="" selected>Seleccione...</option>
+                <option value="1">Manuel Orella</option>
+                <option value="2">Informática</option>
+              </select>
             </div>
-            <div class="mt-4">
-              <a href="../index.php" class="mr-3">Volver</a>
-              <button type="submit" class="btn btn-primary px-4" id="btnNuevoToner">
-                Añadir
-              </button>
-            </div>
-          </form>
-        </section>
+          </div>
+          <div class="mt-4">
+            <a href="../index.php" class="mr-3">Volver</a>
+            <button type="submit" class="btn btn-primary px-4" id="btnNuevoToner">
+              Añadir
+            </button>
+          </div>
+
+        </form>
+
       </div>
       <!-- /.container-fluid -->
 
@@ -158,24 +183,7 @@
   </div>
   <!-- /#wrapper -->
 
-  <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
-        </div>
-      </div>
-    </div>
-  </div>
+
 
 
   <!-- Bootstrap core JavaScript-->

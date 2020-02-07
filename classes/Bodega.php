@@ -3,12 +3,13 @@
 class Bodega
 {
 
-    private $conn;
+    public $conn;
 
-    function __construct($conn)
+    public function __construct($conn)
     {
-        self::checkStorage($conn);
+
         $this->conn = $conn;
+        self::checkStorage($conn);
     }
 
 
@@ -16,6 +17,7 @@ class Bodega
     {
         $conn = $conn->connect();
         $sql = "SELECT * FROM Bodega";
+
         $result = $conn->query($sql);
 
         if ($result->num_rows === 0) {
@@ -29,8 +31,6 @@ class Bodega
 
     public function amountHeld()
     {
-
-
 
         $conn = $this->conn->connect();
 
@@ -59,8 +59,7 @@ class Bodega
             die("Error");
         }
 
-        //$test = array('MO' => $arreglo[0], 'INF' => $arreglo[1]);
-        //echo json_encode($test);
+
         echo json_encode($arreglo);
 
 

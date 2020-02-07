@@ -14,7 +14,10 @@
                         <div class="col-md-6 col-sm-12">
                             <div class="form-group ">
                                 <label for="updMarca">Marca</label>
-                                <input type="text" class="form-control" id="updMarca" placeholder="Marca" required>
+                                <!-- <input type="text" class="form-control" id="updMarca" placeholder="Marca" required> -->
+                                <select class="custom-select" id="updMarca" name="marca" required>
+                                    <option value="" selected>Seleccione...</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-12">
@@ -45,6 +48,9 @@
                             <div class="form-group">
                                 <label for="updImpresora">Impresora</label>
                                 <input type="text" class="form-control" id="updImpresora" placeholder="Modelo de impresora" required>
+                                <!--  <select class="custom-select" id="updImpresora" name="updImpresora" required>
+
+                                </select> -->
                             </div>
                         </div>
                     </div>

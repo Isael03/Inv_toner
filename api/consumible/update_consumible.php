@@ -2,9 +2,11 @@
 
 include "../../config/Database.php";
 include "../../classes/Consumible.php";
+include_once "../../classes/Impresora.php";
 
 $conn = new ConexionData();
 $consumible = new Consumible($conn);
+$impresora = new Impresora($conn);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // header('Content-Type: application/json');
@@ -30,7 +32,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo  $tipo_old;
     echo  $impresora_old; */
 
+    $idImpresora_old = $impresora->showId($impresora_old);
 
+    $idImpresora_new = $impresora->showId($impresora_new);
 
-    $consumible->update($marca_new, $modelo_new, $tipo_new, $impresora_new, $marca_old, $modelo_old, $tipo_old, $impresora_old);
+    if (isset($idImpresora_new) && isset($idImpresora_old)) {
+        $valid = $consumible->update($marca_new, $modelo_new, $tipo_new, $idImpresora_new, $marca_old, $modelo_old, $tipo_old, $idImpresora_old);
+
+        if ($valid) {
+            echo json_encode(array("status" => "ok"));
+        } else {
+            echo json_encode(array("status" => "bad"));
+        }
+    }
 }
