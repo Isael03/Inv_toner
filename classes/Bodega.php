@@ -21,7 +21,7 @@ class Bodega
         $result = $conn->query($sql);
 
         if ($result->num_rows === 0) {
-            $sql = "INSERT INTO Bodega (Id_bodega, Lugar) VALUES (1, 'Manuel Orella'), (2, 'Informatica')";
+            $sql = "INSERT INTO Bodega (Id_bodega, Lugar) VALUES (1, 'Informatica'), (2, 'Bodega A'), (3, 'Bodega B')";
             if ($conn->query($sql)) {
                 //echo "Bodegas ingresadas";
             };
@@ -74,7 +74,7 @@ class Bodega
 
         $conn = $this->conn->connect();
 
-        $sql = "SELECT B.Id_bodega, B.Lugar, if(COUNT(BC.Id_bodega)=0,0, COUNT(BC.Id_bodega)) AS Cantidad FROM Bodega B left JOIN Bodega_Consumible BC ON B.Id_bodega=BC.Id_bodega GROUP by B.Id_bodega ";
+        $sql = "SELECT B.Id_bodega, B.Lugar, if(COUNT(BC.Id_bodega)=0,0, COUNT(BC.Id_bodega)) AS Cantidad FROM Bodega B left JOIN Bodega_Consumible BC ON B.Id_bodega=BC.Id_bodega GROUP by B.Id_bodega ORDER BY B.Id_bodega ASC";
 
         $result = $conn->query($sql);
 
@@ -130,17 +130,22 @@ class Bodega
 
     public function deleteStorage(int $id)
     {
-        $conn = $this->conn->connect();
 
-        $sql = "DELETE FROM Bodega WHERE Id_bodega=$id";
+        if ($id > 3) {
+            $conn = $this->conn->connect();
 
-        if ($conn->query($sql)) {
-            $valid = true;
+            $sql = "DELETE FROM Bodega WHERE Id_bodega=$id";
+
+            if ($conn->query($sql)) {
+                $valid = true;
+            } else {
+                //echo $conn->error;
+                $valid = false;
+            }
+            $conn->close();
         } else {
-            //echo $conn->error;
             $valid = false;
         }
-        $conn->close();
         return $valid;
     }
 }

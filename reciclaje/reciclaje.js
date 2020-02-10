@@ -523,3 +523,29 @@ await fetch("../api/impresora/impresora.php?case=printersBrand")
     alertError();
     console.log(err);
   });
+
+/**For Card  */
+
+for (let i = 0; i < res.data.length; i++) {
+  if (i >= 3) break;
+  if (i === 10) {
+    i = 0;
+  }
+
+  document.getElementById(
+    "rowCards"
+  ).innerHTML += `  <div class="col-xl-3 col-sm-6 mb-3">
+    <div class="card text-white bg-${color[i]} o-hidden h-100">
+      <div class="card-body">
+        <div class="card-body-icon">
+          <i class="fas fa-boxes"></i>
+        </div>
+        <div class="text-center font-weight-bold idstg">${res.data[i].Cantidad}</div>
+      </div>
+      <a class="card-footer text-white clearfix small z-1" href="#">
+        <span class="float-left font-weight-bold">${res.data[i].Lugar}</span>
+      </a>
+    </div>
+  </div>`;
+  //changeTabName(res.data[i].Lugar, i);
+}

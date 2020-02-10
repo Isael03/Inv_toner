@@ -48,7 +48,7 @@
                             <div class="form-group">
                                 <label for="updImpresora">Impresora</label>
                                 <!-- <input type="text" class="form-control" id="updImpresora" placeholder="Modelo de impresora" required> -->
-                                <select class="custom-select" id="updImpresora" name="updImpresora" required>
+                                <select class="custom-select" id="updImpresora" name="updImpresora">
                                     <option value="" selected>Seleccione...</option>
                                 </select>
                             </div>

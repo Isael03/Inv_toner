@@ -1,63 +1,65 @@
 "use strict";
+
 document.addEventListener("DOMContentLoaded", function() {
-  const tableINF = listINF();
-  const tableMO = listMO();
-  const tableAll = listALL();
+  showContent();
   amountHeld();
   autocompletar();
   printMarcaPrinter();
-  showCards();
 
-  /*------------------------- Botones de modals ----------------------------*/
+  /**Las tablas y eventos relacionados cargan 1 segundo despues de cargar las cartas y tabs, para evitar conflictos de variables desconocidas */
+  setTimeout(() => {
+    var tableINF = listINF();
+    var tableMO = listMO();
+    var tableAll = listALL();
 
-  /* boton eliminar del modal */
-  document.querySelector("#btnModalDelete").addEventListener("click", () => {
-    confirmDelete(tableAll);
-  });
+    /*------------------------- Botones de modals ----------------------------*/
 
-  /* boton actualizar del modal */
-  document.querySelector("#btnModalUpdate").addEventListener("click", () => {
-    confirmUpdate(tableAll);
-  });
+    /* boton eliminar del modal */
+    document.querySelector("#btnModalDelete").addEventListener("click", () => {
+      confirmDelete(tableAll);
+    });
 
-  /* Boton retirar del modal */
-  document.querySelector("#btnModalWithdraw").addEventListener("click", () => {
-    if (tableAll.row(".selected").length > 0) {
-      confirmWithdraw(tableAll);
-    }
-    if (tableMO.row(".selected").length > 0) {
-      confirmWithdrawINF_MO(tableMO);
-    }
-    if (tableINF.row(".selected").length > 0) {
-      confirmWithdrawINF_MO(tableINF);
-    }
-  });
+    /* boton actualizar del modal */
+    document.querySelector("#btnModalUpdate").addEventListener("click", () => {
+      confirmUpdate(tableAll);
+    });
 
-  document.querySelector("#btnModalTransfer").addEventListener("click", () => {
-    if (tableMO.row(".selected").length > 0) {
-      confirmTransfer(tableMO, tableINF);
-    }
-    if (tableINF.row(".selected").length > 0) {
-      confirmTransfer(tableINF, tableMO);
-    }
-  });
+    /* Boton retirar del modal */
+    document
+      .querySelector("#btnModalWithdraw")
+      .addEventListener("click", () => {
+        if (tableAll.row(".selected").length > 0) {
+          confirmWithdraw(tableAll);
+        }
+        if (tableMO.row(".selected").length > 0) {
+          confirmWithdrawINF_MO(tableMO);
+        }
+        if (tableINF.row(".selected").length > 0) {
+          confirmWithdrawINF_MO(tableINF);
+        }
+      });
 
-  /* Desmarcar filas seleccionadas al cambiar la pestaña de la tabla */
-  document.querySelector("#tabAll").addEventListener("click", () => {
-    tableMO.rows().deselect();
-    tableINF.rows().deselect();
-    tableAll.ajax.reload();
-  });
-  document.querySelector("#tabINF").addEventListener("click", () => {
-    tableMO.rows().deselect();
-    tableAll.rows().deselect();
-    tableINF.ajax.reload();
-  });
-  document.querySelector("#tabMO").addEventListener("click", () => {
-    tableAll.rows().deselect();
-    tableINF.rows().deselect();
-    tableMO.ajax.reload();
-  });
+    document
+      .querySelector("#btnModalTransfer")
+      .addEventListener("click", () => {
+        if (tableMO.row(".selected").length > 0) {
+          confirmTransfer(tableMO, tableINF);
+        }
+        if (tableINF.row(".selected").length > 0) {
+          confirmTransfer(tableINF, tableMO);
+        }
+      });
+
+    /* Desmarcar filas seleccionadas al cambiar la pestaña de la tabla */
+    document.querySelector("#myTab").addEventListener("click", () => {
+      tableMO.rows().deselect();
+      tableINF.rows().deselect();
+      tableAll.rows().deselect();
+      tableAll.ajax.reload();
+      tableINF.ajax.reload();
+      tableMO.ajax.reload();
+    });
+  }, 1000);
 
   /* Evento del input marca del modal actualizar */
   document.querySelector("#updMarca").addEventListener("input", () => {
@@ -67,6 +69,8 @@ document.addEventListener("DOMContentLoaded", function() {
     ).innerHTML = `<option value="">Seleccione...</option>`;
   });
 });
+
+//***************************************************************************************************************************** */
 
 /* Acción modificar-abrir modal */
 /**@param {object} table*/
@@ -78,7 +82,6 @@ function getDataUpdate(table) {
     jQuery.noConflict();
     jQuery("#modalUpdate");
     $("#modalUpdate").modal("show");
-    console.log(data);
 
     let marca = data.Marca;
     let modelo = data.Modelo;
@@ -138,12 +141,14 @@ function confirmDelete(table) {
 
 /* Pasar datos al modal de modificar */
 /**@param {string} marca,  @param {string} modelo, @param {string} tipo, @param {string} impresora*/
-function setModalUpdate(marca, modelo, tipo, impresora) {
+async function setModalUpdate(marca, modelo, tipo, impresora) {
   document.getElementById("updMarca").value = marca;
   document.getElementById("updModelo").value = modelo;
   document.getElementById("updTipo").value = tipo;
-  printModelPrinter();
+  await printModelPrinter();
+  //setTimeout(() => {
   document.getElementById("updImpresora").value = impresora;
+  //}, 300);
 }
 
 /* validacion de datos del modal modificar */
@@ -164,7 +169,7 @@ function validFields() {
 
 /* Botón confirmación del modal modificar */
 /**@param {object} table */
-async function confirmUpdate(table) {
+function confirmUpdate(table) {
   var datatable = table.row(".selected").data();
 
   if (validFields()) {
@@ -205,7 +210,6 @@ async function confirmUpdate(table) {
 
 /* Abrir modal para retirar */
 /**@param {object} table*/
-
 function getDataWithdraw(table) {
   if (table.row(".selected").length > 0) {
     jQuery.noConflict();
@@ -272,8 +276,8 @@ function confirmWithdraw(table) {
   }
 }
 
+/**@deprecated */
 /**@description  contar elementos de las bodegas y pasarlos a las cards*/
-
 async function amountHeld() {
   let config = {
     method: "GET",
@@ -290,8 +294,8 @@ async function amountHeld() {
       }
     })
     .then(json => {
-      document.querySelector("#amount-inf").innerHTML = json.INF.Cantidad_INF;
-      document.querySelector("#amount-mo").innerHTML = json.MO.Cantidad_MO;
+      /*   document.querySelector("#amount-inf").innerHTML = json.INF.Cantidad_INF;
+      document.querySelector("#amount-mo").innerHTML = json.MO.Cantidad_MO; */
     })
     .catch(err => console.log(err));
 }
@@ -352,12 +356,12 @@ function confirmTransfer(table, table2) {
       fetch("./api/consumible/transfer_consumible.php", config)
         .then(response => {
           if (response.ok) {
+            updateCountCard();
             jQuery.noConflict();
             jQuery("#modalTransfer");
             $("#modalTransfer").modal("hide");
             table.ajax.reload();
             table2.ajax.reload();
-            amountHeld();
             alertSuccess();
           } else {
             alertError();
@@ -516,14 +520,11 @@ function listALL() {
       } /* ,
       {
         defaultContent:
-          "<div class='btn-group btn-group-sm' role='group' aria-label='Basic example'>" +
-          "<button class='btn btn-info' id='btnWithdraw'><span class='fas fa-box-open'></span></button>" +
-          "<button  id='btnUpdate' class='btn btn-warning mx-2'><span class='fas fa-wrench text-white'></span>" +
-          "</button > <button class='btn btn-danger' id='btnDelete'>" +
-          "<span class='fas fa-trash'></span></button></div>"
+          "<div class='btn-group btn-group-sm' role='group' aria-label='Basic example'><button class='btn btn-info' id='btnWithdraw'><span class='fas fa-box-open'></span></button><button  id='btnUpdate' class='btn btn-warning mx-2' ><span class='fas fa-wrench text-white'></span></button > <button class='btn btn-danger' id='btnDelete'><span class='fas fa-trash'></span></button></div>"
       } */
     ]
   });
+  //getUpdate("#tableALL tbody", table);
 
   setInterval(function() {
     table.ajax.reload();
@@ -532,29 +533,40 @@ function listALL() {
   return table;
 }
 
-/**@description Experimental, deprecated */
-/* function btnupdate(table) {
-  $("tbody").on("click", "#btnUpdate", function() {
+/**@deprecated */
+/* var getUpdate = function(tbody, table) {
+  $(tbody).on("click", "#btnUpdate", function() {
+
     var data = table.row($(this).parents("tr")).data();
+    jQuery.noConflict();
+    jQuery("#modalUpdate");
+    $("#modalUpdate").modal("show");
 
-    getDataUpdate(table);
+    let marca = data.Marca;
+    let modelo = data.Modelo;
+    let tipo = data.Tipo;
+    let impresora = data.Impresora;
+    setModalUpdate(marca, modelo, tipo, impresora);
   });
-} */
+}; */
 
-/* Datatable Manuel Orella */
+/* Datatable Bodega A*/
 function listMO() {
-  /**Configuración Datatable*/
-  /** Variable Datatable_ES se encuentra en /scripts/main.js */
+  let dataTab = document.querySelectorAll(".id-tab");
+  //let id_table = document.querySelectorAll(".id-table");
+
   var table = $("#tableMO").DataTable({
     destroy: true,
     //responsive: true,
-    //scrollX: true,
     order: [[0, "desc"]],
     select: true,
     language: Datatable_ES,
     ajax: {
       method: "GET",
-      url: "./api/consumible/get_consumibleMO.php"
+      url: "./api/consumible/get_consumibles.php",
+      data: {
+        bodega: dataTab[1].text
+      }
     },
     columns: [
       { data: "Marca" },
@@ -572,7 +584,7 @@ function listMO() {
         text: "<span class='fas fa-file-pdf'></span>",
         titleAttr: "PDF",
         className: "btn btn-success",
-        title: "Elementos en bodega",
+        //title: `Consumibles en ${document.getElementById("aboda").text}`,
         customize: function(doc) {
           doc.content[1].margin = [100, 10, 100, 0];
           doc.defaultStyle.alignment = "center";
@@ -622,7 +634,8 @@ function listMO() {
 
 /* Tabla de informatica */
 function listINF() {
-  /**Configuración Datatable*/
+  let dataTab = document.querySelectorAll(".id-tab");
+
   var table = $("#tableINF").DataTable({
     destroy: true,
     //responsive: true,
@@ -632,7 +645,10 @@ function listINF() {
     language: Datatable_ES,
     ajax: {
       method: "GET",
-      url: "./api/consumible/get_consumibleINF.php"
+      url: "./api/consumible/get_consumibles.php",
+      data: {
+        bodega: dataTab[0].text
+      }
     },
     dom: "Bfrtip",
     buttons: [
@@ -641,7 +657,7 @@ function listINF() {
         text: "<span class='fas fa-file-pdf'></span>",
         titleAttr: "PDF",
         className: "btn btn-success",
-        title: "Consumibles en Informática",
+        //  title: `Consumibles en ${document.getElementById("ainf").text}`,
         customize: function(doc) {
           doc.content[1].margin = [100, 10, 100, 0];
           doc.defaultStyle.alignment = "center";
@@ -700,7 +716,8 @@ function listINF() {
 async function printModelPrinter() {
   //case: namePrinter
   /* resetear select */
-  document.querySelector("#updImpresora").innerHTML = ``;
+  document.querySelector("#updImpresora").innerHTML =
+    "<option value='' selected>Seleccione...</option>";
   let marca = document.querySelector("#updMarca");
   /*Consulta y llenar select con resultados */
   await fetch(
@@ -713,7 +730,7 @@ async function printModelPrinter() {
       json.forEach(impresora => {
         document.querySelector(
           "#updImpresora"
-        ).innerHTML += `<option value=${impresora.Impresora}>${impresora.Impresora}</option>`;
+        ).innerHTML += `<option >${impresora.Impresora}</option>`;
       });
     })
     .catch(err => {
@@ -737,7 +754,7 @@ async function printMarcaPrinter() {
         for (const impresora of json.marca) {
           document.querySelector(
             "#updMarca"
-          ).innerHTML += `<option value=${impresora.Marca_impresora}>${impresora.Marca_impresora}</option>`;
+          ).innerHTML += `<option>${impresora.Marca_impresora}</option>`;
         }
       } else {
         document.querySelector(
@@ -751,41 +768,101 @@ async function printMarcaPrinter() {
     });
 }
 
-function showCards() {
+function showContent() {
+  document.getElementById("rowCards").innerHTML = "";
+
   fetchURL("./api/bodega/bodegaGet.php?case=listStorage")
     .then(function(res) {
-      const color = [
-        "primary",
-        "warning",
-        "success",
-        "danger",
-        "info",
-        "dark",
-        "secondary",
-        "light",
-        "white",
-        "transparent"
-      ];
       let i = 0;
+
       res.data.forEach(function(bodega) {
-        document.getElementById(
-          "rowCards"
-        ).innerHTML += `  <div class="col-xl-3 col-sm-6 mb-3">
-        <div class="card text-white bg-${color[i++]} o-hidden h-100">
-          <div class="card-body">
-            <div class="card-body-icon">
-              <i class="fas fa-boxes"></i>
-            </div>
-            <div class="text-center font-weight-bold" >${bodega.Cantidad}</div>
-          </div>
-          <a class="card-footer text-white clearfix small z-1" href="#">
-            <span class="float-left font-weight-bold">${bodega.Lugar}</span>
-          </a>
-        </div>
-      </div>`;
+        /**Bloquear limite a 3 cartas */
+        if (i < 3) {
+          if (i === 10) {
+            i = 0;
+          }
+          showCards(bodega.Cantidad, bodega.Lugar, i);
+          changeTabName(bodega.Lugar, i, bodega.Id_bodega);
+          i++;
+        }
       });
     })
     .catch(function(err) {
       console.log(err);
     });
+}
+
+/**Actualizar el contador de las cartas */
+function updateCountCard() {
+  fetchURL("./api/bodega/bodegaGet.php?case=listStorage")
+    .then(function(res) {
+      let i = 0;
+      let card = document.querySelectorAll(".idstg");
+      res.data.forEach(function(bodega) {
+        card[i++].innerHTML = bodega.Cantidad;
+      });
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+}
+
+//Imprimir las pestañas de las tablas en pantalla
+function changeTabName(nombre, index, id) {
+  let tab = document.getElementById("myTab");
+  let tabContent = document.getElementById("myTabContent");
+
+  tab.innerHTML += `<li class="nav-item">
+  <a class="nav-link id-tab" data-toggle="tab" href="#tab-${id}" role="tab" aria-controls="tab-${id}" aria-selected="false">${nombre}</a>
+</li>`;
+
+  /*   tabContent.innerHTML += `<div class="tab-pane fade" id="tab-${id}" role="tabpanel" aria-labelledby="tab-${id}">
+<!-- Datatable de informatica -->
+<div class="table-responsive">
+  <table class="table table-bordered display nowrap text-center id-table" id="table${id}" width="100%" cellspacing="0">
+    <thead>
+      <tr>
+        <th>Marca</th>
+        <th>Modelo</th>
+        <th>Tipo</th>
+        <th>Cantidad</th>
+        <th>Impresora</th>
+      </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+  </table>
+</div>
+</div>`; */
+}
+
+/**Imprimir las cartas de las bodegas en pantalla */
+function showCards(cantidad, lugar, i) {
+  const color = [
+    "primary",
+    "warning",
+    "success",
+    "danger",
+    "info",
+    "dark",
+    "secondary",
+    "light",
+    "white"
+  ];
+  document.getElementById(
+    "rowCards"
+  ).innerHTML += `  <div class="col-xl-3 col-sm-6 mb-3">
+  <div class="card text-white bg-${color[i]} o-hidden h-100">
+    <div class="card-body">
+      <div class="card-body-icon">
+        <i class="fas fa-boxes"></i>
+      </div>
+      <div class="text-center font-weight-bold idstg">${cantidad}</div>
+    </div>
+    <a class="card-footer text-white clearfix small z-1" href="#">
+      <span class="float-left font-weight-bold text-capitalize">${lugar}</span>
+    </a>
+  </div>
+</div>`;
 }

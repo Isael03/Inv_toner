@@ -152,7 +152,7 @@ class Impresora
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT CONCAT(Marca_impresora, ' ', Modelo_impresora) AS Impresora from Impresora WHERE Marca_impresora='$marca'";
+        $sql = "SELECT Id_impresora, CONCAT(Marca_impresora, ' ', Modelo_impresora) AS Impresora from Impresora WHERE Marca_impresora='$marca'";
 
         $result = $conn->query($sql);
 

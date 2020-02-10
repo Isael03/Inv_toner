@@ -60,6 +60,12 @@
           <span>Impresoras</span>
         </a>
       </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="./bodega.php">
+          <i class="fas fa-warehouse"></i>
+          <span>Bodegas</span>
+        </a>
+      </li>
       <li class="nav-item">
         <a class="nav-link" href="./historial.php">
           <i class="fas fa-history"></i>

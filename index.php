@@ -127,23 +127,25 @@
           </div> -->
         </div>
 
-        <ul class="nav nav-tabs mt-5 mb-3" id="myTab" role="tablist">
-          <li class="nav-item" id="tabAll">
-            <a class="nav-link active" id="view-all" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Todos</a>
+        <ul class="nav nav-tabs mt-5 mb-3 text-capitalize" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="true">Todos</a>
           </li>
-          <li class="nav-item" id="tabINF">
-            <a class="nav-link" id="view-inf" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Informática</a>
+          <!--  <li class="nav-item">
+            <a class="nav-link id-tab" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="false">Informatica</a>
           </li>
-          <li class="nav-item" id="tabMO">
-            <a class="nav-link" id="view-str" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Manuel Orella</a>
+          <li class="nav-item">
+            <a class="nav-link id-tab" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Manuel Orella</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link  id-tab" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">Bodega B</a>
+          </li> -->
         </ul>
 
         <!-- Pestañas -->
         <div class="tab-content  mb-4" id="myTabContent">
 
-
-          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
             <!-- Datatable total -->
             <div class="table-responsive">
               <table class="table table-bordered display nowrap text-center" id="tableALL" width="100%" cellspacing="0">
@@ -154,7 +156,7 @@
                     <th>Tipo</th>
                     <th>Cantidad</th>
                     <th>Impresora</th>
-                    <!--  <th class="no-exportar">Acciones</th> -->
+                    <!-- <th class="no-exportar">Acciones</th> -->
                   </tr>
                 </thead>
                 <tbody>
@@ -164,9 +166,7 @@
             </div>
           </div>
 
-          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-
-            <!-- Datatable de informatica -->
+          <div class="tab-pane fade" id="tab-1" role="tabpanel" aria-labelledby="tab-1">
             <div class="table-responsive">
               <table class="table table-bordered display nowrap text-center" id="tableINF" width="100%" cellspacing="0">
                 <thead>
@@ -176,7 +176,6 @@
                     <th>Tipo</th>
                     <th>Cantidad</th>
                     <th>Impresora</th>
-                    <!--   <th>Bodega</th> -->
                   </tr>
                 </thead>
                 <tbody>
@@ -186,9 +185,10 @@
             </div>
 
           </div>
-          <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
 
-            <!-- DataTable MO-->
+          <!-- Bodega A -->
+          <div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="tab-2">
+
             <div class="table-responsive">
               <table class="table table-bordered display nowrap text-center" id="tableMO" width="100%" cellspacing="0">
                 <thead>
@@ -198,7 +198,27 @@
                     <th>Tipo</th>
                     <th>Cantidad</th>
                     <th>Impresora</th>
-                    <!--                   <th>Bodega</th> -->
+                  </tr>
+                </thead>
+
+                <tbody>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Bodega B -->
+          <div class="tab-pane fade" id="tab-3" role="tabpanel" aria-labelledby="bodegaB-tab">
+            <div class="table-responsive">
+              <table class="table table-bordered display nowrap text-center" id="tableBODB" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Tipo</th>
+                    <th>Cantidad</th>
+                    <th>Impresora</th>
                   </tr>
                 </thead>
 

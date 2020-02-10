@@ -66,6 +66,27 @@ class Consumible
         $conn->close();
     }
 
+
+    public function getConsumiblesStorage(string $lugar = null)
+    {
+        $conn = $this->conn->connect();
+
+        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo,  CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, COUNT(C.Modelo) AS Cantidad, B.Lugar FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON BC.Id_bodega=B.Id_bodega INNER JOIN Impresora I ON C.Id_impresora=I.Id_impresora AND B.Lugar='$lugar' GROUP BY C.Modelo";
+
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            while ($data = mysqli_fetch_assoc($result)) {
+                $arreglo["data"][] = array_map("utf8_encode", $data);
+            }
+        } else {
+            $arreglo["data"][] = ["Id_consumible" => "", "Fecha" => "", "Marca" => "", "Modelo" => "", "Lugar" => "", "Tipo" => "", "Id_bodega" => "", "Impresora" => "", "Cantidad" => ""];
+            //die("Error");
+        }
+        mysqli_free_result($result);
+        $conn->close();
+        return $arreglo;
+    }
     /* Mostrar todos los consumibles del Manuel Orella */
 
     public function showAllMO()
@@ -362,7 +383,7 @@ class Consumible
         $conn = $this->conn->connect();
 
 
-        $sql = "UPDATE Consumible SET Marca='$marca_new', Modelo='$modelo_new', Tipo='$tipo_new', Id_impresora='$impresora_new' WHERE Marca='$marca_old' AND Modelo='$modelo_old' AND Tipo='$tipo_old' AND Id_impresora='$impresora_old'";
+        $sql = "UPDATE Consumible SET Marca='$marca_new', Modelo='$modelo_new', Tipo='$tipo_new', Id_impresora=$impresora_new WHERE Marca='$marca_old' AND Modelo='$modelo_old' AND Tipo='$tipo_old' AND Id_impresora=$impresora_old";
 
 
         if ($conn->query($sql)) {
@@ -371,7 +392,8 @@ class Consumible
             $valid = false;
             //echo "Error updating record: " . $conn->error;
         }
-        return $valid;
+
         $conn->close();
+        return $valid;
     }
 }

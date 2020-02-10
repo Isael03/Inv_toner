@@ -96,7 +96,7 @@
                     <form class="col-lg-12 mb-5 collapse show" id="insertPrinter" novalidate>
                         <legend class="h5">Añadir bodega</legend>
                         <div class="form-row">
-                            <div class="col-md-6 col-xs-12 col-lg-3">
+                            <div class="col-md-6 col-xs-12 col-lg-4">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="basic-addon1">Nombre</span>
