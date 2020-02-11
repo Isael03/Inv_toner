@@ -33,25 +33,7 @@ class Retiro
         $conn->close();
     }
 
-    /* Retiro desde cualquier bodega */
-    public function insertWithdraw(int $cantidad, string $usuarioRetira, string $usuarioRecibe,  string $marca, string $modelo, string $tipo, string $impresora, string $idDirRecibe, string $idDepRecibe, string $idRecibe, string $nombreDepartamento)
-    {
-        $conn = $this->conn->connect();
 
-        $sql = "INSERT INTO Retiro (Usuario_retira, Usuario_recibe, Id_recibe, Id_departamento, Departamento, Marca, Modelo, Tipo, Cantidad, Impresora, Id_direccion) VALUES ('$usuarioRetira','$usuarioRecibe','$idRecibe','$idDepRecibe','$nombreDepartamento','$marca','$modelo', '$tipo', '$cantidad', '$impresora','$idDirRecibe')";
-
-
-        if ($conn->query($sql)) {
-            $this->consumible->deleteCon($cantidad, $modelo, $marca, $tipo);
-            /*   $arreglo = array('status' => 'ok');
-            echo json_encode($arreglo); */
-        } else {
-            $arreglo = array('status' => 'bad');
-            echo json_encode($arreglo);
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
-        $conn->close();
-    }
 
     /* Retiros para informatica y manuel orella */
     public function insertWithdrawINF_MO(int $cantidad, string $usuarioRetira, string $usuarioRecibe, string $marca, string $modelo, string $tipo, string $impresora, string $bodega, string $idDirRecibe, string $idDepRecibe, string $idRecibe, string $nombreDepartamento)
@@ -62,18 +44,20 @@ class Retiro
         $sql = "INSERT INTO Retiro (Usuario_retira, Usuario_recibe, Id_recibe, Id_departamento, Departamento, Marca, Modelo, Tipo, Cantidad, Impresora, Id_direccion) VALUES ('$usuarioRetira','$usuarioRecibe','$idRecibe','$idDepRecibe','$nombreDepartamento','$marca','$modelo', '$tipo', '$cantidad', '$impresora','$idDirRecibe')";
 
         if ($conn->query($sql)) {
-            $this->consumible->deleteConsumables($cantidad, $marca, $tipo, $modelo, $bodega);
-            $arreglo = array('status' => 'ok');
-            echo json_encode($arreglo);
+            if ($this->consumible->deleteConsumables($cantidad, $marca, $tipo, $modelo, $bodega)) {
+                $valid = true;
+            }
         } else {
-            $arreglo = array('status' => 'bad');
-            echo json_encode($arreglo);
-            //echo "Error: " . $sql . "<br>" . $conn->error;
+            $valid = false;
         }
         $conn->close();
+        return $valid;
     }
 
-    public function filterByMonth(int $mes)
+
+    /**Filtrar retiros por mes */
+    /**@deprecated */
+    /*  public function filterByMonth(int $mes)
     {
         $conn = $this->conn->connect();
         $año = (int) date('Y');
@@ -99,8 +83,9 @@ class Retiro
         mysqli_free_result($result);
 
         $conn->close();
-    }
+    } */
 
+    /**Filtrar retiros por rango de fecha */
     public function filterRangeHistorial(string $inicio, string $termino)
     {
         $conn = $this->conn->connect();
@@ -123,21 +108,29 @@ class Retiro
         $conn->close();
     }
 
+    /**Obtener la cantidad de consumibles retirados por los departamentos y que consumibles fueron retirados*/
     public function general_Report($inicio, $termino)
     {
         $general_Report['fecha_inicio'] = $inicio;
         $general_Report['fecha_termino'] = $termino;
+
         $general_Report['depart'] = self::department_Orders($inicio, $termino);
+
+        /**Cantidad de consumibles retirados (consulta general) */
         $general_Report['model'] = self::count_Orders($inicio, $termino);
 
         return $general_Report;
     }
 
+
+    /** cantidad de consumibles retirados por los departamentos*/
     private function department_Orders(string $inicio, string $termino)
     {
         $conn = $this->conn->connect();
 
         $sql = "SELECT DE.depart, COUNT(R.Departamento) AS Cantidad from departamentos DE INNER JOIN Retiro R ON DE.iddepart=R.Id_departamento WHERE R.Fecha BETWEEN '$inicio' AND '$termino' GROUP BY DE.depart ORDER BY Cantidad DESC";
+
+        /*    $sql = "SELECT DE.depart, COUNT(R.Departamento) AS Cantidad from departamentos DE LEFT JOIN Retiro R ON DE.iddepart=R.Id_departamento and R.Fecha BETWEEN '2020/01/01' AND '2020/02/20' GROUP BY DE.depart ORDER BY `Cantidad` DESC "; */
 
         $result =  $conn->query($sql);
 
@@ -157,6 +150,7 @@ class Retiro
         }
     }
 
+    /**Cantidad de consumibles retirados (consulta general) */
     private function count_Orders(string $inicio, string $termino)
     {
         $conn = $this->conn->connect();
@@ -181,7 +175,8 @@ class Retiro
         }
     }
 
-    public function getDir(string $inicio, string $termino)
+    /**Obtener informacion de las direcciones*/
+    public function getDir()
     {
         $conn = $this->conn->connect();
 

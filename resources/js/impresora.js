@@ -166,13 +166,9 @@ function updatePrinter(table) {
 /**@description Verificar que alguna fila de la tabla este seleccionada antes de mostrar el formulario para actualizar */
 /**@param table object  */
 function showFormUpdate(table) {
-  if (table.row(".selected").length > 0) {
-    changeForm();
-    const data = table.row(".selected").data();
-    printDataUpdate(data);
-  } else {
-    customAlertError("Seleccione un elemento");
-  }
+  changeForm();
+  const data = table.row(".selected").data();
+  printDataUpdate(data);
 }
 
 /**@description Pasar datos al formulario actualizar */

@@ -79,6 +79,9 @@ function listStorage() {
 function addStorage(table) {
   let nameBodega = document.querySelector("#nuevaBodega");
 
+  let selectores = ["#nuevaBodega"];
+  validClass(selectores);
+
   if (nameBodega.value !== "") {
     let data = new FormData();
     data.append("nombreBodega", nameBodega.value.trim());
@@ -93,6 +96,7 @@ function addStorage(table) {
 
           nameBodega.value = "";
           alertSuccess();
+          clean_Validations(selectores);
         } else {
           alertError();
         }

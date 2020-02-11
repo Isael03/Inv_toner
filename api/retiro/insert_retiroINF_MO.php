@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tipo = $_POST['tipo'];
     $cantidad = (int) $_POST['cantidad'];
     $impresora = strtoupper($_POST['impresora']);
-    $bodega = $_POST['bodega'];
+    $bodega = (int) $_POST['bodega'];
 
     $data = $funcionario->officialData($usuarioRecibe);
 
@@ -32,5 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idDepart = (int) $data['ID_departamento'];
     $nombreDepartamento = $data['Departamento'];
 
-    $retiro->insertWithdrawINF_MO($cantidad, $usuarioRetira, $usuarioRecibe, $marca, $modelo, $tipo, $impresora, $bodega, $idDir, $idDepart, $idRecibe, $nombreDepartamento);
+    $res = $retiro->insertWithdrawINF_MO($cantidad, $usuarioRetira, $usuarioRecibe, $marca, $modelo, $tipo, $impresora, $bodega, $idDir, $idDepart, $idRecibe, $nombreDepartamento);
+
+    ($res) ?  $status = array("status" => "ok") :   $status = array("status" => "bad");
+    echo json_encode($status);
 }

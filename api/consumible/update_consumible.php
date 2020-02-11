@@ -36,8 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $idImpresora_new = $impresora->showId($impresora_new);
 
-    /* echo "id impresora viejo: " . $idImpresora_old;
-    echo " id impresora nueva: " . $idImpresora_new; */
 
     if (isset($idImpresora_new) && isset($idImpresora_old)) {
 

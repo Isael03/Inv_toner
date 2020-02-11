@@ -90,11 +90,11 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
-            <a href="#" class="text-decoration-none text-dark">Inventario de consumibles</a>
+            <a href="./index.php" class="text-decoration-none text-dark">Inventario de consumibles</a>
           </li>
         </ol>
         <div class="text-right mb-1">
-          <a class='btn btn-primary text-white px-4 py-1 rounded-pill' id='btnAdd' href="./views/nuevo.php" title="Añadir" role="button">
+          <a class='btn btn-primary text-white px-4 py-1 rounded-pill' id='btnAdd' href="./views/nuevo.php" title="Añadir consumible" role="button">
             <span class="fas fa-plus"></span>
           </a>
         </div>
@@ -102,44 +102,17 @@
 
         <!-- Icon Cards-->
         <div class="row justify-content-center" id="rowCards">
-          <!--  <div class="col-xl-3 col-sm-6 mb-3">
-            <div class="card text-white bg-primary o-hidden h-100">
-              <div class="card-body">
-                <div class="card-body-icon">
-                  <i class="fas fa-boxes"></i>
-                </div>
-                <div class="text-center font-weight-bold" id="amount-inf">Calculando...</div>
-              </div>
-              <a class="card-footer text-white clearfix small z-1" href="#">
-                <span class="float-left font-weight-bold">Informática</span>
-              </a>
-            </div>
-          </div>
-          <div class="col-xl-3 col-sm-6 mb-3">
-            <div class="card text-white bg-warning o-hidden h-100">
-              <div class="card-body">
-                <div class="text-center font-weight-bold" id="amount-mo">Calculando...</div>
-              </div>
-              <a class="card-footer text-white clearfix small z-1" href="#">
-                <span class="float-left font-weight-bold">Manuel Orella</span>
-              </a>
-            </div>
-          </div> -->
+
         </div>
 
         <ul class="nav nav-tabs mt-5 mb-3 text-capitalize" id="myTab" role="tablist">
           <li class="nav-item">
             <a class="nav-link active" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="true">Todos</a>
           </li>
-          <!--  <li class="nav-item">
-            <a class="nav-link id-tab" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="false">Informatica</a>
-          </li>
+
           <li class="nav-item">
-            <a class="nav-link id-tab" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Manuel Orella</a>
+            <a class="nav-link  id-tab" data-toggle="tab" href="#bodegas" role="tab" aria-controls="bodegas" aria-selected="false">Entrega de consumibles</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link  id-tab" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">Bodega B</a>
-          </li> -->
         </ul>
 
         <!-- Pestañas -->
@@ -166,31 +139,19 @@
             </div>
           </div>
 
-          <div class="tab-pane fade" id="tab-1" role="tabpanel" aria-labelledby="tab-1">
-            <div class="table-responsive">
-              <table class="table table-bordered display nowrap text-center" id="tableINF" width="100%" cellspacing="0">
-                <thead>
-                  <tr>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Tipo</th>
-                    <th>Cantidad</th>
-                    <th>Impresora</th>
-                  </tr>
-                </thead>
-                <tbody>
-
-                </tbody>
-              </table>
+          <!-- Bodegas-->
+          <div class="tab-pane fade" id="bodegas" role="tabpanel" aria-labelledby="bodegas">
+            <div class="row">
+              <div class="col-md-4 col-sm-12">
+                <div class="form-group ">
+                  <label for="change-storage" class="form-label">Bodega</label>
+                  <select class="custom-select" id="change-storage" name="tipo" required>
+                  </select>
+                </div>
+              </div>
             </div>
-
-          </div>
-
-          <!-- Bodega A -->
-          <div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="tab-2">
-
             <div class="table-responsive">
-              <table class="table table-bordered display nowrap text-center" id="tableMO" width="100%" cellspacing="0">
+              <table class="table table-bordered display nowrap text-center" id="tableBodegas" width="100%" cellspacing="0">
                 <thead>
                   <tr>
                     <th>Marca</th>
@@ -200,28 +161,6 @@
                     <th>Impresora</th>
                   </tr>
                 </thead>
-
-                <tbody>
-
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Bodega B -->
-          <div class="tab-pane fade" id="tab-3" role="tabpanel" aria-labelledby="bodegaB-tab">
-            <div class="table-responsive">
-              <table class="table table-bordered display nowrap text-center" id="tableBODB" width="100%" cellspacing="0">
-                <thead>
-                  <tr>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Tipo</th>
-                    <th>Cantidad</th>
-                    <th>Impresora</th>
-                  </tr>
-                </thead>
-
                 <tbody>
 
                 </tbody>

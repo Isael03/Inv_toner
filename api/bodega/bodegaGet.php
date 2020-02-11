@@ -14,9 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $nameStorage = $bodega->listStorage();
             echo json_encode($nameStorage);
             break;
-        case 'amountHeld':
-            $bodega->amountHeld();
-            break;
 
         default:
             # code...

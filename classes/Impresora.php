@@ -9,6 +9,7 @@ class Impresora
     }
 
 
+    /**Ingresar nueva impresora */
     public function insertPrinter(string $marca, string $modelo)
     {
         $conn = $this->conn->connect();
@@ -24,6 +25,8 @@ class Impresora
         return $valid;
     }
 
+
+    /**Ver el id, marca y modelo de la impresora */
     public function showPrinters()
     {
         $conn = $this->conn->connect();
@@ -45,6 +48,8 @@ class Impresora
         }
     }
 
+
+    /**Modificar nombre de la impresora */
     public function updatePrinter(string $marca, string $modelo, int $id)
     {
         $conn = $this->conn->connect();
@@ -61,7 +66,7 @@ class Impresora
         return $valid;
     }
 
-
+    /**Borrar impresora */
     public function deletePrinter(int $id)
     {
         $conn = $this->conn->connect();
@@ -79,10 +84,12 @@ class Impresora
         return $valid;
     }
 
+    /**Obtener Marcas de impresoras existentes y Modelos de consumibles */
     public function printersBrand()
     {
         $conn = $this->conn->connect();
 
+        /**Modelos consumible */
         $sql = "SELECT Modelo from Consumible GROUP BY Modelo";
         $result = $conn->query($sql);
 
@@ -92,6 +99,7 @@ class Impresora
             }
         }
 
+        /**Marcas de impresoras */
         $sql = "SELECT Marca_impresora from Impresora GROUP BY Marca_impresora";
         $result = $conn->query($sql);
 
@@ -108,6 +116,7 @@ class Impresora
     }
 
 
+    /** Obtener modelos de impresoras*/
     public function showModelPrinter(string $marca)
     {
         $conn = $this->conn->connect();
@@ -127,6 +136,7 @@ class Impresora
         }
     }
 
+    /**Obtener ids de impresoras segun marca y modelo de impresora */
     public function showId(string $impresora)
     {
         $conn = $this->conn->connect();
@@ -148,6 +158,7 @@ class Impresora
         }
     }
 
+    /**Obtener id, y marca+modelo de las impresoras */
     public function NamePrinter(string $marca)
     {
         $conn = $this->conn->connect();

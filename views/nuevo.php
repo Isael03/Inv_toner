@@ -102,7 +102,7 @@
           <div class="form-group row">
             <label for="inputCantidad" class="col-sm-2 col-form-label">Cantidad</label>
             <div class="col-sm-10">
-              <input type="number" name="cantidad" class="form-control col-md-6 mb-2 col-lg-4" id="inputCantidad" required />
+              <input type="number" name="cantidad" class="form-control col-md-6 mb-2 col-lg-4" id="inputCantidad" required min="1" value="1"/>
             </div>
           </div>
           <div class="form-group row">
@@ -144,9 +144,7 @@
             <div class="col-sm-10">
               <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="modelo_imp" name="impresora" required>
                 <option value="" selected>Seleccione...</option>
-                <!--<option value="1">Manuel Orella</option>
-                <option value="2">Informática</option> -->
-              </select>
+              </select> <a href="./impresoras.php"><span class="fas fa-plus-circle fa-lg" title="Añadir impresora"></span></a>
               <!--  <input list="inputModeloImpresora" name="impresora" class="form-control mb-2 col-md-6 mb-2 col-lg-4" id="modelo_imp" autocomplete="off" required>
               <datalist id="inputModeloImpresora">
               </datalist> -->
@@ -157,8 +155,7 @@
             <div class="col-sm-10">
               <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="selectUbicacion" name="ubicacion" required>
                 <option value="" selected>Seleccione...</option>
-                <!-- <option value="1">Manuel Orella</option>
-                <option value="2">Informática</option> -->
+
               </select>
             </div>
           </div>

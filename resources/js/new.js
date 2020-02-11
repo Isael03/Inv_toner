@@ -1,7 +1,10 @@
 document.addEventListener("DOMContentLoaded", function() {
   var forms = document.getElementsByClassName("needs-validation");
   printMarcaPrinter();
-  selectStorage();
+  selectStorage(
+    "selectUbicacion",
+    "../api/bodega/bodegaGet.php?case=listStorage"
+  );
 
   document.querySelector("#inputMarca").addEventListener("input", () => {
     document.querySelector(
@@ -112,21 +115,6 @@ async function printModelPrinter() {
           "#modelo_imp"
         ).innerHTML += `<option value=${modelo.Modelo_impresora}>${modelo.Modelo_impresora}</option>`;
       }
-    })
-    .catch(err => {
-      console.log(err);
-    });
-}
-
-/**Mostrar bodegas en el select de Ubicacion */
-function selectStorage() {
-  fetchURL("../api/bodega/bodegaGet.php?case=listStorage")
-    .then(res => {
-      res.data.forEach(bodega => {
-        document.getElementById(
-          "selectUbicacion"
-        ).innerHTML += `<option value=${bodega.Id_bodega}>${bodega.Lugar}</option>`;
-      });
     })
     .catch(err => {
       console.log(err);

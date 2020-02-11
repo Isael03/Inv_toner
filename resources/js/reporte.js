@@ -58,7 +58,7 @@ function reportGeneral() {
           for (const dep of json.depart) {
             document.getElementById(
               "tbody-depart"
-            ).innerHTML += `<tr><td>${dep.depart}</td><td>${dep.Cantidad}</td></tr>`;
+            ).innerHTML += `<tr><td class='text-uppercase'>${dep.depart}</td><td>${dep.Cantidad}</td></tr>`;
           }
           for (const element of json.model) {
             document.getElementById(

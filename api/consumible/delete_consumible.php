@@ -12,6 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $modelo = strtoupper($_POST['modelo']);
     $marca = strtoupper($_POST['marca']);
     $tipo = $_POST['tipo'];
+    $id_bodega = (int) $_POST['id_bodega'];
 
-    $consumible->deleteCon($cantidad, $modelo, $marca, $tipo);
+    $res = $consumible->deleteCon($cantidad, $modelo, $marca, $tipo, $id_bodega);
+    ($res) ?  $status = array("status" => "ok") :   $status = array("status" => "bad");
+    echo json_encode($status);
 }

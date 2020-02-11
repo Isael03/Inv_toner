@@ -196,6 +196,7 @@
           </div>
           <div class="modal-body">
             <p class="text-center">¿Está seguro de borrar esta impresora?</p>
+            <small class="text-danger">*Todos los consumibles asociados a esta impresora también serán eliminados.</small>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

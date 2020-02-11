@@ -28,9 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'dep':
 
             //echo "";
-            $inicio = $_POST['inicio_dep'];
-            $termino = $_POST['termino_dep'];
-            $dep_Report = $retiro->getDir($inicio,  $termino);
+
+            $dep_Report = $retiro->getDir();
 
             if (isset($dep_Report)) {
                 echo json_encode($dep_Report);

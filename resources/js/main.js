@@ -67,6 +67,7 @@ function autocompletar() {
       /* validar arreglo vs input */
       if (ListaFuncionarios.length == 0) return false;
 
+      //miembro.substr(0, funcionario.length).toLowerCase()
       for (miembro of ListaFuncionarios) {
         if (
           miembro.substr(0, funcionario.length).toLowerCase() === funcionario
@@ -158,7 +159,7 @@ function httpRequest(url, callback) {
 //-------------------------------------------------------------
 
 /**@description marcar bordes para indicar si el input es valido o no
- * @param {array} selectores */
+ * @param {string[]} selectores */
 function validClass(selectores) {
   for (let index = 0; index < selectores.length; index++) {
     let input = document.querySelector(selectores[index]);
@@ -229,4 +230,19 @@ async function fetchURL(url, method = "GET", data = {}) {
     alertError();
     console.log(error);
   }
+}
+
+/**Mostrar bodegas en el select de Ubicacion */
+function selectStorage(idinput, url) {
+  fetchURL(url)
+    .then(res => {
+      res.data.forEach(bodega => {
+        document.getElementById(
+          idinput
+        ).innerHTML += `<option value=${bodega.Id_bodega}>${bodega.Lugar}</option>`;
+      });
+    })
+    .catch(err => {
+      console.log(err);
+    });
 }

@@ -57,8 +57,6 @@ if ($result->num_rows > 0) {
             text-align: center;
         }
 
-
-
         thead:before,
         thead:after {
             display: none;
@@ -138,10 +136,11 @@ if ($result->num_rows > 0) {
                 </div>
             </div>
         </div>
-    <?php echo "<br><br>";
+        <br><br>
+    <?php
     } ?>
 
-    <div style="page-break-after:never;"></div>
+    <!-- <div style="page-break-after:never;"></div> -->
 
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

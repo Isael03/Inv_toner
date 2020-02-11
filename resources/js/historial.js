@@ -1,22 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
   const table = list();
-  document.querySelector("#filter").value = "";
-  document.querySelector("#mes").value = "";
 
-  document.querySelector("#btnBuscarMes").addEventListener("click", e => {
-    e.preventDefault();
-    search(table);
-  });
-  document.querySelector("#filter").addEventListener("input", () => {
-    let filter = document.querySelector("#filter").value;
-
-    if (filter === "") {
-      table.rows().remove();
-      table.ajax.reload();
-      document.title = "Historial";
-    }
-    showForm();
-  });
   document.querySelector("#btnBuscarRango").addEventListener("click", () => {
     DateRange(table);
   });
@@ -27,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
 function list() {
   const table = $("#tableHist").DataTable({
     destroy: true,
-    //responsive: true,
+    // responsive: true,
     select: true,
     order: [[0, "desc"]],
     /*  pageLength: 5,
@@ -88,84 +72,14 @@ function list() {
       { data: "Tipo" },
       { data: "Cantidad" },
       { data: "Impresora" }
-    ]
+    ],
+    responsive: true
   });
   setInterval(function() {
     table.ajax.reload();
   }, 100000);
 
   return table;
-}
-
-function search(table) {
-  let mes = document.querySelector("#mes").value;
-
-  if (mes !== "") {
-    let data = new FormData();
-    data.append("mes", mes);
-    data.append("case", 1);
-
-    fetch("../api/retiro/get_retiro.php", {
-      method: "POST",
-      body: data
-    })
-      .then(function(response) {
-        if (response.ok) {
-          return response.json();
-        } else {
-          customAlertError("Error en la búsqueda");
-          throw "Error en la llamada fetch";
-        }
-      })
-      .then(json => {
-        if (json.data[0].Fecha != "") {
-          table.rows().remove();
-          table.rows.add(json.data).draw();
-          alertSuccess();
-        } else {
-          table.rows().remove();
-          table.rows.add(json.data).draw();
-          alertWarning("Nada encontrado");
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        customAlertError("Error en la búsqueda");
-      });
-  } else {
-    table.rows().remove();
-    table.ajax.reload();
-    customAlertError("Seleccione un mes");
-  }
-}
-
-function showForm() {
-  //let formMes = document.querySelector("#formMesHistorial");
-  //let formRange = document.querySelector("#formRange");
-  let filter = document.querySelector("#filter");
-  jQuery.noConflict();
-  jQuery("#formRange");
-  jQuery("#formMesHistorial");
-
-  if (filter.value === "mes") {
-    $("#formRange").collapse("hide");
-
-    setTimeout(() => {
-      $("#formMesHistorial").collapse("show");
-    }, 260);
-  }
-
-  if (filter.value === "rango") {
-    $("#formMesHistorial").collapse("hide");
-    setTimeout(() => {
-      $("#formRange").collapse("show");
-    }, 260);
-  }
-
-  if (filter.value === "") {
-    $("#formMesHistorial").collapse("hide");
-    $("#formRange").collapse("hide");
-  }
 }
 
 function DateRange(table) {
@@ -213,57 +127,6 @@ function DateRange(table) {
 }
 
 function namepdf() {
-  document.querySelector("#mes").addEventListener("input", () => {
-    var mes = document.querySelector("#mes").value;
-    var nameMes;
-
-    switch (mes) {
-      case "01":
-        nameMes = " del mes de Enero";
-        break;
-      case "02":
-        nameMes = " del mes de Febrero";
-        break;
-      case "03":
-        nameMes = " del mes de Marzo";
-        break;
-      case "04":
-        nameMes = " del mes de Abril";
-        break;
-      case "05":
-        nameMes = " del mes de Mayo";
-        break;
-      case "06":
-        nameMes = " del mes de Junio";
-        break;
-      case "07":
-        nameMes = " del mes de Julio";
-        break;
-      case "08":
-        nameMes = " del mes de Agosto";
-        break;
-      case "09":
-        nameMes = " del mes de Septiembre";
-        break;
-      case "10":
-        nameMes = " del mes de Obtubre";
-        break;
-      case "11":
-        nameMes = " del mes de Noviembre";
-        break;
-      case "12":
-        nameMes = " del mes de Diciembre";
-        break;
-
-      default:
-        nameMes = "";
-        break;
-    }
-
-    let name = "Historial de retiros de consumibles de impresoras" + nameMes;
-    document.title = name;
-  });
-
   document.querySelector("#btnBuscarRango").addEventListener("click", () => {
     let dateFrom = document.getElementById("dateFrom").value;
     let dateTo = document.getElementById("dateTo").value;
