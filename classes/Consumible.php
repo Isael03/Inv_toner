@@ -13,6 +13,8 @@ class Consumible
     public function addPrinterConsumables(int $cantidad, string $marca, string $tipo, string $modelo, int $bodega, string $impresora)
     {
         $conn = $this->conn->connect();
+        /**Verifica si el consumible existe en la lista o no, y devuelve la id */
+        $id = self::addListConsumible($marca, $tipo, $modelo, $impresora);
 
         $query = "SELECT Id_impresora from Impresora WHERE Modelo_impresora='$impresora' AND Marca_impresora='$marca'";
         $result = $conn->query($query);
@@ -26,7 +28,7 @@ class Consumible
         }
         $Id_impresora = (int) $arreglo['Id_impresora'];
 
-        $sql = "INSERT INTO Consumible (Marca, Modelo, Tipo, Id_impresora) VALUES ('$marca', '$modelo', '$tipo', '$Id_impresora')";
+        $sql = "INSERT INTO Consumible (Marca, Modelo, Tipo, Id_impresora, Id_lista) VALUES ('$marca', '$modelo', '$tipo', '$Id_impresora', $id)";
 
         $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
 
@@ -318,59 +320,34 @@ class Consumible
         return $valid;
     }
 
+    /**Verifica si el consumible existe, sino lo agrega a ala tabla y en ambos casos devuelve la id */
     private function addListConsumible(string $marca, string $tipo, string $modelo, string $impresora)
     {
         $conn = $this->conn->connect();
 
-        $query = "SELECT Id_impresora from Impresora WHERE CONCAT()";
+        $query = "SELECT Id_impresora from Impresora WHERE Modelo_impresora='$impresora' AND Marca_impresora='$marca'";
         $result = $conn->query($query);
-
         if ($result->num_rows > 0) {
-            while ($data = $result->fetch_assoc()) {
-                $arreglo = array_map('utf8_encode', $data);
-            }
-        } else {
-            $valid = false;
-        }
-        $Id_impresora = (int) $arreglo['Id_impresora'];
 
-        $sql = "INSERT INTO Consumible (Marca, Modelo, Tipo, Id_impresora) VALUES ('$marca', '$modelo', '$tipo', '$Id_impresora')";
+            $sql = "SELECT Id_lista from Lista_Consumible WHERE Marca='$marca' AND Modelo='$modelo' AND Tipo='$tipo' AND Impresora=CONCAT('$marca', ' ','$impresora')";
 
-        $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+            $result = $conn->query($sql);
 
-        $valid = true;
+            if ($result->num_rows === 0) {
+                $Nombreimpresora = $marca . " " . $impresora;
+                $insert = "INSERT INTO Lista_Consumible (Marca, Modelo, Tipo, Impresora) VALUES ('$marca', '$modelo', '$tipo', '$Nombreimpresora')";
 
-        for ($i = 0; $i < $cantidad; $i++) {
-
-            if ($conn->query($sql)) {
-
-                $last_idConsumible = $conn->insert_id;
-
-                $sql2 = "INSERT INTO Bodega_Consumible (Id_bodega, Id_consumible) VALUES ($bodega, $last_idConsumible)";
-                if ($conn->query($sql2) === false) {
-                    $valid = false;
-                    $conn->rollback();
-                    //echo "Error: " . $sql . "<br>" . $conn->error;
-                    break;
+                if ($conn->query($insert)) {
+                    return $conn->insert_id;
                 }
             } else {
-                //echo "Error: " . $sql . "<br>" . $conn->error;
-                $conn->rollback();
-                $valid = false;
-                break;
+                $arreglo = [];
+                while ($data = $result->fetch_assoc()) {
+                    array_push($arreglo, $data['Id_lista']);
+                }
+                return ((int) $arreglo[0]);
             }
         }
-
-        /* Enviar respuesta del proceso */
-        if ($valid) {
-            $arreglo = array('status' => 'ok');
-            echo json_encode($arreglo);
-        } else {
-            $arreglo = array('status' => 'bad');
-            echo json_encode($arreglo);
-        }
-
-        $conn->commit();
         $conn->close();
     }
 }

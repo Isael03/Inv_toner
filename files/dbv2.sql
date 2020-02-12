@@ -1,6 +1,6 @@
-drop database if exists Consumibles_impresoras_v2;
+drop database if exists Consumibles_impresoras;
 
-CREATE DATABASE IF NOT EXISTS `Consumibles_impresoras_v2`;
+CREATE DATABASE IF NOT EXISTS `Consumibles_impresoras`;
 USE Consumibles_impresoras_v2;
 
 CREATE TABLE if not EXISTS Bodega(

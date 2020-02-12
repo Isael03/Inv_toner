@@ -221,7 +221,6 @@ function getDataWithdraw(table) {
 /**@param {object} table*/
 function setModalWithdraw(table) {
   var data = table.row(".selected").data();
-
   //document.querySelector("#submitter").value = "Falta";
   document.querySelector("#receivedBy").value = "";
   document.querySelector("#mMarca").value = data.Marca;
@@ -402,6 +401,7 @@ function confirmWithdrawINF_MO(table) {
     form.append("impresora", data.Impresora);
     form.append("cantidad", parseInt(cantidad));
     form.append("bodega", parseInt(data.Id_bodega));
+    form.append("Nombrebodega", data.Lugar);
 
     let config = {
       method: "POST",
