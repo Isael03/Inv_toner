@@ -16,7 +16,7 @@ class Retiro
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT DATE_FORMAT(Fecha, '%d/%m/%Y %H:%i:%s') AS Fecha, Usuario_retira as Retira, Usuario_recibe AS Recibe, Departamento, Marca, Modelo, Tipo, Cantidad, Impresora FROM Retiro ORDER BY Fecha DESC";
+        $sql = "SELECT DATE_FORMAT(Fecha, '%d/%m/%Y %H:%i:%s') AS Fecha, Usuario_retira as Retira, Usuario_recibe AS Recibe, Departamento, Marca, Modelo, Tipo, Cantidad, Impresora, Bodega FROM Retiro ORDER BY Fecha DESC";
         $result =  $conn->query($sql);
 
         if ($result->num_rows > 0) {
@@ -25,7 +25,7 @@ class Retiro
             }
             echo json_encode($arreglo);
         } else {
-            $arreglo["data"][] = ["Fecha" => "", "Retira" => "", "Recibe" => "", "Departamento" => "", "Marca" => "", "Modelo" => "", "Tipo" => "", "Cantidad" => "", "Impresora" => ""];
+            $arreglo["data"][] = ["Fecha" => "", "Retira" => "", "Recibe" => "", "Departamento" => "", "Marca" => "", "Modelo" => "", "Tipo" => "", "Cantidad" => "", "Impresora" => "", "Bodega" => ""];
             // die("Error");
         }
 
@@ -33,15 +33,12 @@ class Retiro
         $conn->close();
     }
 
-
-
-    /* Retiros para informatica y manuel orella */
-    public function insertWithdrawINF_MO(int $cantidad, string $usuarioRetira, string $usuarioRecibe, string $marca, string $modelo, string $tipo, string $impresora, string $bodega, string $idDirRecibe, string $idDepRecibe, string $idRecibe, string $nombreDepartamento, string $nombreBodega)
+    /**Retirar consummibles de las bodegas */
+    public function insertWithdrawINF_MO(int $cantidad, string $usuarioRetira, string $usuarioRecibe, string $marca, string $modelo, string $tipo, string $impresora, int $bodega, int $idDirRecibe, int $idDepRecibe, int $idRecibe, string $nombreDepartamento, string $nombreBodega)
     {
         $conn = $this->conn->connect();
 
-
-        $sql = "INSERT INTO Retiro (Usuario_retira, Usuario_recibe, Id_recibe, Id_departamento, Departamento, Marca, Modelo, Tipo, Cantidad, Impresora, Id_direccion, Bodega) VALUES ('$usuarioRetira','$usuarioRecibe','$idRecibe','$idDepRecibe','$nombreDepartamento','$marca','$modelo', '$tipo', '$cantidad', '$impresora','$idDirRecibe', '$nombreBodega')";
+        $sql = "INSERT INTO Retiro (Usuario_retira, Usuario_recibe, Id_recibe, Id_departamento, Departamento, Marca, Modelo, Tipo, Cantidad, Impresora, Id_direccion, Bodega) VALUES ('$usuarioRetira','$usuarioRecibe', $idRecibe, $idDepRecibe,'$nombreDepartamento','$marca','$modelo', '$tipo', $cantidad, '$impresora',$idDirRecibe, '$nombreBodega')";
 
         if ($conn->query($sql)) {
             if ($this->consumible->deleteConsumables($cantidad, $marca, $tipo, $modelo, $bodega)) {
@@ -49,6 +46,7 @@ class Retiro
             }
         } else {
             $valid = false;
+            // $conn->error;
         }
         $conn->close();
         return $valid;

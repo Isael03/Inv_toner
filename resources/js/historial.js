@@ -71,16 +71,67 @@ function list() {
       { data: "Modelo" },
       { data: "Tipo" },
       { data: "Cantidad" },
-      { data: "Impresora" }
-    ],
-    responsive: true
+      { data: "Impresora" },
+      { data: "Bodega" }
+    ]
   });
   setInterval(function() {
     table.ajax.reload();
   }, 100000);
 
+  showModal("#tableHist tbody", table);
+
   return table;
 }
+
+/**Mostral modal con informacion de la fila */
+var showModal = function(tbody, table) {
+  $(tbody).on("click", "tr", function() {
+    //var data = table.row($(this).parents("tr")).data();
+    var data = table.row(this).data();
+    jQuery.noConflict();
+    jQuery("#dataHistorial");
+    $("#dataHistorial").modal("show");
+
+    document.querySelector(
+      "#mMistorialHeader"
+    ).innerHTML = `Recibe: ${data.Recibe}`;
+
+    let size_font = ".9em";
+
+    let dataModal = [
+      "Fecha: ",
+      "Departamento que recibe: ",
+      "Quién entrega: ",
+      "Marca: ",
+      "Modelo: ",
+      "Tipo: ",
+      "Cantidad: ",
+      "Impresora: ",
+      "Bodega: "
+    ];
+
+    let infoModal = [
+      data.Fecha,
+      data.Departamento,
+      data.Retira,
+      data.Marca,
+      data.Modelo,
+      data.Tipo,
+      data.Cantidad,
+      data.Impresora,
+      data.Bodega
+    ];
+
+    document.querySelector("#body-history").innerHTML = "";
+
+    for (let index = 0; index < dataModal.length; index++) {
+      document.querySelector(
+        "#body-history"
+      ).innerHTML += `<div class='row'><div class='col-6'> <p class='m-0' style="font-size:${size_font}">${dataModal[index]}</p></div><div class='col-6 font-weight-bold'  style="font-size:${size_font}">${infoModal[index]}</div></div> `;
+    }
+  });
+};
 
 function DateRange(table) {
   let dateFrom = document.querySelector("#dateFrom").value;

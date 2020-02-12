@@ -3,7 +3,7 @@
 document.addEventListener("DOMContentLoaded", function() {
   showContent();
   autocompletar();
-  printMarcaPrinter();
+  //printMarcaPrinter();
 
   /**Las tablas y eventos relacionados cargan 1 segundo despues de cargar las cartas y tabs, para evitar conflictos de variables desconocidas */
   setTimeout(() => {
@@ -23,10 +23,11 @@ document.addEventListener("DOMContentLoaded", function() {
       confirmDelete(tableStorages);
     });
 
+    /**@deprecated */
     /* boton actualizar del modal */
-    document.querySelector("#btnModalUpdate").addEventListener("click", () => {
+    /*   document.querySelector("#btnModalUpdate").addEventListener("click", () => {
       confirmUpdate(tableAll);
-    });
+    }); */
 
     /* Boton retirar del modal */
     document
@@ -63,6 +64,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //***************************************************************************************************************************** */
 
+/**@deprecated */
 /* Acción modificar-abrir modal */
 /**@param {object} table*/
 function getDataUpdate(table) {
@@ -112,6 +114,8 @@ function confirmDelete(table) {
     dataDelete.append("marca", data.Marca.toUpperCase());
     dataDelete.append("tipo", data.Tipo);
     dataDelete.append("id_bodega", parseInt(data.Id_bodega));
+    dataDelete.append("id_bodega", parseInt(data.Id_bodega));
+    dataDelete.append("case", "deleteCon");
 
     fetchURL("./api/consumible/delete_consumible.php", "POST", dataDelete)
       .then(res => {
@@ -134,6 +138,7 @@ function confirmDelete(table) {
   }
 }
 
+/**@deprecated */
 /* Pasar datos al modal de modificar */
 /**@param {string} marca,  @param {string} modelo, @param {string} tipo, @param {string} impresora*/
 async function setModalUpdate(marca, modelo, tipo, impresora) {
@@ -146,6 +151,7 @@ async function setModalUpdate(marca, modelo, tipo, impresora) {
   //}, 300);
 }
 
+/**@deprecated */
 /* validacion de datos del modal modificar */
 function validFields() {
   let marca = document.getElementById("updMarca").value;
@@ -162,6 +168,7 @@ function validFields() {
   }
 }
 
+/**@deprecated */
 /* Botón confirmación del modal modificar */
 /**@param {object} table */
 function confirmUpdate(table) {
@@ -221,7 +228,7 @@ function getDataWithdraw(table) {
 /**@param {object} table*/
 function setModalWithdraw(table) {
   var data = table.row(".selected").data();
-  //document.querySelector("#submitter").value = "Falta";
+
   document.querySelector("#receivedBy").value = "";
   document.querySelector("#mMarca").value = data.Marca;
   document.querySelector("#mModelo").value = data.Modelo;
@@ -232,7 +239,8 @@ function setModalWithdraw(table) {
 /**  */
 /**@deprecated */
 /**@description Confirmar retiro @param {object} table*/
-function confirmWithdraw(table) {
+/* function confirmWithdraw(table) {
+
   var data = table.row(".selected").data();
   let receivedBy = document.querySelector("#receivedBy");
 
@@ -270,6 +278,7 @@ function confirmWithdraw(table) {
       .catch(err => console.log(err));
   }
 }
+ */
 
 /**@description abrir modal para transferir, @param {object} table*/
 function transfer(table) {
@@ -401,7 +410,8 @@ function confirmWithdrawINF_MO(table) {
     form.append("impresora", data.Impresora);
     form.append("cantidad", parseInt(cantidad));
     form.append("bodega", parseInt(data.Id_bodega));
-    form.append("Nombrebodega", data.Lugar);
+    form.append("nombreBodega", data.Lugar);
+    form.append("Id_consumible", data.Id_consumible);
 
     let config = {
       method: "POST",
@@ -480,7 +490,7 @@ function listALL() {
             };
           };
         }
-      },
+      } /* ,
       {
         text: " <span class='fas fa-wrench text-white'></span>",
         titleAttr: "Actualizar",
@@ -488,12 +498,13 @@ function listALL() {
         action: function() {
           getDataUpdate(table);
         }
-      }
+      } */
     ],
     language: Datatable_ES,
     ajax: {
       method: "GET",
-      url: "./api/consumible/get_consumibleALL.php"
+      url: "./api/consumible/get_consumibleALL.php",
+      data: { case: "allConsumables" }
     },
 
     columns: [
@@ -536,14 +547,15 @@ function listALL() {
   });
 }; */
 
+/**@deprecated */
 /**@description agregar modelos de impresoras en la lista del modal actualizar */
-async function printModelPrinter() {
+/* async function printModelPrinter() {
   //case: namePrinter
-  /* resetear select */
+  // resetear select 
   document.querySelector("#updImpresora").innerHTML =
     "<option value='' selected>Seleccione...</option>";
   let marca = document.querySelector("#updMarca");
-  /*Consulta y llenar select con resultados */
+ // Consulta y llenar select con resultados 
   await fetch(
     `./api/impresora/impresora.php?case=namePrinter&&marca=${marca.value.toUpperCase()}`
   )
@@ -561,10 +573,11 @@ async function printModelPrinter() {
       console.log(err);
       alertError();
     });
-}
+} */
 
+/**@deprecated */
 /**@description agregar marcas de impresoras en la lista del modal actualizar */
-async function printMarcaPrinter() {
+/* async function printMarcaPrinter() {
   //case:printersBrand
   await fetch("./api/impresora/impresora.php?case=printersBrand")
     .then(response => {
@@ -589,7 +602,7 @@ async function printMarcaPrinter() {
       // alertError();
       console.log(err);
     });
-}
+} */
 
 function showContent() {
   /**Iniciar el select de bodegas */
@@ -773,10 +786,6 @@ function listStorages() {
       { data: "Impresora" }
     ]
   });
-
-  setInterval(function() {
-    table.ajax.reload();
-  }, 100000);
 
   return table;
 }

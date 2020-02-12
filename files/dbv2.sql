@@ -1,7 +1,7 @@
 drop database if exists Consumibles_impresoras;
 
 CREATE DATABASE IF NOT EXISTS `Consumibles_impresoras`;
-USE Consumibles_impresoras_v2;
+USE Consumibles_impresoras;
 
 CREATE TABLE if not EXISTS Bodega(
 	Id_bodega INT AUTO_INCREMENT PRIMARY KEY,
@@ -12,17 +12,8 @@ CREATE TABLE IF NOT EXISTS Impresora(
     Id_impresora int AUTO_INCREMENT PRIMARY KEY,
     Marca_impresora VARCHAR(20) NOT NULL,
     Modelo_impresora VARCHAR(20) NOT NULL
-
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
-CREATE TABLE if not EXISTS `Lista_Consumible` (
-  `Id_lista` int(11) AUTO_INCREMENT PRIMARY KEY,
-  `Marca` varchar(20) NOT NULL,
-  `Modelo` varchar(20) NOT NULL,
-  `Tipo` VARCHAR(60) NOT NULL,
-  Impresora varchar(40) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 CREATE TABLE if not EXISTS `Consumible` (
@@ -32,11 +23,8 @@ CREATE TABLE if not EXISTS `Consumible` (
   `Modelo` varchar(20) NOT NULL,
   `Tipo` enum('Tambor','Fusor','Tinta', 'Toner', 'Tambor de residuo', 'Tambor de arrastre', 'Correa de arrastre') NOT NULL,
   Id_impresora int NOT NULL,
-  Id_lista int not null,
    FOREIGN KEY (Id_impresora) REFERENCES Impresora(Id_impresora)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-     FOREIGN KEY (Id_lista) REFERENCES Lista_Consumible(Id_lista)
-    ON DELETE CASCADE ON UPDATE CASCADE
+    ON DELETE CASCADE ON UPDATE CASCADE  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS Bodega_Consumible(
@@ -52,11 +40,11 @@ CREATE TABLE IF NOT EXISTS Bodega_Consumible(
 Create table if not exists Retiro(
     Id_retiro int AUTO_INCREMENT PRIMARY KEY,
     Fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    Usuario_retira varchar(20) NOT NULL,
-    Usuario_recibe varchar(20) not null,
+    Usuario_retira varchar(100) NOT NULL,
+    Usuario_recibe varchar(100) not null,
     Id_recibe int not null,
     Id_departamento int not null,
-    Departamento varchar(20) not null,
+    Departamento varchar(100) not null,
     `Marca` varchar(20) NOT NULL,
     `Modelo` varchar(20) NOT NULL,
    `Tipo` varchar(20) NOT NULL,

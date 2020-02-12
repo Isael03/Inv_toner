@@ -127,6 +127,7 @@
                 <th>Tipo</th>
                 <th>Cantidad</th>
                 <th>Impresora</th>
+                <th>Bodega</th>
               </tr>
             </thead>
             <tbody>
@@ -148,6 +149,24 @@
 
     </div>
     <!-- /#wrapper -->
+
+    <!-- Modal info row -->
+    <div class="modal" tabindex="-1" role="dialog" id='dataHistorial'>
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h6 class="modal-title  font-weight-bold" id="mMistorialHeader"></h6>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="body-history">
+
+          </div>
+
+        </div>
+      </div>
+    </div>
 
 
 

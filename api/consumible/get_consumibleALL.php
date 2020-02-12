@@ -6,5 +6,20 @@ $conn = new ConexionData();
 $consumible = new Consumible($conn);
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $consumible->showAll();
+
+    $case = $_GET['case'];
+
+    switch ($case) {
+        case 'allConsumables':
+            $consumible->showAll();
+            break;
+        case 'allConsumablesList':
+            $data = $consumible->showListConsumable();
+            echo json_encode($data);
+            break;
+
+        default:
+            # code...
+            break;
+    }
 }

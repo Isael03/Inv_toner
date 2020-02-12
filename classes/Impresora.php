@@ -121,7 +121,7 @@ class Impresora
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT Modelo_impresora from Impresora WHERE Marca_impresora='$marca' GROUP BY Modelo_impresora";
+        $sql = "SELECT Id_impresora, Modelo_impresora from Impresora WHERE Marca_impresora='$marca' GROUP BY Modelo_impresora";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
