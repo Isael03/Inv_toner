@@ -23,31 +23,36 @@ class Retiro
             while ($data = mysqli_fetch_assoc($result)) {
                 $arreglo["data"][] = array_map("utf8_encode", $data);
             }
-            echo json_encode($arreglo);
         } else {
-            $arreglo["data"][] = ["Fecha" => "", "Retira" => "", "Recibe" => "", "Departamento" => "", "Marca" => "", "Modelo" => "", "Tipo" => "", "Cantidad" => "", "Impresora" => "", "Bodega" => ""];
+            /* $arreglo["data"] = ["Fecha" => "", "Retira" => "", "Recibe" => "", "Departamento" => "", "Marca" => "", "Modelo" => "", "Tipo" => "", "Cantidad" => "", "Impresora" => "", "Bodega" => ""]; */
+            $arreglo["data"] = [];
             // die("Error");
         }
-
+        echo json_encode($arreglo);
         mysqli_free_result($result);
         $conn->close();
     }
 
     /**Retirar consummibles de las bodegas */
-    public function insertWithdrawINF_MO(int $cantidad, string $usuarioRetira, string $usuarioRecibe, string $marca, string $modelo, string $tipo, string $impresora, int $bodega, int $idDirRecibe, int $idDepRecibe, int $idRecibe, string $nombreDepartamento, string $nombreBodega)
+    public function insertWithdrawINF_MO(int $cantidad, string $usuarioRetira, string $usuarioRecibe, string $marca, string $modelo, string $tipo, string $impresora, int $bodega, int $idDirRecibe, int $idDepRecibe, int $idRecibe, string $nombreDepartamento, string $nombreBodega, $Id_consumible)
     {
         $conn = $this->conn->connect();
 
         $sql = "INSERT INTO Retiro (Usuario_retira, Usuario_recibe, Id_recibe, Id_departamento, Departamento, Marca, Modelo, Tipo, Cantidad, Impresora, Id_direccion, Bodega) VALUES ('$usuarioRetira','$usuarioRecibe', $idRecibe, $idDepRecibe,'$nombreDepartamento','$marca','$modelo', '$tipo', $cantidad, '$impresora',$idDirRecibe, '$nombreBodega')";
 
+        $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+
         if ($conn->query($sql)) {
-            if ($this->consumible->deleteConsumables($cantidad, $marca, $tipo, $modelo, $bodega)) {
+            if ($this->consumible->deleteConsumables($cantidad, $bodega,  $Id_consumible)) {
                 $valid = true;
+            } else {
+                $conn->rollback();
             }
         } else {
             $valid = false;
             // $conn->error;
         }
+        $conn->commit();
         $conn->close();
         return $valid;
     }
@@ -97,7 +102,8 @@ class Retiro
                 $arreglo["data"][] = array_map("utf8_encode", $data);
             }
         } else {
-            $arreglo["data"][] = ["Fecha" => "", "Retira" => "", "Recibe" => "", "Departamento" => "", "Marca" => "", "Modelo" => "", "Tipo" => "", "Cantidad" => "", "Impresora" => ""];
+            /* $arreglo["data"] = ["Fecha" => "", "Retira" => "", "Recibe" => "", "Departamento" => "", "Marca" => "", "Modelo" => "", "Tipo" => "", "Cantidad" => "", "Impresora" => ""]; */
+            $arreglo["data"] = [];
             // die("Error");
         }
         echo json_encode($arreglo);

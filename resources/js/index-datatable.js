@@ -110,11 +110,8 @@ function confirmDelete(table) {
   if (cant_delete <= parseInt(data.Cantidad) || cant_delete === 0) {
     const dataDelete = new FormData();
     dataDelete.append("cantidad", parseInt(cant_delete));
-    dataDelete.append("modelo", data.Modelo.toUpperCase());
-    dataDelete.append("marca", data.Marca.toUpperCase());
-    dataDelete.append("tipo", data.Tipo);
     dataDelete.append("id_bodega", parseInt(data.Id_bodega));
-    dataDelete.append("id_bodega", parseInt(data.Id_bodega));
+    dataDelete.append("Id_consumible", parseInt(data.Id_consumible));
     dataDelete.append("case", "deleteCon");
 
     fetchURL("./api/consumible/delete_consumible.php", "POST", dataDelete)
@@ -336,12 +333,10 @@ function confirmTransfer(table) {
     if (cantidad <= parseInt(data.Cantidad)) {
       let formData = new FormData();
 
-      formData.append("cantidad", cantidad);
-      formData.append("marca", data.Marca);
-      formData.append("modelo", data.Modelo);
-      formData.append("tipo", data.Tipo);
+      formData.append("cantidad", parseInt(cantidad));
       formData.append("origen", parseInt(data.Id_bodega));
       formData.append("destino", parseInt(destino));
+      formData.append("Id_consumible", parseInt(data.Id_consumible));
 
       let config = {
         method: "POST",
@@ -457,7 +452,7 @@ function listALL() {
     destroy: true,
     //responsive: true,
     order: [[0, "desc"]],
-    select: true,
+    select: false,
     dom: "Bfrtip",
     buttons: [
       {
@@ -490,15 +485,7 @@ function listALL() {
             };
           };
         }
-      } /* ,
-      {
-        text: " <span class='fas fa-wrench text-white'></span>",
-        titleAttr: "Actualizar",
-        className: "btn btn-warning",
-        action: function() {
-          getDataUpdate(table);
-        }
-      } */
+      }
     ],
     language: Datatable_ES,
     ajax: {
@@ -506,7 +493,13 @@ function listALL() {
       url: "./api/consumible/get_consumibleALL.php",
       data: { case: "allConsumables" }
     },
+    createdRow: function(row, data, dataIndex) {
+      console.log(data);
 
+      if (data.Marca === "HP") {
+        $(row).addClass("bg-danger text-white");
+      }
+    },
     columns: [
       { data: "Marca" },
       { data: "Modelo" },

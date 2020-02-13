@@ -11,7 +11,7 @@ CREATE TABLE if not EXISTS Bodega(
 CREATE TABLE IF NOT EXISTS Impresora(
     Id_impresora int AUTO_INCREMENT PRIMARY KEY,
     Marca_impresora VARCHAR(20) NOT NULL,
-    Modelo_impresora VARCHAR(20) NOT NULL
+    Modelo_impresora VARCHAR(20) UNIQUE NOT NULL 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
@@ -23,6 +23,8 @@ CREATE TABLE if not EXISTS `Consumible` (
   `Modelo` varchar(20) NOT NULL,
   `Tipo` enum('Tambor','Fusor','Tinta', 'Toner', 'Tambor de residuo', 'Tambor de arrastre', 'Correa de arrastre') NOT NULL,
   Id_impresora int NOT NULL,
+    rango_stockMinimo int DEFAULT 0 NULL,
+  rango_stockMaximo int DEFAULT 0 NULL,
    FOREIGN KEY (Id_impresora) REFERENCES Impresora(Id_impresora)
     ON DELETE CASCADE ON UPDATE CASCADE  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

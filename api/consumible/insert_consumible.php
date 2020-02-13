@@ -23,6 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $bodega = (int) $_POST['bodega'];
             //$impresora = strtoupper($_POST['impresora']);
             $impresora = (int) $_POST['impresora'];
+            $rangoMinimo = (int) $_POST['rangoMinimo'];
+            $rangoMaximo = (int) $_POST['rangoMaximo'];
 
             $consumible->addPrinterConsumables($cantidad, $marca, $tipo, $modelo, $bodega, $impresora);
             break;

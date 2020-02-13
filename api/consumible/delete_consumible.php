@@ -11,13 +11,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             //Borrar cantidades de la tabla bodega_consumible
         case 'deleteCon':
             $cantidad = (int) $_POST['cantidad'];
-            $modelo = strtoupper($_POST['modelo']);
-            $marca = strtoupper($_POST['marca']);
-            $tipo = $_POST['tipo'];
             $id_bodega = (int) $_POST['id_bodega'];
             $Id_consumible = (int) $_POST['Id_consumible'];
 
-            $res = $consumible->deleteCon($cantidad, $modelo, $marca, $tipo, $id_bodega, $Id_consumible);
+            $res = $consumible->deleteCon($cantidad, $id_bodega, $Id_consumible);
             ($res) ?  $status = array("status" => "ok") :   $status = array("status" => "bad");
             header('Content-Type: application/json');
             echo json_encode($status);

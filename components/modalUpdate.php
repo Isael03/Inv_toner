@@ -54,6 +54,20 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <div class="form-group ">
+                                <label for="cantMinima">Stock Mínimo</label>
+                                <input type="number" class="form-control" id="cantMinima" min="1" value="1" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <div class="form-group ">
+                                <label for="cantMaxima">Stock Máximo</label>
+                                <input type="number" class="form-control" id="cantMaxima" min="1" value="1" required>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
 

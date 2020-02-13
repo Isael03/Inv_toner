@@ -75,6 +75,8 @@ async function sendData() {
   let tipo = document.getElementById("selectTipo").value.trim();
   let bodega = document.getElementById("selectUbicacion").value.trim();
   let impresora = document.getElementById("modelo_imp").value.trim();
+  let minimo = document.getElementById("rangoMinimo").value.trim();
+  let maximo = document.getElementById("rangoMaximo").value.trim();
 
   modelo = modelo.toUpperCase().replace(/ /g, "-");
 
@@ -85,6 +87,8 @@ async function sendData() {
   data.append("modelo", modelo);
   data.append("tipo", tipo);
   data.append("bodega", parseInt(bodega));
+  data.append("minimo", parseInt(bodega));
+  data.append("maximo", parseInt(bodega));
   // data.append("impresora", impresora.toUpperCase());
   data.append("impresora", parseInt(impresora));
   // data.append("Id_impresora", parseInt())
@@ -213,7 +217,7 @@ function sendDataExists(table) {
 
       formaData.append("Id_consumible", parseInt(data.Id_consumible));
       formaData.append("Id_bodega", bodega);
-      formaData.append("cantidad", cantidad);
+      formaData.append("cantidad", parseInt(cantidad));
       formaData.append("case", "addConsumablesExists");
 
       fetchURL("../api/consumible/insert_consumible.php", "POST", formaData)
@@ -253,24 +257,26 @@ function getDataUpdate(table) {
     let modelo = data.Modelo;
     let tipo = data.Tipo;
     let impresora = data.Impresora;
+    let maximo = data.Maximo;
+    let minimo = data.Minimo;
 
     //Pasar datos al modal
-    setModalUpdate(marca, modelo, tipo, impresora);
+    setModalUpdate(marca, modelo, tipo, impresora, maximo, minimo);
   } else {
     customAlertError("Seleccione un elemento");
   }
 }
 
 /* Pasar datos al modal de modificar */
-/**@param {string} marca,  @param {string} modelo, @param {string} tipo, @param {string} impresora*/
-async function setModalUpdate(marca, modelo, tipo, impresora) {
+/**@param {string} marca,  @param {string} modelo, @param {string} tipo, @param {string} impresora, @param {string} maximo, @param {string} minimo*/
+async function setModalUpdate(marca, modelo, tipo, impresora, maximo, minimo) {
   document.getElementById("updMarca").value = marca;
   document.getElementById("updModelo").value = modelo;
   document.getElementById("updTipo").value = tipo;
+  document.getElementById("cantMinima").value = minimo;
+  document.getElementById("cantMaxima").value = maximo;
   await printModelPrinter();
-  //setTimeout(() => {
   document.getElementById("updImpresora").value = impresora;
-  //}, 300);
 }
 
 /* validacion de datos del modal modificar */
@@ -279,10 +285,28 @@ function validFields() {
   let modelo = document.getElementById("updModelo").value;
   let tipo = document.getElementById("updTipo").value;
   let modelo_impresora = document.getElementById("updImpresora").value;
+  let minima = document.getElementById("cantMinima").value;
+  let maxima = document.getElementById("cantMaxima").value;
+  /*   Number.isInteger(parseInt(minima)) &&
+  Number.isInteger(parseInt(maxima)) */
 
-  validClass(["#updMarca", "#updModelo", "#updTipo", "#updImpresora"]);
+  validClass([
+    "#updMarca",
+    "#updModelo",
+    "#updTipo",
+    "#updImpresora",
+    "#cantMinima",
+    "#cantMaxima"
+  ]);
 
-  if (marca != "" && modelo != "" && tipo != "" && modelo_impresora != "") {
+  if (
+    marca != "" &&
+    modelo != "" &&
+    tipo != "" &&
+    modelo_impresora != "" &&
+    isNaN(parseInt(minima)) === false &&
+    isNaN(parseInt(maxima)) === false
+  ) {
     return true;
   } else {
     return false;
@@ -299,6 +323,8 @@ function confirmUpdate(table) {
     let _modelo = document.getElementById("updModelo").value.trim();
     let _tipo = document.getElementById("updTipo").value.trim();
     let _impresora = document.getElementById("updImpresora").value.trim();
+    let minima = document.getElementById("cantMinima").value.trim();
+    let maxima = document.getElementById("cantMaxima").value.trim();
 
     _modelo = _modelo.toUpperCase().replace(/ /g, "-");
 
@@ -308,8 +334,10 @@ function confirmUpdate(table) {
     data.append("modelo_new", _modelo.toUpperCase());
     data.append("tipo_new", _tipo);
     data.append("Id_consumible", parseInt(datatable.Id_consumible));
-    //data.append("Id_impresora_old", parseInt(datatable.Id_impresora));
     data.append("impresora_new", _impresora.toUpperCase());
+    data.append("minimo", parseInt(minima));
+    data.append("maximo", parseInt(maxima));
+    //data.append("Id_impresora_old", parseInt(datatable.Id_impresora));
     /* data.append("marca_old", datatable.Marca);
     data.append("modelo_old", datatable.Modelo);
     data.append("tipo_old", datatable.Tipo);

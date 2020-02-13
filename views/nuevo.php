@@ -110,8 +110,33 @@
 
           <!-- tab nuevo -->
           <div class="tab-pane fade show active" id="newConsumable" role="tabpanel" aria-labelledby="newConsumable-tab">
+
+            <div class="alert alert-warning text-center mt-3 " role="alert">
+              Recuerda: Antes de añadir un nuevo consumible, asegúrese que las bodegas e impresoras esten añadidas en el sistema.
+            </div>
             <!-- Form-->
             <form class="mx-5 mt-5 needs-validation" id="formNuevo" novalidate>
+              <!--  <div class="form-group row">
+                <div class="col">
+                  <label for="inputCantidad">Cantidad</label>
+                  <div>
+                    <input type="number" name="cantidad" class="form-control" id="inputCantidad" required min="1" value="1" />
+                  </div>
+                </div>
+                <div class="col">
+                  <label for="inputMarca">Marca</label>
+                  <div>
+                    <select class="custom-select " id="inputMarca" name="marca" required>
+                      <option value="" selected>Seleccione...</option>
+
+                    </select>
+                  </div>
+
+
+                </div>
+              </div>
+ -->
+
               <div class="form-group row">
                 <label for="inputCantidad" class="col-sm-2 col-form-label">Cantidad</label>
                 <div class="col-sm-10">
@@ -121,7 +146,7 @@
               <div class="form-group row">
                 <label for="inputMarca" class="col-sm-2 col-form-label">Marca</label>
                 <div class="col-sm-10">
-                  <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="inputMarca" name="marca" required>
+                  <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 col-lg-4" id="inputMarca" name="marca" required>
                     <option value="" selected>Seleccione...</option>
 
                   </select>
@@ -130,7 +155,7 @@
               <div class="form-group row">
                 <label for="modelo_con" class="col-sm-2 col-form-label">Modelo</label>
                 <div class="col-sm-10">
-                  <input list="inputModelo" name="modelo" class="form-control mb-2 col-md-6 mb-2 col-lg-4" autocomplete="off" id="modelo_con" required>
+                  <input list="inputModelo" name="modelo" class="form-control mb-2 col-md-6 col-lg-4" autocomplete="off" id="modelo_con" required>
                   <datalist id="inputModelo">
                   </datalist>
 
@@ -154,7 +179,7 @@
               <div class="form-group row">
                 <label for="modelo_imp" class="col-sm-2 col-form-label">Impresora</label>
                 <div class="col-sm-10">
-                  <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="modelo_imp" name="impresora" required>
+                  <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 col-lg-4" id="modelo_imp" name="impresora" required>
                     <option value="" selected>Seleccione...</option>
                   </select> <a href="./impresoras.php"><span class="fas fa-plus-circle fa-lg" title="Añadir impresora"></span></a>
                 </div>
@@ -162,10 +187,22 @@
               <div class="form-group row">
                 <label for="selectUbicacion" class="col-sm-2 col-form-label">Ubicación</label>
                 <div class="col-sm-10">
-                  <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="selectUbicacion" name="ubicacion" required>
+                  <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 col-lg-4" id="selectUbicacion" name="ubicacion" required>
                     <option value="" selected>Seleccione...</option>
 
                   </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputCantidad" class="col-sm-2 col-form-label">Rango mínimo</label>
+                <div class="col-sm-10">
+                  <input type="number" name="cantidad" class="form-control col-md-6 mb-2 col-lg-4" id="rangoMinimo" required min="1" value="1" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputCantidad" class="col-sm-2 col-form-label">Rango máximo</label>
+                <div class="col-sm-10">
+                  <input type="number" name="cantidad" class="form-control col-md-6 mb-2 col-lg-4" id="rangoMaximo" required min="1" value="1" />
                 </div>
               </div>
               <div class="mt-4">

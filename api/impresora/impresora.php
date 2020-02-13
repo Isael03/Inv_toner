@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             if (isset($data)) {
                 echo json_encode($data);
             } else {
-                $arreglo['data'][] = array('Marca_impresora' => "", "Modelo_impresora" => "");
+                $arreglo['data'] = array('Marca_impresora' => "", "Modelo_impresora" => "");
                 echo json_encode($arreglo);
             }
             break;

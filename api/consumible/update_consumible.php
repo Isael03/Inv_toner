@@ -16,6 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tipo_new = $_POST['tipo_new'];
     $impresora_new = strtoupper($_POST['impresora_new']);
     $Id_consumible = (int) $_POST['Id_consumible'];
+    $minimo = (int) $_POST['minimo'];
+    $maximo = (int) $_POST['maximo'];
     //$Id_impresora_old = strtoupper($_POST['Id_impresora_old']);
     /*  $marca_old = strtoupper($_POST['marca_old']);
     $modelo_old = strtoupper($_POST['modelo_old']);
@@ -32,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($idImpresora_new)) {
 
-        $valid = $consumible->update($marca_new, $modelo_new, $tipo_new, $idImpresora_new, $Id_consumible /* $marca_old, $modelo_old, $tipo_old, $idImpresora_old */);
+        $valid = $consumible->update($marca_new, $modelo_new, $tipo_new, $idImpresora_new, $Id_consumible, $minimo, $maximo);
         header('Content-Type: application/json');
         if ($valid) {
             echo json_encode(array("status" => "ok"));
