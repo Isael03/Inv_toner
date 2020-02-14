@@ -119,7 +119,6 @@
               <div class="row">
                 <div class="col d-flex justify-content-center">
                   <form class="mt-5 needs-validation" id="formNuevo" novalidate>
-
                     <div class="row">
                       <div class="form-group col-lg-6 col-sm-12">
                         <label for="inputCantidad" class=" col-form-label">Cantidad</label>
@@ -204,11 +203,8 @@
                       </button>
                     </div>
 
-
-
                   </form>
                 </div>
-
               </div>
             </div>
           </div>

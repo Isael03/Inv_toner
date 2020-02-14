@@ -44,6 +44,21 @@ document.addEventListener("DOMContentLoaded", function() {
       tableAll.ajax.reload();
       tableStorages.ajax.reload();
     });
+
+    document.getElementById("max-transfer").addEventListener("click", () => {
+      var data = tableStorages.row(".selected").data();
+      document.getElementById("amountTtoINF").value = data.Cantidad;
+    });
+
+    document.getElementById("max-delete").addEventListener("click", () => {
+      var data = tableStorages.row(".selected").data();
+      document.getElementById("cantDelete").value = data.Cantidad;
+    });
+
+    document.getElementById("max-withdraw").addEventListener("click", () => {
+      var data = tableStorages.row(".selected").data();
+      document.getElementById("mCantidad").value = data.Cantidad;
+    });
   }, 1000);
 
   /* Evento del input marca del modal actualizar */
@@ -263,7 +278,7 @@ function confirmWithdrawINF_MO(table) {
   let receivedBy = document.querySelector("#receivedBy");
   let cantidad = document.querySelector("#mCantidad").value.trim();
 
-  let selectores = ["#receivedBy"];
+  let selectores = ["#receivedBy", "#mCantidad"];
   validClass(selectores);
 
   if (receivedBy.value.trim() === "" || parseInt(data.Cantidad) < cantidad) {
@@ -386,11 +401,7 @@ function listALL() {
       { data: "Cantidad" },
       {
         data: "Impresora"
-      } /* ,
-      {
-        defaultContent:
-          "<div class='btn-group btn-group-sm' role='group' aria-label='Basic example'><button class='btn btn-info' id='btnWithdraw'><span class='fas fa-box-open'></span></button><button  id='btnUpdate' class='btn btn-warning mx-2' ><span class='fas fa-wrench text-white'></span></button > <button class='btn btn-danger' id='btnDelete'><span class='fas fa-trash'></span></button></div>"
-      } */
+      }
     ]
   });
   //getUpdate("#tableALL tbody", table);
@@ -466,7 +477,7 @@ function showCards(cantidad, lugar, i) {
       <div class="card-body-icon">
         <i class="fas fa-boxes"></i>
       </div>
-      <div class="text-center font-weight-bold">${cantidad}</div>
+      <div class="text-center font-weight-bold idstg">${cantidad}</div>
     </div>
     <a class="card-footer text-white clearfix small z-1">
       <span class="float-left font-weight-bold text-capitalize">${lugar}</span>
@@ -492,35 +503,6 @@ function listStorages() {
     },
     dom: "Bfrtip",
     buttons: [
-      /*  {
-        extend: "pdf",
-        text: "<span class='fas fa-file-pdf'></span>",
-        titleAttr: "PDF",
-        className: "btn btn-success",
-        title: `Consumibles en ${
-          document.querySelector("#transfer-select").value
-        }`,
-        customize: function(doc) {
-          doc.content[1].margin = [100, 10, 100, 0];
-          doc.defaultStyle.alignment = "center";
-          doc.footer = function(currentPage, pageCount) {
-            return currentPage.toString() + " de " + pageCount;
-          };
-          doc.header = function() {
-            return {
-              text:
-                "Emitido el " +
-                new Date().getDate() +
-                "/" +
-                new Date().getMonth() +
-                1 +
-                "/" +
-                new Date().getFullYear(),
-              alignment: "left"
-            };
-          };
-        }
-      }, */
       {
         text: " <span class='fas fa-box-open text-white'></span>",
         titleAttr: "Retirar",

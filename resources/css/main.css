@@ -57,6 +57,11 @@ strong {
   color: #fff;
 }
 
+.select-max:hover {
+  color: dodgerblue;
+  text-decoration: underline;
+}
+
 @media (max-width: 768px) {
   div.alert,
   .input-group-text {
@@ -82,8 +87,10 @@ strong {
     padding: 0.4rem;
   }
 
-  div #btnAdd {
+  #btnAdd {
     padding-left: 0.6rem !important;
     padding-right: 0.6rem !important;
+    padding-bottom: 0 !important;
+    padding-top: 0.1rem !important;
   }
 }

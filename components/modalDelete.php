@@ -13,7 +13,7 @@
                 ¿Esta seguro de que desea borrarlo?
                 <div class="form-group mx-auto mt-2 text-center w-50">
                     <label for="recipient-name" class="col-form-label">Cantidad a eliminar</label>
-                    <input type="number" class="form-control w-100 mx-auto" id="cantDelete" placeholder="Cantidad a eliminar" value="1" min="1">
+                    <input type="number" class="form-control w-100 mx-auto" id="cantDelete" placeholder="Cantidad a eliminar" value="1" min="1"><small class="select-max" id="max-delete">Seleccionar máxima cantidad</small>
                 </div>
             </div>
             <div class="modal-footer">

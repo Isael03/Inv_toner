@@ -20,7 +20,7 @@
 
                     <label for="amountTtoINF">Especifique la cantidad por favor:</label>
                     <div class="form-group ">
-                        <input type="number" class="form-control w-25 mx-auto" id="amountTtoINF" placeholder="Cantidad" min="1" required>
+                        <input type="number" class="form-control w-25 mx-auto" id="amountTtoINF" placeholder="Cantidad" min="1" required><small class="select-max" id="max-transfer">Seleccionar máxima cantidad</small>
                     </div>
 
                 </form>

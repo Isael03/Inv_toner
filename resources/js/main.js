@@ -70,7 +70,8 @@ function autocompletar() {
       //miembro.substr(0, funcionario.length).toLowerCase()
       for (miembro of ListaFuncionarios) {
         if (
-          miembro.substr(0, funcionario.length).toLowerCase() === funcionario
+          miembro.substr(0, funcionario.length).toLowerCase() ===
+          funcionario.toLowerCase()
         ) {
           const elementoLista = document.createElement("div");
           elementoLista.innerHTML = `<strong>${miembro.substr(
