@@ -87,7 +87,7 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb mb-5">
           <li class="breadcrumb-item">
-            <a href="#" class="text-decoration-none text-dark">Impresoras</a>
+            <a href="./impresoras.php" class="text-decoration-none text-dark">Impresoras</a>
           </li>
         </ol>
 

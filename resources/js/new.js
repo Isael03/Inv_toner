@@ -1,12 +1,14 @@
 document.addEventListener("DOMContentLoaded", function() {
   const table = tableListConsumables();
+
   var forms = document.getElementsByClassName("needs-validation");
   printMarcaPrinter();
+
+  /**Añadir las bodegas al select input */
   selectStorage(
     "selectUbicacion",
     "../api/bodega/bodegaGet.php?case=listStorage"
   );
-
   selectStorage(
     "selectStorage",
     "../api/bodega/bodegaGet.php?case=listStorage"
@@ -19,7 +21,8 @@ document.addEventListener("DOMContentLoaded", function() {
     document.querySelector(
       "#modelo_imp"
     ).innerHTML = `<option value=''>Seleccione...</option>`;
-    printModelPrinter();
+    let marca = document.querySelector("#inputMarca");
+    printModelPrinter(marca);
   });
 
   /**Animacion de validacion de formulario de nuevo consumible */
@@ -56,14 +59,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
   /* Evento del input marca del modal actualizar */
   document.querySelector("#updMarca").addEventListener("input", () => {
-    printModelPrinter();
+    printModelPrinterIPD();
     document.querySelector(
       "#updImpresora"
     ).innerHTML = `<option value="">Seleccione...</option>`;
   });
 
+  /**Evento del boton eliminar del modal */
   document.getElementById("btnDeleteAll").addEventListener("click", function() {
     confirmDeleteAll(table);
+  });
+
+  /**Desmarcar fila selecionada al pulsar el tab */
+  document.getElementById("myTabAdd").addEventListener("click", () => {
+    table.rows().deselect();
   });
 });
 
@@ -87,11 +96,10 @@ async function sendData() {
   data.append("modelo", modelo);
   data.append("tipo", tipo);
   data.append("bodega", parseInt(bodega));
-  data.append("minimo", parseInt(bodega));
-  data.append("maximo", parseInt(bodega));
+  data.append("rangoMinimo", parseInt(minimo));
+  data.append("rangoMaximo", parseInt(maximo));
   // data.append("impresora", impresora.toUpperCase());
   data.append("impresora", parseInt(impresora));
-  // data.append("Id_impresora", parseInt())
   data.append("case", "addPrinterConsumables");
 
   fetchURL("../api/consumible/insert_consumible.php", "POST", data)
@@ -118,6 +126,10 @@ async function printMarcaPrinter() {
           document.querySelector(
             "#inputMarca"
           ).innerHTML += `<option value=${impresora.Marca_impresora}>${impresora.Marca_impresora}</option>`;
+
+          document.querySelector(
+            "#updMarca"
+          ).innerHTML += `<option>${impresora.Marca_impresora}</option>`;
         }
 
         if (res.modelo_con !== undefined) {
@@ -137,9 +149,14 @@ async function printMarcaPrinter() {
 }
 
 /**@description Listar modelos de impresoras en el input impresora */
-async function printModelPrinter() {
+async function printModelPrinter(marca) {
   //case: showModelPrinter
-  let marca = document.querySelector("#inputMarca");
+  //let marca = document.querySelector("#inputMarca");
+
+  //resetear select
+  /*  document.querySelector("#updImpresora").innerHTML =
+    "<option value='' selected>Seleccione...</option>"; */
+  //let updmarca = document.querySelector("#updMarca");
 
   await fetch(
     `../api/impresora/impresora.php?case=showModelPrinter&&marca=${marca.value.toUpperCase()}`
@@ -275,7 +292,7 @@ async function setModalUpdate(marca, modelo, tipo, impresora, maximo, minimo) {
   document.getElementById("updTipo").value = tipo;
   document.getElementById("cantMinima").value = minimo;
   document.getElementById("cantMaxima").value = maximo;
-  await printModelPrinter();
+  await printModelPrinterIPD();
   document.getElementById("updImpresora").value = impresora;
 }
 
@@ -287,8 +304,6 @@ function validFields() {
   let modelo_impresora = document.getElementById("updImpresora").value;
   let minima = document.getElementById("cantMinima").value;
   let maxima = document.getElementById("cantMaxima").value;
-  /*   Number.isInteger(parseInt(minima)) &&
-  Number.isInteger(parseInt(maxima)) */
 
   validClass([
     "#updMarca",
@@ -337,11 +352,6 @@ function confirmUpdate(table) {
     data.append("impresora_new", _impresora.toUpperCase());
     data.append("minimo", parseInt(minima));
     data.append("maximo", parseInt(maxima));
-    //data.append("Id_impresora_old", parseInt(datatable.Id_impresora));
-    /* data.append("marca_old", datatable.Marca);
-    data.append("modelo_old", datatable.Modelo);
-    data.append("tipo_old", datatable.Tipo);
-    data.append("impresora_old", datatable.Impresora); */
 
     fetchURL("../api/consumible/update_consumible.php", "POST", data)
       .then(res => {
@@ -361,7 +371,7 @@ function confirmUpdate(table) {
 }
 
 /**@description agregar marcas de impresoras en la lista del modal actualizar */
-async function printMarcaPrinter() {
+/* async function printMarcaPrinter() {
   //case:printersBrand
   await fetch("../api/impresora/impresora.php?case=printersBrand")
     .then(response => {
@@ -386,16 +396,17 @@ async function printMarcaPrinter() {
       // alertError();
       console.log(err);
     });
-}
+} */
 
 /**@description agregar modelos de impresoras en la lista del modal actualizar */
-async function printModelPrinter() {
+async function printModelPrinterIPD() {
   //case: namePrinter
-  /* resetear select */
+
+  //resetear select
   document.querySelector("#updImpresora").innerHTML =
     "<option value='' selected>Seleccione...</option>";
   let marca = document.querySelector("#updMarca");
-  /*Consulta y llenar select con resultados */
+  //Consulta y llenar select con resultados
   await fetch(
     `../api/impresora/impresora.php?case=namePrinter&&marca=${marca.value.toUpperCase()}`
   )
@@ -415,6 +426,7 @@ async function printModelPrinter() {
     });
 }
 
+/**Mostrar modal de confirmacion para la eliminacion */
 function showModalDelete(table) {
   if (table.row(".selected").length > 0) {
     //abrir modal
@@ -426,6 +438,7 @@ function showModalDelete(table) {
   }
 }
 
+/**Realizar eliminacion del elemento */
 function confirmDeleteAll(table) {
   var datatable = table.row(".selected").data();
 

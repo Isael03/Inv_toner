@@ -91,24 +91,21 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb mb-3">
           <li class="breadcrumb-item">
-            <a href="#" class="text-decoration-none text-dark">Reportes de entregas</a>
+            <a href="./reporte.php" class="text-decoration-none text-dark">Reportes de entregas</a>
           </li>
         </ol>
 
         <!-- Contenido -->
         <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
           <li class="nav-item">
-            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">General</a>
+            <a class="nav-link active" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">General</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Dirección</a>
+            <a class="nav-link" data-toggle="tab" href="#direccion" role="tab" aria-controls="direccion" aria-selected="false">Dirección</a>
           </li>
-          <!-- <li class="nav-item">
-            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
-          </li> -->
         </ul>
         <div class="tab-content" id="myTabContent">
-          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="home-tab">
 
             <!-- formulario desde-hasta -->
             <p>Buscar:</p>
@@ -187,7 +184,7 @@
             </section>
           </div>
 
-          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+          <div class="tab-pane fade" id="direccion" role="tabpanel" aria-labelledby="profile-tab">
             <p>Buscar:</p>
             <form>
               <div class="form-row align-items-center">
@@ -235,7 +232,6 @@
             </div>
 
           </div>
-          <!-- <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div> -->
         </div>
 
 

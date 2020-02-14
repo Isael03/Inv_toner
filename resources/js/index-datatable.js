@@ -3,9 +3,8 @@
 document.addEventListener("DOMContentLoaded", function() {
   showContent();
   autocompletar();
-  //printMarcaPrinter();
 
-  /**Las tablas y eventos relacionados cargan 1 segundo despues de cargar las cartas y tabs, para evitar conflictos de variables desconocidas */
+  /**Las tablas y eventos relacionados cargan 1 segundo despues de cargar las cartas, para evitar conflictos de variables desconocidas */
   setTimeout(() => {
     var tableStorages = listStorages();
     var tableAll = listALL();
@@ -22,12 +21,6 @@ document.addEventListener("DOMContentLoaded", function() {
     document.querySelector("#btnModalDelete").addEventListener("click", () => {
       confirmDelete(tableStorages);
     });
-
-    /**@deprecated */
-    /* boton actualizar del modal */
-    /*   document.querySelector("#btnModalUpdate").addEventListener("click", () => {
-      confirmUpdate(tableAll);
-    }); */
 
     /* Boton retirar del modal */
     document
@@ -135,78 +128,6 @@ function confirmDelete(table) {
   }
 }
 
-/**@deprecated */
-/* Pasar datos al modal de modificar */
-/**@param {string} marca,  @param {string} modelo, @param {string} tipo, @param {string} impresora*/
-async function setModalUpdate(marca, modelo, tipo, impresora) {
-  document.getElementById("updMarca").value = marca;
-  document.getElementById("updModelo").value = modelo;
-  document.getElementById("updTipo").value = tipo;
-  await printModelPrinter();
-  //setTimeout(() => {
-  document.getElementById("updImpresora").value = impresora;
-  //}, 300);
-}
-
-/**@deprecated */
-/* validacion de datos del modal modificar */
-function validFields() {
-  let marca = document.getElementById("updMarca").value;
-  let modelo = document.getElementById("updModelo").value;
-  let tipo = document.getElementById("updTipo").value;
-  let modelo_impresora = document.getElementById("updImpresora").value;
-
-  validClass(["#updMarca", "#updModelo", "#updTipo", "#updImpresora"]);
-
-  if (marca != "" && modelo != "" && tipo != "" && modelo_impresora != "") {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-/**@deprecated */
-/* Botón confirmación del modal modificar */
-/**@param {object} table */
-function confirmUpdate(table) {
-  var datatable = table.row(".selected").data();
-
-  if (validFields()) {
-    let _marca = document.getElementById("updMarca").value.trim();
-    let _modelo = document.getElementById("updModelo").value.trim();
-    let _tipo = document.getElementById("updTipo").value.trim();
-    let _impresora = document.getElementById("updImpresora").value.trim();
-
-    _modelo = _modelo.toUpperCase().replace(/ /g, "-");
-
-    //Pasar datos al objeto formatData
-    let data = new FormData();
-    data.append("marca_new", _marca.toUpperCase());
-    data.append("modelo_new", _modelo.toUpperCase());
-    data.append("tipo_new", _tipo);
-    data.append("impresora_new", _impresora.toUpperCase());
-    data.append("marca_old", datatable.Marca);
-    data.append("modelo_old", datatable.Modelo);
-    data.append("tipo_old", datatable.Tipo);
-    data.append("impresora_old", datatable.Impresora);
-
-    fetchURL("./api/consumible/update_consumible.php", "POST", data)
-      .then(res => {
-        if (res.status === "ok") {
-          customAlertSuccess("Elemento actualizado");
-
-          $("#modalUpdate").modal("hide");
-          table.ajax.reload();
-        } else {
-          alertError();
-        }
-      })
-      .catch(err => console.log(err));
-  } else {
-    alertErrorFormEmpty();
-  }
-}
-
 /* Abrir modal para retirar */
 /**@param {object} table*/
 function getDataWithdraw(table) {
@@ -232,50 +153,6 @@ function setModalWithdraw(table) {
   document.querySelector("#mTipo").value = data.Tipo;
   document.querySelector("#mCantidad").value = 1;
 }
-
-/**  */
-/**@deprecated */
-/**@description Confirmar retiro @param {object} table*/
-/* function confirmWithdraw(table) {
-
-  var data = table.row(".selected").data();
-  let receivedBy = document.querySelector("#receivedBy");
-
-  let cantidad = document.querySelector("#mCantidad").value.trim();
-
-  if (receivedBy.value.trim() === "" || parseInt(data.Cantidad) < cantidad) {
-    customAlertError(
-      "La cantidad sobrepasa a la existente o hay algún campo vacío"
-    );
-  } else {
-    //let usuarioRetira = document.querySelector("#submitter").value.trim();
-
-    let form = new FormData();
-    //form.append("usuarioRetira", usuarioRetira);
-    form.append("usuarioRecibe", receivedBy.value.trim());
-    form.append("marca", data.Marca);
-    form.append("modelo", data.Modelo);
-    form.append("tipo", data.Tipo);
-    form.append("impresora", data.Impresora);
-    form.append("cantidad", parseInt(cantidad));
-
-    fetchURL("./api/retiro/insert_retiro.php", "POST", form)
-      .then(res => {
-        if (res.status === "bad") {
-          alertError();
-        } else {
-          jQuery.noConflict();
-          jQuery("#modalWithdraw");
-          $("#modalWithdraw").modal("hide");
-          updateCountCard();
-          alertSuccess();
-          table.ajax.reload();
-        }
-      })
-      .catch(err => console.log(err));
-  }
-}
- */
 
 /**@description abrir modal para transferir, @param {object} table*/
 function transfer(table) {
@@ -394,10 +271,7 @@ function confirmWithdrawINF_MO(table) {
       "La cantidad sobrepasa a la existente o hay algún campo vacío"
     );
   } else {
-    //let usuarioRetira = document.querySelector("#submitter").value.trim();
-
     let form = new FormData();
-    // form.append("usuarioRetira", usuarioRetira);
     form.append("usuarioRecibe", receivedBy.value.trim());
     form.append("marca", data.Marca);
     form.append("modelo", data.Modelo);
@@ -493,11 +367,16 @@ function listALL() {
       url: "./api/consumible/get_consumibleALL.php",
       data: { case: "allConsumables" }
     },
+    /**Colores en las celdas de cantidad */
     createdRow: function(row, data, dataIndex) {
-      console.log(data);
-
-      if (data.Marca === "HP") {
-        $(row).addClass("bg-danger text-white");
+      if (data.Cantidad < data.Minimo) {
+        $($(row).find("td")[3]).addClass("bg-danger text-white");
+      }
+      if (data.Cantidad >= data.Minimo && data.Cantidad <= data.Maximo) {
+        $($(row).find("td")[3]).addClass("bg-warning text-white");
+      }
+      if (data.Cantidad > data.Maximo) {
+        $($(row).find("td")[3]).addClass("bg-success text-white");
       }
     },
     columns: [
@@ -523,80 +402,7 @@ function listALL() {
   return table;
 }
 
-/**@deprecated */
-/* var getUpdate = function(tbody, table) {
-  $(tbody).on("click", "#btnUpdate", function() {
-
-    var data = table.row($(this).parents("tr")).data();
-    jQuery.noConflict();
-    jQuery("#modalUpdate");
-    $("#modalUpdate").modal("show");
-
-    let marca = data.Marca;
-    let modelo = data.Modelo;
-    let tipo = data.Tipo;
-    let impresora = data.Impresora;
-    setModalUpdate(marca, modelo, tipo, impresora);
-  });
-}; */
-
-/**@deprecated */
-/**@description agregar modelos de impresoras en la lista del modal actualizar */
-/* async function printModelPrinter() {
-  //case: namePrinter
-  // resetear select 
-  document.querySelector("#updImpresora").innerHTML =
-    "<option value='' selected>Seleccione...</option>";
-  let marca = document.querySelector("#updMarca");
- // Consulta y llenar select con resultados 
-  await fetch(
-    `./api/impresora/impresora.php?case=namePrinter&&marca=${marca.value.toUpperCase()}`
-  )
-    .then(response => {
-      return response.json();
-    })
-    .then(json => {
-      json.forEach(impresora => {
-        document.querySelector(
-          "#updImpresora"
-        ).innerHTML += `<option >${impresora.Impresora}</option>`;
-      });
-    })
-    .catch(err => {
-      console.log(err);
-      alertError();
-    });
-} */
-
-/**@deprecated */
-/**@description agregar marcas de impresoras en la lista del modal actualizar */
-/* async function printMarcaPrinter() {
-  //case:printersBrand
-  await fetch("./api/impresora/impresora.php?case=printersBrand")
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-    })
-    .then(json => {
-      if (json.marca[0].Marca_impresora != null) {
-        for (const impresora of json.marca) {
-          document.querySelector(
-            "#updMarca"
-          ).innerHTML += `<option>${impresora.Marca_impresora}</option>`;
-        }
-      } else {
-        document.querySelector(
-          "#updMarca"
-        ).innerHTML += `<option value="">No hay impresoras en el sistema</option>`;
-      }
-    })
-    .catch(err => {
-      // alertError();
-      console.log(err);
-    });
-} */
-
+/**Mostrar cartas con nombres y cantidad */
 function showContent() {
   /**Iniciar el select de bodegas */
   selectStorage(
@@ -639,37 +445,6 @@ function updateCountCard() {
     });
 }
 
-//Imprimir las pestañas de las tablas en pantalla
-/**@deprecated */
-/* function changeTabName(nombre, index, id) {
-  let tab = document.getElementById("myTab");
-  let tabContent = document.getElementById("myTabContent");
-
-  tab.innerHTML += `<li class="nav-item">
-  <a class="nav-link id-tab" data-toggle="tab" href="#tab-${id}" role="tab" aria-controls="tab-${id}" aria-selected="false">${nombre}</a>
-</li>`;
-
-     tabContent.innerHTML += `<div class="tab-pane fade" id="tab-${id}" role="tabpanel" aria-labelledby="tab-${id}">
-<!-- Datatable de informatica -->
-<div class="table-responsive">
-  <table class="table table-bordered display nowrap text-center id-table" id="table${id}" width="100%" cellspacing="0">
-    <thead>
-      <tr>
-        <th>Marca</th>
-        <th>Modelo</th>
-        <th>Tipo</th>
-        <th>Cantidad</th>
-        <th>Impresora</th>
-      </tr>
-    </thead>
-    <tbody>
-
-    </tbody>
-  </table>
-</div>
-</div>`; 
-} */
-
 /**Imprimir las cartas de las bodegas en pantalla */
 function showCards(cantidad, lugar, i) {
   const color = [
@@ -685,13 +460,13 @@ function showCards(cantidad, lugar, i) {
   ];
   document.getElementById(
     "rowCards"
-  ).innerHTML += `  <div class="col-xl-3 col-md-3 col-sm-6" style="margin-bottom:.5rem; margin-top:1rem">
+  ).innerHTML += `  <div class="col-xl-3 col-md-3 col-sm-12" style="margin-bottom:.5rem; margin-top:1rem">
   <div class="card text-white bg-${color[i]} o-hidden h-100">
     <div class="card-body">
       <div class="card-body-icon">
         <i class="fas fa-boxes"></i>
       </div>
-      <div class="text-center font-weight-bold idstg">${cantidad}</div>
+      <div class="text-center font-weight-bold">${cantidad}</div>
     </div>
     <a class="card-footer text-white clearfix small z-1">
       <span class="float-left font-weight-bold text-capitalize">${lugar}</span>

@@ -120,6 +120,23 @@
 
           <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
             <!-- Datatable total -->
+            <div class="row mb-3" id="legend-color">
+              <div class="col">
+                <ul class="list-unstyled">
+                  <li class="float-right">
+                    <p class="my-0 mr-3"><span class="bg-danger px-4 mr-3 rounded text-white">Insuficiente</span> </p>
+                  </li>
+                  <li class="float-right">
+                    <p class="my-0 mr-3"><span class="bg-warning px-4 mr-3 rounded text-white">Dentro de lo permitido</span> </p>
+                  </li>
+                  <li class="float-right">
+                    <p class="my-0 mr-3"><span class="bg-success px-4 mr-3 rounded text-white">Excedente</span> </p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+
             <div class="table-responsive">
               <table class="table table-bordered display nowrap text-center" id="tableALL" width="100%" cellspacing="0">
                 <thead>
@@ -129,7 +146,6 @@
                     <th>Tipo</th>
                     <th>Cantidad</th>
                     <th>Impresora</th>
-                    <!-- <th class="no-exportar">Acciones</th> -->
                   </tr>
                 </thead>
                 <tbody>

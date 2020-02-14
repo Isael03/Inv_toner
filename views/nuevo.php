@@ -98,7 +98,7 @@
         </ol>
 
         <!-- tabs -->
-        <ul class="nav nav-tabs" id="myTabCon" role="tablist">
+        <ul class="nav nav-tabs" id="myTabAdd" role="tablist">
           <li class="nav-item">
             <a class="nav-link active" data-toggle="tab" href="#newConsumable" role="tab" aria-controls="newConsumable" aria-selected="true">Nuevo</a>
           </li>
@@ -115,103 +115,102 @@
               Recuerda: Antes de añadir un nuevo consumible, asegúrese que las bodegas e impresoras esten añadidas en el sistema.
             </div>
             <!-- Form-->
-            <form class="mx-5 mt-5 needs-validation" id="formNuevo" novalidate>
-              <!--  <div class="form-group row">
-                <div class="col">
-                  <label for="inputCantidad">Cantidad</label>
-                  <div>
-                    <input type="number" name="cantidad" class="form-control" id="inputCantidad" required min="1" value="1" />
-                  </div>
-                </div>
-                <div class="col">
-                  <label for="inputMarca">Marca</label>
-                  <div>
-                    <select class="custom-select " id="inputMarca" name="marca" required>
-                      <option value="" selected>Seleccione...</option>
+            <div class="container">
+              <div class="row">
+                <div class="col d-flex justify-content-center">
+                  <form class="mt-5 needs-validation" id="formNuevo" novalidate>
 
-                    </select>
-                  </div>
+                    <div class="row">
+                      <div class="form-group col-lg-6 col-sm-12">
+                        <label for="inputCantidad" class=" col-form-label">Cantidad</label>
+                        <div>
+                          <input type="number" name="cantidad" class="form-control  mb-2 " id="inputCantidad" required min="1" value="1" />
+                        </div>
+                      </div>
+                      <div class="form-group col-lg-6 col-sm-12">
+                        <label for="inputMarca" class="col-form-label">Marca</label>
+                        <div>
+                          <select class="custom-select mr-sm-2" id="inputMarca" name="marca" required>
+                            <option value="" selected>Seleccione...</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="form-group col-lg-6 col-sm-12">
+                        <label for="modelo_con" class="col-form-label">Modelo</label>
+                        <div>
+                          <input list="inputModelo" name="modelo" class="form-control" autocomplete="off" id="modelo_con" required />
+                          <datalist id="inputModelo"> </datalist>
+                        </div>
+                      </div>
+                      <div class="form-group col-lg-6 col-sm-12">
+                        <label for="selectTipo" class="col-form-label">Tipo</label>
+                        <div>
+                          <select class="custom-select mr-sm-2" id="selectTipo" name="tipo" required>
+                            <option value="" selected>Seleccione...</option>
+                            <option value="Fusor">Fusor</option>
+                            <option value="Tinta">Tinta</option>
+                            <option value="Tambor">Tambor</option>
+                            <option value="Toner">Tóner</option>
+                            <option value="Tambor de residuo">Tambor de residuo</option>
+                            <option value="Tambor de arrastre">Tambor de arrastre</option>
+                            <option value="Correa de arrastre">Correa de arrastre</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="form-group col-lg-6 col-sm-12">
+                        <label for="modelo_imp" class="col-form-label">Impresora <a href="./impresoras.php"><span class="fas fa-plus-circle" title="Añadir impresora"></span></a></label>
+                        <div>
+                          <select class="custom-select mr-sm-2" id="modelo_imp" name="impresora" required>
+                            <option value="" selected>Seleccione...</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="form-group col-lg-6 col-sm-12">
+                        <label for="selectUbicacion" class="col-form-label">Ubicación<a href="./bodega.php" class="ml-2"><span class="fas fa-plus-circle" title="Añadir bodega"></span></a></label>
+                        <div>
+                          <select class="custom-select mr-sm-2" id="selectUbicacion" name="ubicacion" required>
+                            <option value="" selected>Seleccione...</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="form-group col-lg-6 col-sm-12">
+                        <label for="inputCantidad" class="col-form-label">Rango mínimo</label>
+                        <div>
+                          <input type="number" name="cantidad" class="form-control" id="rangoMinimo" required min="1" value="1" />
+                        </div>
+                      </div>
+
+                      <div class="form-group col-lg-6 col-sm-12">
+                        <label for="inputCantidad" class="col-form-label">Rango máximo</label>
+                        <div>
+                          <input type="number" name="cantidad" class="form-control" id="rangoMaximo" required min="1" value="1" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mt-4">
+                      <a href="../index.php" class="mr-3">Volver</a>
+                      <button type="submit" class="btn btn-primary px-4" id="btnNuevoToner">
+                        Añadir
+                      </button>
+                    </div>
 
 
-                </div>
-              </div>
- -->
 
-              <div class="form-group row">
-                <label for="inputCantidad" class="col-sm-2 col-form-label">Cantidad</label>
-                <div class="col-sm-10">
-                  <input type="number" name="cantidad" class="form-control col-md-6 mb-2 col-lg-4" id="inputCantidad" required min="1" value="1" />
+                  </form>
                 </div>
-              </div>
-              <div class="form-group row">
-                <label for="inputMarca" class="col-sm-2 col-form-label">Marca</label>
-                <div class="col-sm-10">
-                  <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 col-lg-4" id="inputMarca" name="marca" required>
-                    <option value="" selected>Seleccione...</option>
 
-                  </select>
-                </div>
               </div>
-              <div class="form-group row">
-                <label for="modelo_con" class="col-sm-2 col-form-label">Modelo</label>
-                <div class="col-sm-10">
-                  <input list="inputModelo" name="modelo" class="form-control mb-2 col-md-6 col-lg-4" autocomplete="off" id="modelo_con" required>
-                  <datalist id="inputModelo">
-                  </datalist>
-
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="selectTipo" class="col-sm-2 col-form-label">Tipo</label>
-                <div class="col-sm-10">
-                  <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="selectTipo" name="tipo" required>
-                    <option value="" selected>Seleccione...</option>
-                    <option value="Fusor">Fusor</option>
-                    <option value="Tinta">Tinta</option>
-                    <option value="Tambor">Tambor</option>
-                    <option value="Toner">Tóner</option>
-                    <option value="Tambor de residuo">Tambor de residuo</option>
-                    <option value="Tambor de arrastre">Tambor de arrastre</option>
-                    <option value="Correa de arrastre">Correa de arrastre</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="modelo_imp" class="col-sm-2 col-form-label">Impresora</label>
-                <div class="col-sm-10">
-                  <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 col-lg-4" id="modelo_imp" name="impresora" required>
-                    <option value="" selected>Seleccione...</option>
-                  </select> <a href="./impresoras.php"><span class="fas fa-plus-circle fa-lg" title="Añadir impresora"></span></a>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="selectUbicacion" class="col-sm-2 col-form-label">Ubicación</label>
-                <div class="col-sm-10">
-                  <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 col-lg-4" id="selectUbicacion" name="ubicacion" required>
-                    <option value="" selected>Seleccione...</option>
-
-                  </select>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="inputCantidad" class="col-sm-2 col-form-label">Rango mínimo</label>
-                <div class="col-sm-10">
-                  <input type="number" name="cantidad" class="form-control col-md-6 mb-2 col-lg-4" id="rangoMinimo" required min="1" value="1" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="inputCantidad" class="col-sm-2 col-form-label">Rango máximo</label>
-                <div class="col-sm-10">
-                  <input type="number" name="cantidad" class="form-control col-md-6 mb-2 col-lg-4" id="rangoMaximo" required min="1" value="1" />
-                </div>
-              </div>
-              <div class="mt-4">
-                <a href="../index.php" class="mr-3">Volver</a>
-                <button type="submit" class="btn btn-primary px-4" id="btnNuevoToner">
-                  Añadir
-                </button>
-              </div>
-            </form>
+            </div>
           </div>
 
           <!-- tab existente -->

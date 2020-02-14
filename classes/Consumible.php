@@ -58,7 +58,7 @@ class Consumible
                 }
             }
         } else {
-            $sql = "INSERT INTO Consumible (Marca, Modelo, Tipo, Id_impresora, rango_stockMinimo, rango_stockMaximo) VALUES ('$marca', '$modelo', '$tipo', '$Id_impresora', $rangoMinimo, $rangoMaximo)";
+            $sql = "INSERT INTO Consumible (Marca, Modelo, Tipo, Id_impresora, rango_stockMinimo, rango_stockMaximo) VALUES ('$marca', '$modelo', '$tipo', $Id_impresora, $rangoMinimo, $rangoMaximo)";
 
             $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
 
@@ -144,7 +144,7 @@ class Consumible
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, COUNT(BC.Id_consumible) AS Cantidad, C.rango_stockMinimo AS Minimo, C.rango_stockMaximo AS Maximo FROM Consumible C LEFT JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible LEFT JOIN Bodega B ON BC.Id_bodega=B.Id_bodega LEFT JOIN Impresora I ON C.Id_impresora=I.Id_impresora GROUP BY C.Modelo";
+        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, COUNT(BC.Id_consumible) AS Cantidad, C.rango_stockMinimo AS Minimo, C.rango_stockMaximo AS Maximo FROM Consumible C LEFT JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible LEFT JOIN Bodega B ON BC.Id_bodega=B.Id_bodega LEFT JOIN Impresora I ON C.Id_impresora=I.Id_impresora GROUP BY BC.Id_consumible";
 
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
@@ -329,6 +329,7 @@ class Consumible
             while ($data = mysqli_fetch_assoc($result)) {
                 array_push($arreglo, $data['Id_ubicacion']);
             }
+
             $valid = true;
             foreach ($arreglo as $id) {
                 if ($conn->query("UPDATE `Bodega_Consumible` SET `Id_bodega`=$codDestino WHERE Id_ubicacion=$id") === false) {

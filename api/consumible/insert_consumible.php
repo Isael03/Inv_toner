@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $rangoMinimo = (int) $_POST['rangoMinimo'];
             $rangoMaximo = (int) $_POST['rangoMaximo'];
 
-            $consumible->addPrinterConsumables($cantidad, $marca, $tipo, $modelo, $bodega, $impresora);
+            $consumible->addPrinterConsumables($cantidad, $marca, $tipo, $modelo, $bodega, $impresora, $rangoMinimo, $rangoMaximo);
             break;
 
         case 'addConsumablesExists':

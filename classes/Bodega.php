@@ -9,12 +9,12 @@ class Bodega
     {
 
         $this->conn = $conn;
-        /**Al inicializarse se crean 3 bodegas */
+        /**Al inicializarse se crean 2 bodegas */
         self::checkStorage($conn);
     }
 
 
-    /**Crear 3 bodegas  */
+    /**Crear 2 bodegas  */
     private function checkStorage($conn)
     {
         $conn = $conn->connect();
@@ -23,7 +23,7 @@ class Bodega
         $result = $conn->query($sql);
 
         if ($result->num_rows === 0) {
-            $sql = "INSERT INTO Bodega (Id_bodega, Lugar) VALUES (1, 'Bodega A'), (2, 'Bodega B'), (3, 'Bodega C')";
+            $sql = "INSERT INTO Bodega (Id_bodega, Lugar) VALUES (1, 'Bodega A'), (2, 'Bodega B')";
             if ($conn->query($sql)) {
                 //echo "Bodegas ingresadas";
             };
@@ -34,8 +34,6 @@ class Bodega
     /**Listar nombres de bodega y la cantidad que tienen alamacenada*/
     public function listStorage()
     {
-
-
         $conn = $this->conn->connect();
 
         $sql = "SELECT B.Id_bodega, B.Lugar, if(COUNT(BC.Id_bodega)=0,0, COUNT(BC.Id_bodega)) AS Cantidad FROM Bodega B left JOIN Bodega_Consumible BC ON B.Id_bodega=BC.Id_bodega GROUP by B.Id_bodega ORDER BY B.Id_bodega ASC";

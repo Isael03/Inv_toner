@@ -19,6 +19,7 @@
 
   <!-- Custom styles for this template-->
   <link href="../resources/css/sb-admin.css" rel="stylesheet">
+  <link rel="stylesheet" href="../resources/css/main.css">
 
   <!-- toastr -->
   <link rel="stylesheet" href="../vendor/toastr/toastr.min.css">
@@ -87,7 +88,7 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb mb-5">
           <li class="breadcrumb-item">
-            <a href="#" class="text-decoration-none text-dark">Historial de entregas</a>
+            <a href="./historial.php" class="text-decoration-none text-dark">Historial de entregas</a>
           </li>
         </ol>
 

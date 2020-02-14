@@ -87,7 +87,7 @@
                 <!-- Breadcrumbs-->
                 <ol class="breadcrumb mb-5">
                     <li class="breadcrumb-item">
-                        <a href="#" class="text-decoration-none text-dark">Bodega</a>
+                        <a href="./bodega.php" class="text-decoration-none text-dark">Bodega</a>
                     </li>
                 </ol>
 
