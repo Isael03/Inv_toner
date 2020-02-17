@@ -3,7 +3,6 @@
 document.addEventListener("DOMContentLoaded", function() {
   showContent();
   autocompletar();
-
   /**Las tablas y eventos relacionados cargan 1 segundo despues de cargar las cartas, para evitar conflictos de variables desconocidas */
   setTimeout(() => {
     var tableStorages = listStorages();
@@ -72,30 +71,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //***************************************************************************************************************************** */
 
-/**@deprecated */
-/* Acción modificar-abrir modal */
-/**@param {object} table*/
-function getDataUpdate(table) {
-  var data = table.row(".selected").data();
-
-  if (table.row(".selected").length > 0) {
-    //abrir modal
-    jQuery.noConflict();
-    jQuery("#modalUpdate");
-    $("#modalUpdate").modal("show");
-
-    let marca = data.Marca;
-    let modelo = data.Modelo;
-    let tipo = data.Tipo;
-    let impresora = data.Impresora;
-
-    //Pasar datos al modal
-    setModalUpdate(marca, modelo, tipo, impresora);
-  } else {
-    customAlertError("Seleccione un elemento");
-  }
-}
-
 /* Acción boton eliminar-abrir modal */
 /**@param {object} table*/
 function getDataDelete(table) {
@@ -115,7 +90,7 @@ function confirmDelete(table) {
   const data = table.row(".selected").data();
   let cant_delete = document.getElementById("cantDelete").value;
 
-  if (cant_delete <= parseInt(data.Cantidad) || cant_delete === 0) {
+  if (cant_delete <= parseInt(data.Cantidad) && cant_delete > 0) {
     const dataDelete = new FormData();
     dataDelete.append("cantidad", parseInt(cant_delete));
     dataDelete.append("id_bodega", parseInt(data.Id_bodega));
@@ -152,6 +127,11 @@ function getDataWithdraw(table) {
     $("#modalWithdraw").modal("show");
 
     setModalWithdraw(table);
+    /**Al cerrar el modal las validaciones desaparecen */
+    $("#modalWithdraw").on("hidden.bs.modal", function() {
+      let selectores = ["#receivedBy", "#mCantidad"];
+      clean_Validations(selectores);
+    });
   } else {
     customAlertError("Seleccione un elemento");
   }
@@ -161,6 +141,7 @@ function getDataWithdraw(table) {
 /**@param {object} table*/
 function setModalWithdraw(table) {
   var data = table.row(".selected").data();
+  console.log(data);
 
   document.querySelector("#receivedBy").value = "";
   document.querySelector("#mMarca").value = data.Marca;
@@ -207,6 +188,12 @@ function transfer(table) {
     $("#modalTransfer").modal("show");
 
     document.querySelector("#amountTtoINF").value = 1;
+
+    /**Al cerrar el modal las validaciones desaparecen */
+    $("#modalTransfer").on("hidden.bs.modal", function() {
+      let selectores = ["#amountTtoINF", "#transfer-select"];
+      clean_Validations(selectores);
+    });
   } else {
     customAlertError("Seleccione un elemento");
   }
@@ -218,7 +205,10 @@ function confirmTransfer(table) {
   let cantidad = document.querySelector("#amountTtoINF").value;
   let destino = document.querySelector("#transfer-select").value;
 
-  if (cantidad != "" && destino != "") {
+  let selectores = ["#amountTtoINF", "#transfer-select"];
+  validClass(selectores);
+
+  if (cantidad != "" && destino != "" && cantidad > 0) {
     var data = table.row(".selected").data();
     cantidad = parseInt(cantidad);
 
@@ -254,6 +244,7 @@ function confirmTransfer(table) {
             $("#modalTransfer").modal("hide");
             changeStorage(table);
             alertSuccess();
+            clean_Validations(selectores);
           } else {
             alertError();
           }
@@ -275,23 +266,28 @@ function confirmTransfer(table) {
 /**@param {object} table */
 function confirmWithdrawINF_MO(table) {
   var data = table.row(".selected").data();
-  let receivedBy = document.querySelector("#receivedBy");
+  let receivedBy = document.querySelector("#receivedBy").value.trim();
   let cantidad = document.querySelector("#mCantidad").value.trim();
 
   let selectores = ["#receivedBy", "#mCantidad"];
   validClass(selectores);
 
-  if (receivedBy.value.trim() === "" || parseInt(data.Cantidad) < cantidad) {
-    customAlertError(
-      "La cantidad sobrepasa a la existente o hay algún campo vacío"
-    );
+  if (receivedBy === "" || cantidad === "") {
+    alertErrorFormEmpty();
+  } else if (parseInt(cantidad) < 0 || parseInt(data.Cantidad) < cantidad) {
+    //Comprobar que la cantidad sea mayor a 0 y menor o igual a la que existe
+    customAlertError("La cantidad sobrepasa a la existente");
+    let input = document.querySelector("#mCantidad");
+    input.classList.add("is-invalid");
   } else {
+    //Proceder a efectuar el retiro
     let form = new FormData();
-    form.append("usuarioRecibe", receivedBy.value.trim());
+    form.append("usuarioRecibe", receivedBy);
     form.append("marca", data.Marca);
     form.append("modelo", data.Modelo);
     form.append("tipo", data.Tipo);
     form.append("impresora", data.Impresora);
+    form.append("id_impresora", data.Id_impresora);
     form.append("cantidad", parseInt(cantidad));
     form.append("bodega", parseInt(data.Id_bodega));
     form.append("nombreBodega", data.Lugar);
@@ -319,10 +315,11 @@ function confirmWithdrawINF_MO(table) {
           jQuery.noConflict();
           jQuery("#modalWithdraw");
           $("#modalWithdraw").modal("hide");
-          //table.ajax.reload();
+          table.ajax.reload();
           alertSuccess();
           updateCountCard();
           changeStorage(table);
+          clean_Validations(selectores);
         } else {
           alertError();
         }
@@ -341,7 +338,7 @@ function listALL() {
     destroy: true,
     //responsive: true,
     order: [[0, "desc"]],
-    select: false,
+    select: true,
     dom: "Bfrtip",
     buttons: [
       {
@@ -384,14 +381,16 @@ function listALL() {
     },
     /**Colores en las celdas de cantidad */
     createdRow: function(row, data, dataIndex) {
-      if (data.Cantidad < data.Minimo) {
-        $($(row).find("td")[3]).addClass("bg-danger text-white");
-      }
-      if (data.Cantidad >= data.Minimo && data.Cantidad <= data.Maximo) {
-        $($(row).find("td")[3]).addClass("bg-warning text-white");
-      }
-      if (data.Cantidad > data.Maximo) {
-        $($(row).find("td")[3]).addClass("bg-success text-white");
+      let cantidad = parseInt(data.Cantidad);
+      let minimo = parseInt(data.Minimo);
+      let maximo = parseInt(data.Maximo);
+
+      if (cantidad < minimo) {
+        $($(row).find("td")[5]).addClass("bg-danger text-white");
+      } else if (cantidad > maximo) {
+        $($(row).find("td")[5]).addClass("bg-success text-white");
+      } else {
+        $($(row).find("td")[5]).addClass("bg-warning text-white");
       }
     },
     columns: [
@@ -401,6 +400,9 @@ function listALL() {
       { data: "Cantidad" },
       {
         data: "Impresora"
+      },
+      {
+        data: "Estado"
       }
     ]
   });

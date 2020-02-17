@@ -163,6 +163,11 @@
           </div>
           <div class="modal-body" id="body-history">
 
+
+          </div>
+          <div class="modal-footer border-top-0">
+          <div class="d-none" id="id_historial"></div>
+            <button type="button" class="btn btn-danger mx-auto px-5 py-1" title="Anular entrega" id="btnCancel"><span class="fas fa-undo-alt "></span></button>
           </div>
 
         </div>

@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .addEventListener("click", () => dataForm(table));
 });
 
+/**Datatable de impresoras */
 function tablePrinter() {
   /**Configuración Datatable*/
   var table = $("#tablePrinters").DataTable({
@@ -61,10 +62,8 @@ function tablePrinter() {
   return table;
 }
 
+/**Cambiar formulario */
 function changeForm() {
-  /*  let insertForm = document.querySelector("#insertPrinter");
-  let updateForm = document.querySelector("#updatePrinter");*/
-
   let updateForm = document.querySelector("#updatePrinter");
   jQuery.noConflict();
 

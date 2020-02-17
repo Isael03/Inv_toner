@@ -13,7 +13,6 @@ class Bodega
         self::checkStorage($conn);
     }
 
-
     /**Crear 2 bodegas  */
     private function checkStorage($conn)
     {
@@ -46,14 +45,14 @@ class Bodega
             }
         } else {
             //die("Error");
-            $arreglo['data'][] = array("Id_bodega" => "", "Lugar" => "", "Cantidad" => "");
+            $arreglo['data'][] = array();
         }
 
         mysqli_free_result($result);
         $conn->close();
 
         if (isset($arreglo['data'])) {
-            return  $arreglo;
+            return $arreglo;
         }
     }
 
@@ -110,5 +109,31 @@ class Bodega
             $valid = false;
         }
         return $valid;
+    }
+
+    public function checkStorageExistence(int $Id_bodega, string $nombre)
+    {
+        $conn = $this->conn->connect();
+
+        $sql = "SELECT * FROM Bodega WHERE Id_bodega=$Id_bodega";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            $res = $Id_bodega;
+        } else {
+            $sqlquery = "SELECT Id_bodega from Bodega WHERE Lugar='$nombre'";
+            $result = $conn->query($sqlquery);
+            if ($result->num_rows > 0) {
+                while ($data = $result->fetch_assoc()) {
+                    $arreglo = array_map('utf8_encode', $data);
+                }
+                $res = $arreglo['Id_bodega'];
+            } else {
+                $res = "";
+            }
+        }
+        mysqli_free_result($result);
+        $conn->close();
+        return $res;
     }
 }

@@ -112,7 +112,7 @@
             <form>
               <div class="form-row align-items-center">
                 <div class="col-auto">
-                  <label class="sr-only" for="inlineFormInput">Desde</label>
+                  <label class="sr-only" for="inicio-gral">Desde</label>
                   <div class="input-group mb-2">
                     <div class="input-group-prepend">
                       <div class="input-group-text">Desde</div>
@@ -121,7 +121,7 @@
                   </div>
                 </div>
                 <div class="col-auto">
-                  <label class="sr-only" for="inlineFormInputGroup">Hasta</label>
+                  <label class="sr-only" for="termino-gral">Hasta</label>
                   <div class="input-group mb-2">
                     <div class="input-group-prepend">
                       <div class="input-group-text">Hasta</div>
@@ -130,7 +130,7 @@
                   </div>
                 </div>
                 <div class="col-auto">
-                  <button type="submit" class="btn btn-primary mb-2" id="btn-searchGeneral">Buscar</button>
+                  <button type="button" class="btn btn-primary mb-2" id="btn-searchGeneral">Buscar</button>
                 </div>
               </div>
             </form>

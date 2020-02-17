@@ -2,25 +2,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const table = listStorage();
   document.querySelector("#nuevaBodega").value = "";
 
+  /**Evento de para la creacion de la bodega  */
   document.querySelector("#btnNuevabodega").addEventListener("click", () => {
     addStorage(table);
   });
 
+  /**Evento del boton actualizar del modal actualizar bodega */
   document
     .querySelector("#btnModalUpdateStorage")
     .addEventListener("click", () => {
       updateStorage(table);
     });
 
+  /**Evento del boton delete del modal eliminar bodega */
   document
     .querySelector("#btnModalDeleteStorage")
     .addEventListener("click", () => {
       deleteStorage(table);
     });
 });
-
+/**Configuración Datatable*/
 function listStorage() {
-  /**Configuración Datatable*/
   var table = $("#tableStorage").DataTable({
     destroy: true,
     //responsive: true,

@@ -165,7 +165,7 @@ function validClass(selectores) {
   for (let index = 0; index < selectores.length; index++) {
     let input = document.querySelector(selectores[index]);
 
-    if (input.value === "") {
+    if (input.value === "" || input.value < 1) {
       if (input.classList.contains("is-valid")) {
         input.classList.remove("is-valid");
         input.classList.add("is-invalid");
@@ -181,6 +181,19 @@ function validClass(selectores) {
       input.classList.add("is-valid");
       //return true;
     }
+  }
+}
+
+function validarCantidades(IDmin, IDmax) {
+  let idmin = document.querySelector(IDmin);
+  let idmax = document.querySelector(IDmax);
+
+  if (idmin.value >= idmax.value) {
+    idmin.classList.add("is-invalid");
+    idmax.classList.add("is-invalid");
+  } else {
+    idmin.classList.add("is-valid");
+    idmax.classList.add("is-valid");
   }
 }
 

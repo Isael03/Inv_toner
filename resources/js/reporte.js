@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("inicio-gral").value = "";
-  document.getElementById("termino-gral").value = "";
+  /*  document.getElementById("inicio-gral").value = "";
+  document.getElementById("termino-gral").value = ""; */
 
-  document.getElementById("btn-searchGeneral").addEventListener("click", e => {
-    e.preventDefault();
-    e.stopPropagation();
+  document.getElementById("btn-searchGeneral").addEventListener("click", () => {
+    /* e.preventDefault();
+    e.stopPropagation(); */
     reportGeneral();
   });
 
@@ -20,9 +20,10 @@ function reportGeneral() {
   let termino = document.getElementById("termino-gral");
 
   if (inicio.value != "" && termino.value != "") {
+
     var data = new FormData();
-    data.append("inicio", inicio.value.trim());
-    data.append("termino", termino.value.trim());
+    data.append("inicio", inicio.value.trim() + " 00:00:00");
+    data.append("termino", termino.value.trim() + " 23:59:59");
     data.append("case", "general");
 
     let config = {
@@ -51,9 +52,12 @@ function reportGeneral() {
           document.getElementById("tbody-depart").innerHTML = "";
           document.getElementById("tbody-model").innerHTML = "";
 
+          let fechaInicio =inicio.value + " 00:00:00";
+          let fechaTermino =termino.value + " 23:59:59";
+
           document.getElementById(
             "linkToPdf"
-          ).innerHTML = `<a class="btn btn-secondary mb-2 text-white" href="reporte_pdf.php?inicio=${inicio.value}&&termino=${termino.value}" target="_blank">PDF</a>`;
+          ).innerHTML = `<a class="btn btn-secondary mb-2 text-white" href="reporte_pdf.php?inicio=${fechaInicio}&&termino=${fechaTermino}" target="_blank">PDF</a>`;
 
           for (const dep of json.depart) {
             document.getElementById(
@@ -97,8 +101,8 @@ function listDepart() {
 
   if (inicio.value != "" && termino.value != "") {
     var data = new FormData();
-    data.append("inicio_dep", inicio.value.trim());
-    data.append("termino_dep", termino.value.trim());
+    data.append("inicio_dep", inicio.value.trim() + " 00:00:00");
+    data.append("termino_dep", termino.value.trim() + " 23:59:59");
     data.append("case", "dep");
 
     let config = {
@@ -123,9 +127,12 @@ function listDepart() {
           document.getElementById("tbody-dep").innerHTML = "";
 
           for (const dep of json) {
+            Fechainicio = inicio.value + " 00:00:00";
+            Fechatermino = termino.value + " 23:59:59";
+
             document.getElementById(
               "tbody-dep"
-            ).innerHTML += `<tr><td id=${dep.iddireccion}>${dep.direccion}</td><td><a href='./reporte_dep_pdf.php?iddir=${dep.iddireccion}&&nombre_dir=${dep.direccion}&&inicio_dep=${inicio.value}&&termino_dep=${termino.value}' target="_blank">Generar pdf</a></td></tr>`;
+            ).innerHTML += `<tr><td id=${dep.iddireccion}>${dep.direccion}</td><td><a href='./reporte_dep_pdf.php?iddir=${dep.iddireccion}&&nombre_dir=${dep.direccion}&&inicio_dep=${Fechainicio}&&termino_dep=${Fechatermino} ' target="_blank">Generar pdf</a></td></tr>`;
           }
 
           inicio.value = "";

@@ -141,7 +141,7 @@
                         <label for="modelo_con" class="col-form-label">Modelo</label>
                         <div>
                           <input list="inputModelo" name="modelo" class="form-control" autocomplete="off" id="modelo_con" required />
-                          <datalist id="inputModelo"> </datalist>
+                          <!--  <datalist id="inputModelo"> </datalist> -->
                         </div>
                       </div>
                       <div class="form-group col-lg-6 col-sm-12">

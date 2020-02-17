@@ -8,7 +8,6 @@ class Impresora
         $this->conn = $db;
     }
 
-
     /**Ingresar nueva impresora */
     public function insertPrinter(string $marca, string $modelo)
     {
@@ -24,7 +23,6 @@ class Impresora
         $conn->close();
         return $valid;
     }
-
 
     /**Ver el id, marca y modelo de la impresora */
     public function showPrinters()
@@ -47,7 +45,6 @@ class Impresora
             return $arreglo;
         }
     }
-
 
     /**Modificar nombre de la impresora */
     public function updatePrinter(string $marca, string $modelo, int $id)
@@ -115,7 +112,6 @@ class Impresora
         }
     }
 
-
     /** Obtener modelos de impresoras*/
     public function showModelPrinter(string $marca)
     {
@@ -178,5 +174,32 @@ class Impresora
         if (isset($arreglo)) {
             return $arreglo;
         }
+    }
+
+    public function checkPrinterExistence(int $Id_impresora, string $impresora)
+    {
+        $conn = $this->conn->connect();
+
+        $sql = "SELECT * FROM Impresora WHERE Id_impresora=$Id_impresora";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            $res = $Id_impresora;
+        } else {
+            $sqlquery = "SELECT Id_impresora from Impresora WHERE CONCAT(Marca_impresora, ' ', Modelo_impresora)='$impresora'";
+            $result = $conn->query($sqlquery);
+            if ($result->num_rows > 0) {
+                while ($data = $result->fetch_assoc()) {
+                    $arreglo = array_map('utf8_encode', $data);
+                }
+                $res = $arreglo['Id_impresora'];
+            } else {
+                $res = "";
+            }
+        }
+        mysqli_free_result($result);
+
+        $conn->close();
+        return $res;
     }
 }

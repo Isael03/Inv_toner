@@ -18,8 +18,14 @@ $termino_dep = $_GET['termino_dep'];
 $nombre_dir = $_GET['nombre_dir'];
 $iddir = $_GET['iddir'];
 
-$inicio = explode('-', $inicio_dep);
-$termino = explode('-', $termino_dep);
+$array_inicio = explode(" ", $inicio_dep);
+$array_termino = explode(" ", $termino_dep);
+
+$inicio = explode('-', $array_inicio[0]);
+$termino = explode('-', $array_termino[0]);
+
+date_default_timezone_set('UTC');
+date_default_timezone_set("America/Santiago");
 
 $conn = $db->connect();
 

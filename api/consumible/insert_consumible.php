@@ -3,7 +3,6 @@ include "../../config/Database.php";
 include "../../classes/Consumible.php";
 include "../../classes/Bodega.php";
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $conn = new ConexionData();
@@ -26,7 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $rangoMinimo = (int) $_POST['rangoMinimo'];
             $rangoMaximo = (int) $_POST['rangoMaximo'];
 
-            $consumible->addPrinterConsumables($cantidad, $marca, $tipo, $modelo, $bodega, $impresora, $rangoMinimo, $rangoMaximo);
+            $res = $consumible->addPrinterConsumables($cantidad, $marca, $tipo, $modelo, $bodega, $impresora, $rangoMinimo, $rangoMaximo);
+            ($res) ? $status = array("status" => "ok") : $status = array("status" => "bad");
+            echo json_encode($status);
             break;
 
         case 'addConsumablesExists':
@@ -35,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $Id_bodega = (int) $_POST['Id_bodega'];
 
             $res = $consumible->addConsumablesExists($cantidad, $id_consumible, $Id_bodega);
-            ($res) ?  $status = array("status" => "ok") :   $status = array("status" => "bad");
+            ($res) ? $status = array("status" => "ok") : $status = array("status" => "bad");
             echo json_encode($status);
 
             break;

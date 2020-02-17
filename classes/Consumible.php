@@ -32,15 +32,15 @@ class Consumible
     }
 
     /* Insertar nuevos Consumibles  */
-    public function addPrinterConsumables(int $cantidad, string $marca, string $tipo, string $modelo, int $bodega, int $Id_impresora, int $rangoMinimo, int $rangoMaximo)
+    public function addPrinterConsumables(int $cantidad, string $marca, string $tipo, string $modelo, int $bodega, int $Id_impresora, int $rangoMinimo = 0, int $rangoMaximo = 0)
     {
         $conn = $this->conn->connect();
         $valid = true;
 
         $query = "SELECT Id_consumible from Consumible WHERE Marca='$marca' AND Modelo='$modelo' AND Tipo='$tipo' AND Id_impresora=$Id_impresora";
         $result = $conn->query($query);
-
         if ($result->num_rows > 0) {
+
             while ($data = $result->fetch_assoc()) {
                 $arreglo = array_map('utf8_encode', $data);
             }
@@ -53,7 +53,7 @@ class Consumible
                 if ($conn->query($sql2) === false) {
                     $valid = false;
                     $conn->rollback();
-                    //echo "Error: " . $sql . "<br>" . $conn->error;
+                    echo "Error: " . $sql2 . "<br>" . $conn->error;
                     break;
                 }
             }
@@ -69,7 +69,7 @@ class Consumible
                     if ($conn->query($sql2) === false) {
                         $valid = false;
                         $conn->rollback();
-                        //echo "Error: " . $sql . "<br>" . $conn->error;
+                        // echo "Error: " . $sql . "<br>" . $conn->error;
                         break;
                     }
                 }
@@ -81,16 +81,17 @@ class Consumible
         }
 
         /* Enviar respuesta del proceso */
-        if ($valid) {
-            $arreglo = array('status' => 'ok');
-            echo json_encode($arreglo);
+        /*  if ($valid) {
+        $arreglo = array('status' => 'ok');
+        echo json_encode($arreglo);
         } else {
-            $arreglo = array('status' => 'bad');
-            echo json_encode($arreglo);
-        }
+        $arreglo = array('status' => 'bad');
+        echo json_encode($arreglo);
+        } */
 
         $conn->commit();
         $conn->close();
+        return $valid;
     }
 
     /**Obtener el contenido de cada bodega*/
@@ -98,7 +99,7 @@ class Consumible
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, COUNT(C.Modelo) AS Cantidad, B.Lugar, BC.Id_bodega  FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON BC.Id_bodega=B.Id_bodega INNER JOIN Impresora I ON C.Id_impresora=I.Id_impresora AND BC.Id_bodega=$lugar GROUP BY C.Modelo ";
+        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, C.Id_impresora, COUNT(C.Modelo) AS Cantidad, B.Lugar, BC.Id_bodega  FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON BC.Id_bodega=B.Id_bodega INNER JOIN Impresora I ON C.Id_impresora=I.Id_impresora AND BC.Id_bodega=$lugar GROUP BY C.Modelo ";
 
         $result = $conn->query($sql);
 
@@ -144,19 +145,19 @@ class Consumible
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, COUNT(BC.Id_consumible) AS Cantidad, C.rango_stockMinimo AS Minimo, C.rango_stockMaximo AS Maximo FROM Consumible C LEFT JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible LEFT JOIN Bodega B ON BC.Id_bodega=B.Id_bodega LEFT JOIN Impresora I ON C.Id_impresora=I.Id_impresora GROUP BY BC.Id_consumible";
+        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, COUNT(BC.Id_consumible) AS Cantidad, C.rango_stockMinimo AS Minimo, C.rango_stockMaximo AS Maximo, CASE WHEN COUNT(BC.Id_consumible) > C.rango_stockMaximo THEN 'Suficientes' WHEN COUNT(BC.Id_consumible) < C.rango_stockMinimo THEN 'Insuficientes' ELSE 'Dentro de lo permitido' END AS Estado FROM Consumible C LEFT JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible LEFT JOIN Bodega B ON BC.Id_bodega=B.Id_bodega LEFT JOIN Impresora I ON C.Id_impresora=I.Id_impresora GROUP BY C.Id_consumible";
 
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             while ($data = mysqli_fetch_assoc($result)) {
                 $arreglo["data"][] = array_map("utf8_encode", $data);
             }
-            echo json_encode($arreglo);
         } else {
-            $arreglo["data"][] = ["Id_consumible" => "", "Fecha" => "", "Marca" => "", "Modelo" => "", "Lugar" => "", "Tipo" => "", "Id_bodega" => "", "Impresora" => "", "Cantidad" => ""];
-            echo json_encode($arreglo);
+            $arreglo["data"] = [];
+
             //die("Error");
         }
+        echo json_encode($arreglo);
         mysqli_free_result($result);
         $conn->close();
     }
@@ -165,54 +166,55 @@ class Consumible
     /**@deprecated */
     /*  public function showSome($array)
     {
-        $element = $array;
+    $element = $array;
 
-        $conn = $this->conn->connect();
-        $condicion = "";
+    $conn = $this->conn->connect();
+    $condicion = "";
 
-        if (!empty($element['bodega'])) {
-            $bodega = $element['bodega'];
-            $condicion .= "T.Id_bodega = $bodega";
-        }
+    if (!empty($element['bodega'])) {
+    $bodega = $element['bodega'];
+    $condicion .= "T.Id_bodega = $bodega";
+    }
 
-        if (!empty($element['marca'])) {
-            if ($condicion != "") {
-                $condicion .= " AND ";
-            }
-            $marca = $element['marca'];
-            $condicion .= "T.Marca='$marca'";
-        }
+    if (!empty($element['marca'])) {
+    if ($condicion != "") {
+    $condicion .= " AND ";
+    }
+    $marca = $element['marca'];
+    $condicion .= "T.Marca='$marca'";
+    }
 
-        if (!empty($element['modelo'])) {
-            if ($condicion != "") {
-                $condicion .= " AND ";
-            }
-            $modelo = $element['modelo'];
-            $condicion .= "T.Modelo='$modelo'";
-        }
+    if (!empty($element['modelo'])) {
+    if ($condicion != "") {
+    $condicion .= " AND ";
+    }
+    $modelo = $element['modelo'];
+    $condicion .= "T.Modelo='$modelo'";
+    }
 
-        $sql = "SELECT T.Id_consumible, T.Marca, T.Modelo, T.Tipo, T.Codigo_barra, T.Id_impresora, T.Id_bodega, B.Lugar FROM Consumible T INNER JOIN Bodega B WHERE $condicion AND T.Id_bodega=B.Id_bodega";
+    $sql = "SELECT T.Id_consumible, T.Marca, T.Modelo, T.Tipo, T.Codigo_barra, T.Id_impresora, T.Id_bodega, B.Lugar FROM Consumible T INNER JOIN Bodega B WHERE $condicion AND T.Id_bodega=B.Id_bodega";
 
-        $result = $conn->query($sql);
+    $result = $conn->query($sql);
 
-        if ($result->num_rows > 0) {
-            while ($data = mysqli_fetch_assoc($result)) {
-                $arreglo["data"][] = array_map("utf8_encode", $data);
-            }
-            echo json_encode($arreglo);
-        } else {
-            $arreglo["data"][] = ["Id_consumible" => "", "Marca" => "", "Modelo" => "", "Tipo" => "", "Codigo_barra" => "", "Modelo_impresora" => "", "Id_bodega" => "", "Lugar" => ""];
-            //  die("Error");
-            echo json_encode($arreglo);
-        }
-        mysqli_free_result($result);
-        $conn->close();
+    if ($result->num_rows > 0) {
+    while ($data = mysqli_fetch_assoc($result)) {
+    $arreglo["data"][] = array_map("utf8_encode", $data);
+    }
+    echo json_encode($arreglo);
+    } else {
+    $arreglo["data"][] = ["Id_consumible" => "", "Marca" => "", "Modelo" => "", "Tipo" => "", "Codigo_barra" => "", "Modelo_impresora" => "", "Id_bodega" => "", "Lugar" => ""];
+    //  die("Error");
+    echo json_encode($arreglo);
+    }
+    mysqli_free_result($result);
+    $conn->close();
     } */
 
     /**Funcion que comprueba que existan los modelos de consumibles antes de borrarlos*/
-    public function deleteCon(int $cantidad, /* string $modelo, string $marca, string $tipo,*/ int $id_bodega,  int $Id_consumible)
+    public function deleteCon(int $cantidad, int $id_bodega, int $Id_consumible)
     {
         $conn = $this->conn->connect();
+
         /* Si es distinto a cero solo se borrarán algunos*/
         if ($cantidad != 0) {
             /* Comprobar la cantidad de consumibles en bodega */
@@ -226,7 +228,7 @@ class Consumible
                     $arreglo = array_map("utf8_encode", $data);
                 }
 
-                if ($cantidad <=  $arreglo['Cantidad'] && $arreglo['Cantidad'] != 0) {
+                if ($cantidad <= $arreglo['Cantidad'] && $arreglo['Cantidad'] != 0) {
                     $res = self::deleteConsumables($cantidad, $id_bodega, $Id_consumible);
                 }
             }
@@ -301,8 +303,8 @@ class Consumible
                     $arreglo = array_map("utf8_encode", $data);
                 }
 
-                if ($cantidad <=  $arreglo['Cantidad']) {
-                    $res = self::transferUpdate($cantidad, $origen,  $destino, $Id_consumible);
+                if ($cantidad <= $arreglo['Cantidad']) {
+                    $res = self::transferUpdate($cantidad, $origen, $destino, $Id_consumible);
                 }
             }
 
@@ -350,9 +352,7 @@ class Consumible
     {
         $conn = $this->conn->connect();
 
-
         $sql = "UPDATE Consumible SET Marca='$marca_new', Modelo='$modelo_new', Tipo='$tipo_new', Id_impresora=$impresora_new, rango_stockMinimo=$rangoMinimo, rango_stockMaximo=$rangoMaximo WHERE Id_consumible=$Id_consumible";
-
 
         if ($conn->query($sql)) {
             $valid = true;

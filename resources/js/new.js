@@ -1,7 +1,30 @@
+"use strict";
 document.addEventListener("DOMContentLoaded", function() {
   const table = tableListConsumables();
 
-  var forms = document.getElementsByClassName("needs-validation");
+  //var forms = document.getElementsByClassName("needs-validation");
+  /**Animacion de validacion de formulario de nuevo consumible */
+  /*    var validation = Array.prototype.filter.call(forms, function(form) {
+    form.addEventListener(
+      "submit",
+      function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+          alertError();
+        }
+        if (form.checkValidity() === true) {
+          event.preventDefault();
+          event.stopPropagation();
+
+          //Enviar datos
+          sendData();
+        }
+        form.classList.add("was-validated");
+      },
+      false
+    );
+  }); */
   printMarcaPrinter();
 
   /**Añadir las bodegas al select input */
@@ -23,29 +46,6 @@ document.addEventListener("DOMContentLoaded", function() {
     ).innerHTML = `<option value=''>Seleccione...</option>`;
     let marca = document.querySelector("#inputMarca");
     printModelPrinter(marca);
-  });
-
-  /**Animacion de validacion de formulario de nuevo consumible */
-  var validation = Array.prototype.filter.call(forms, function(form) {
-    form.addEventListener(
-      "submit",
-      function(event) {
-        if (form.checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
-          alertError();
-        }
-        if (form.checkValidity() === true) {
-          event.preventDefault();
-          event.stopPropagation();
-
-          //Enviar datos
-          sendData();
-        }
-        form.classList.add("was-validated");
-      },
-      false
-    );
   });
 
   document.querySelector("#btnAddMore").addEventListener("click", () => {
@@ -74,6 +74,13 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("myTabAdd").addEventListener("click", () => {
     table.rows().deselect();
   });
+
+  document.getElementById("btnNuevoToner").addEventListener("click", e => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    sendData();
+  });
 });
 
 /**@description Enviar datos a la bd */
@@ -87,32 +94,64 @@ async function sendData() {
   let minimo = document.getElementById("rangoMinimo").value.trim();
   let maximo = document.getElementById("rangoMaximo").value.trim();
 
-  modelo = modelo.toUpperCase().replace(/ /g, "-");
+  let selectores = [
+    "#inputCantidad",
+    "#inputMarca",
+    "#modelo_con",
+    "#selectTipo",
+    "#selectUbicacion",
+    "#modelo_imp",
+    "#rangoMinimo",
+    "#rangoMaximo"
+  ];
+  validClass(selectores);
 
-  const data = new FormData();
+  if (
+    cantidad != "" &&
+    marca != "" &&
+    modelo != "" &&
+    tipo != "" &&
+    bodega != "" &&
+    impresora != "" &&
+    minimo != "" &&
+    maximo != ""
+  ) {
+    modelo = modelo.toUpperCase().replace(/ /g, "-");
 
-  data.append("cantidad", parseInt(cantidad));
-  data.append("marca", marca.toUpperCase());
-  data.append("modelo", modelo);
-  data.append("tipo", tipo);
-  data.append("bodega", parseInt(bodega));
-  data.append("rangoMinimo", parseInt(minimo));
-  data.append("rangoMaximo", parseInt(maximo));
-  // data.append("impresora", impresora.toUpperCase());
-  data.append("impresora", parseInt(impresora));
-  data.append("case", "addPrinterConsumables");
+    validarCantidades("#rangoMinimo", "#rangoMaximo");
 
-  fetchURL("../api/consumible/insert_consumible.php", "POST", data)
-    .then(res => {
-      if (res.status === "ok") {
-        alertSuccess();
-        document.getElementById("formNuevo").reset();
-        setTimeout(() => document.location.reload(), 1000);
-      } else {
-        alertError();
-      }
-    })
-    .catch(err => console.log(err));
+    if (parseInt(minimo) < parseInt(maximo)) {
+      const data = new FormData();
+
+      data.append("cantidad", parseInt(cantidad));
+      data.append("marca", marca.toUpperCase());
+      data.append("modelo", modelo);
+      data.append("tipo", tipo);
+      data.append("bodega", parseInt(bodega));
+      data.append("rangoMinimo", parseInt(minimo));
+      data.append("rangoMaximo", parseInt(maximo));
+      data.append("impresora", parseInt(impresora));
+      data.append("case", "addPrinterConsumables");
+
+      fetchURL("../api/consumible/insert_consumible.php", "POST", data)
+        .then(res => {
+          if (res.status === "ok") {
+            alertSuccess();
+            document.getElementById("formNuevo").reset();
+            setTimeout(() => document.location.reload(), 1000);
+          } else {
+            alertError();
+          }
+        })
+        .catch(err => console.log(err));
+    } else {
+      customAlertError(
+        "El rango mínimo no puede ser mayor o igual que el rango máximo"
+      );
+    }
+  } else {
+    alertErrorFormEmpty();
+  }
 }
 
 /**@description Listar marcas de impresoras en el input marca*/
@@ -131,14 +170,6 @@ async function printMarcaPrinter() {
             "#updMarca"
           ).innerHTML += `<option>${impresora.Marca_impresora}</option>`;
         }
-
-        if (res.modelo_con !== undefined) {
-          for (const modelo of res.modelo_con) {
-            document.querySelector(
-              "#inputModelo"
-            ).innerHTML += `<option value=${modelo.Modelo}>`;
-          }
-        }
       } else {
         document.querySelector(
           "#inputMarca"
@@ -151,12 +182,6 @@ async function printMarcaPrinter() {
 /**@description Listar modelos de impresoras en el input impresora */
 async function printModelPrinter(marca) {
   //case: showModelPrinter
-  //let marca = document.querySelector("#inputMarca");
-
-  //resetear select
-  /*  document.querySelector("#updImpresora").innerHTML =
-    "<option value='' selected>Seleccione...</option>"; */
-  //let updmarca = document.querySelector("#updMarca");
 
   await fetch(
     `../api/impresora/impresora.php?case=showModelPrinter&&marca=${marca.value.toUpperCase()}`
@@ -165,8 +190,6 @@ async function printModelPrinter(marca) {
       return response.json();
     })
     .then(json => {
-      console.log(json);
-
       for (const modelo of json) {
         document.querySelector(
           "#modelo_imp"
@@ -270,6 +293,18 @@ function getDataUpdate(table) {
     jQuery("#modalUpdate");
     $("#modalUpdate").modal("show");
 
+    $("#modalUpdate").on("hidden.bs.modal", function() {
+      let selectores = [
+        "#updMarca",
+        "#updModelo",
+        "#updTipo",
+        "#cantMinima",
+        "#cantMaxima",
+        "#updImpresora"
+      ];
+      clean_Validations(selectores);
+    });
+
     let marca = data.Marca;
     let modelo = data.Modelo;
     let tipo = data.Tipo;
@@ -341,62 +376,46 @@ function confirmUpdate(table) {
     let minima = document.getElementById("cantMinima").value.trim();
     let maxima = document.getElementById("cantMaxima").value.trim();
 
-    _modelo = _modelo.toUpperCase().replace(/ /g, "-");
+    minima = parseInt(minima);
+    maxima = parseInt(maxima);
 
-    //Pasar datos al objeto formatData
-    let data = new FormData();
-    data.append("marca_new", _marca.toUpperCase());
-    data.append("modelo_new", _modelo.toUpperCase());
-    data.append("tipo_new", _tipo);
-    data.append("Id_consumible", parseInt(datatable.Id_consumible));
-    data.append("impresora_new", _impresora.toUpperCase());
-    data.append("minimo", parseInt(minima));
-    data.append("maximo", parseInt(maxima));
+    validarCantidades("#cantMinima", "#cantMaxima");
 
-    fetchURL("../api/consumible/update_consumible.php", "POST", data)
-      .then(res => {
-        if (res.status === "ok") {
-          customAlertSuccess("Elemento actualizado");
+    if (parseInt(minima) < parseInt(maxima)) {
+      _modelo = _modelo.toUpperCase().replace(/ /g, "-");
 
-          $("#modalUpdate").modal("hide");
-          table.ajax.reload();
-        } else {
-          alertError();
-        }
-      })
-      .catch(err => console.log(err));
+      //Pasar datos al objeto formatData
+      let data = new FormData();
+      data.append("marca_new", _marca.toUpperCase());
+      data.append("modelo_new", _modelo.toUpperCase());
+      data.append("tipo_new", _tipo);
+      data.append("Id_consumible", parseInt(datatable.Id_consumible));
+      data.append("impresora_new", _impresora.toUpperCase());
+      data.append("minimo", minima);
+      data.append("maximo", maxima);
+
+      fetchURL("../api/consumible/update_consumible.php", "POST", data)
+        .then(res => {
+          if (res.status === "ok") {
+            customAlertSuccess("Elemento actualizado");
+
+            $("#modalUpdate").modal("hide");
+            table.ajax.reload();
+          } else {
+            alertError();
+          }
+        })
+        .catch(err => console.log(err));
+    } else {
+      validarCantidades("#cantMinima", "#cantMaxima");
+      customAlertError(
+        "El rango mínimo no puede ser mayor o igual que el rango máximo"
+      );
+    }
   } else {
     alertErrorFormEmpty();
   }
 }
-
-/**@description agregar marcas de impresoras en la lista del modal actualizar */
-/* async function printMarcaPrinter() {
-  //case:printersBrand
-  await fetch("../api/impresora/impresora.php?case=printersBrand")
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-    })
-    .then(json => {
-      if (json.marca[0].Marca_impresora != null) {
-        for (const impresora of json.marca) {
-          document.querySelector(
-            "#updMarca"
-          ).innerHTML += `<option>${impresora.Marca_impresora}</option>`;
-        }
-      } else {
-        document.querySelector(
-          "#updMarca"
-        ).innerHTML += `<option value="">No hay impresoras en el sistema</option>`;
-      }
-    })
-    .catch(err => {
-      // alertError();
-      console.log(err);
-    });
-} */
 
 /**@description agregar modelos de impresoras en la lista del modal actualizar */
 async function printModelPrinterIPD() {

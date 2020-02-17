@@ -20,8 +20,14 @@ $termino = $_GET['termino'];
 
 $general_Report = $retiro->general_Report($inicio, $termino);
 
-$inicio = explode('-', $inicio);
-$termino = explode('-', $termino);
+$inicio = explode(" ", $inicio);
+$termino = explode(" ", $termino);
+
+$inicio = explode('-', $inicio[0]);
+$termino = explode('-', $termino[0]);
+
+date_default_timezone_set('UTC');
+date_default_timezone_set("America/Santiago");
 ?>
 
 <!DOCTYPE html>
@@ -67,34 +73,11 @@ $termino = explode('-', $termino);
         }
     </style>
 
-    <!-- <style type="text/css">
-
-    
-        thead:before,
-        thead:after {
-            display: none;
-        }
-
-        tbody:before,
-        tbody:after {
-            display: none;
-        }
-
-        html {
-            margin: 0;
-        }
-
-        body {
-            font-family: "Helvetica", serif;
-            margin: 0;
-        }
-
-    </style>
- -->
 </head>
 
 <body>
     <div id="header">
+
         <h1 class="text-center mb-5 mt-5">
             <font><b>Entregas <?php echo $inicio[2] . '-' . $inicio[1] . '-' . $inicio[0] . ' a ' . $termino[2] . '-' . $termino[1] . '-' . $termino[0] ?> </b></font>
         </h1>

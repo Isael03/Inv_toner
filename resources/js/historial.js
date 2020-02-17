@@ -6,12 +6,15 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   namepdf();
+
+  document.querySelector("#btnCancel").addEventListener("click", () => {
+    cancelWithdraw(table);
+  });
 });
 
 function list() {
   const table = $("#tableHist").DataTable({
     destroy: true,
-    // responsive: true,
     select: true,
     order: [[0, "desc"]],
     /*  pageLength: 5,
@@ -75,9 +78,9 @@ function list() {
       { data: "Bodega" }
     ]
   });
-  setInterval(function() {
+  /*  setInterval(function() {
     table.ajax.reload();
-  }, 100000);
+  }, 100000); */
 
   showModal("#tableHist tbody", table);
 
@@ -123,6 +126,8 @@ var showModal = function(tbody, table) {
       data.Bodega
     ];
 
+    document.querySelector("#id_historial").innerHTML = data.Id_retiro;
+
     document.querySelector("#body-history").innerHTML = "";
 
     for (let index = 0; index < dataModal.length; index++) {
@@ -133,14 +138,15 @@ var showModal = function(tbody, table) {
   });
 };
 
+/** Buscar datos por rango de fechas*/
 function DateRange(table) {
   let dateFrom = document.querySelector("#dateFrom").value;
   let dateTo = document.querySelector("#dateTo").value;
 
   let data = new FormData();
 
-  data.append("inicio", dateFrom);
-  data.append("termino", dateTo);
+  data.append("inicio", dateFrom + " 00:00:00");
+  data.append("termino", dateTo + " 23:59:59");
   data.append("case", 2);
 
   let config = {
@@ -189,4 +195,27 @@ function namepdf() {
     let name = "Historial de retiros de consumibles de impresoras" + range;
     document.title = name;
   });
+}
+function cancelWithdraw(table) {
+  let data = new FormData();
+
+  let id_historial = document.querySelector("#id_historial").innerHTML;
+
+  data.append("id_retiro", id_historial);
+
+  fetchURL("../api/retiro/cancelar_retiro.php", "POST", data)
+    .then(function(res) {
+      if (res.status === "ok") {
+        alertSuccess();
+        jQuery.noConflict();
+        jQuery("#dataHistorial");
+        $("#dataHistorial").modal("hide");
+        table.ajax.reload();
+      } else {
+        alertError();
+      }
+    })
+    .catch(function(err) {
+      console.error(err);
+    });
 }

@@ -120,7 +120,7 @@
 
           <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
             <!-- Datatable total -->
-            <div class="row mb-3" id="legend-color">
+          <!--   <div class="row mb-3" id="legend-color">
               <div class="col">
                 <ul class="list-unstyled">
                   <li class="float-right">
@@ -134,7 +134,7 @@
                   </li>
                 </ul>
               </div>
-            </div>
+            </div> -->
 
 
             <div class="table-responsive">
@@ -146,6 +146,7 @@
                     <th>Tipo</th>
                     <th>Cantidad</th>
                     <th>Impresora</th>
+                    <th>Estado</th>
                   </tr>
                 </thead>
                 <tbody>
