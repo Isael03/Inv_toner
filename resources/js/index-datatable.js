@@ -5,8 +5,16 @@ document.addEventListener("DOMContentLoaded", function() {
   autocompletar();
   /**Las tablas y eventos relacionados cargan 1 segundo despues de cargar las cartas, para evitar conflictos de variables desconocidas */
   setTimeout(() => {
+    //Configuracion para cuando la tabla esta oculta en un tab
+    $('a[data-toggle="tab"]').on("shown.bs.tab", function(e) {
+      $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+    });
+    //--------------------------
+
+    //Inicializar tablas
     var tableStorages = listStorages();
     var tableAll = listALL();
+    //----------------------------------
 
     document
       .querySelector("#change-storage")
@@ -22,13 +30,13 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     /* Boton retirar del modal */
-    document
-      .querySelector("#btnModalWithdraw")
-      .addEventListener("click", () => {
-        if (tableStorages.row(".selected").length > 0) {
-          confirmWithdrawINF_MO(tableStorages);
-        }
-      });
+    document.querySelector("#btnModalWithdraw").addEventListener("click", e => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (tableStorages.row(".selected").length > 0) {
+        confirmWithdrawINF_MO(tableStorages);
+      }
+    });
 
     document
       .querySelector("#btnModalTransfer")
@@ -88,8 +96,13 @@ function getDataDelete(table) {
 /**@param {object} table*/
 function confirmDelete(table) {
   const data = table.row(".selected").data();
-  let cant_delete = document.getElementById("cantDelete").value;
+  let input = document.getElementById("cantDelete");
+  let cant_delete = parseInt(input.value);
 
+  let selectores = ["#cantDelete"];
+  validClass(selectores);
+
+  cant_delete = parseInt(cant_delete);
   if (cant_delete <= parseInt(data.Cantidad) && cant_delete > 0) {
     const dataDelete = new FormData();
     dataDelete.append("cantidad", parseInt(cant_delete));
@@ -113,8 +126,17 @@ function confirmDelete(table) {
         console.log(err);
         alertError();
       });
-  } else {
+  } else if (cant_delete > parseInt(data.Cantidad)) {
     customAlertError("La cantidad seleccionada sobrepasa la que existe");
+    input.classList.add("is-invalid");
+  } else if (cant_delete <= 0) {
+    customAlertError(
+      "La cantidad seleccionada no puede ser menor o igual a cero"
+    );
+    input.classList.add("is-invalid");
+  } else {
+    alertErrorFormEmpty();
+    input.classList.add("is-invalid");
   }
 }
 
@@ -141,7 +163,6 @@ function getDataWithdraw(table) {
 /**@param {object} table*/
 function setModalWithdraw(table) {
   var data = table.row(".selected").data();
-  console.log(data);
 
   document.querySelector("#receivedBy").value = "";
   document.querySelector("#mMarca").value = data.Marca;
@@ -202,20 +223,21 @@ function transfer(table) {
 /* Boton confirmar del  modal transferir del modal */
 /**@param {object} table, @param {object} table */
 function confirmTransfer(table) {
-  let cantidad = document.querySelector("#amountTtoINF").value;
+  let input = document.querySelector("#amountTtoINF");
   let destino = document.querySelector("#transfer-select").value;
+
+  let cantidad = parseInt(input.value);
 
   let selectores = ["#amountTtoINF", "#transfer-select"];
   validClass(selectores);
 
   if (cantidad != "" && destino != "" && cantidad > 0) {
     var data = table.row(".selected").data();
-    cantidad = parseInt(cantidad);
 
     if (cantidad <= parseInt(data.Cantidad)) {
       let formData = new FormData();
 
-      formData.append("cantidad", parseInt(cantidad));
+      formData.append("cantidad", cantidad);
       formData.append("origen", parseInt(data.Id_bodega));
       formData.append("destino", parseInt(destino));
       formData.append("Id_consumible", parseInt(data.Id_consumible));
@@ -255,8 +277,14 @@ function confirmTransfer(table) {
         });
     } else {
       customAlertError("La cantidad especificada supera a la existente");
+      input.classList.add("is-invalid");
     }
-  } else {
+  } else if (cantidad <= 0) {
+    customAlertError(
+      "La cantidad seleccionada no puede ser menor o igual a cero"
+    );
+    input.classList.add("is-invalid");
+  } else if (isNaN(cantidad) || destino === "") {
     alertErrorFormEmpty();
   }
 }
@@ -269,15 +297,22 @@ function confirmWithdrawINF_MO(table) {
   let receivedBy = document.querySelector("#receivedBy").value.trim();
   let cantidad = document.querySelector("#mCantidad").value.trim();
 
+  let input = document.querySelector("#mCantidad");
+
+  cantidad = parseInt(cantidad);
   let selectores = ["#receivedBy", "#mCantidad"];
   validClass(selectores);
 
-  if (receivedBy === "" || cantidad === "") {
+  if (receivedBy === "" || isNaN(cantidad)) {
     alertErrorFormEmpty();
-  } else if (parseInt(cantidad) < 0 || parseInt(data.Cantidad) < cantidad) {
+  } else if (parseInt(data.Cantidad) < cantidad) {
     //Comprobar que la cantidad sea mayor a 0 y menor o igual a la que existe
     customAlertError("La cantidad sobrepasa a la existente");
-    let input = document.querySelector("#mCantidad");
+    input.classList.add("is-invalid");
+  } else if (cantidad <= 0) {
+    customAlertError(
+      "La cantidad seleccionada no puede ser menor o igual a cero"
+    );
     input.classList.add("is-invalid");
   } else {
     //Proceder a efectuar el retiro

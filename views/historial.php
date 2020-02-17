@@ -37,11 +37,13 @@
     <a class="navbar-brand ml-2" href="../index.php">Inventario</a>
 
     <!-- Navbar -->
-    <ul class="nav navbar-nav d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+    <ul class="nav navbar-nav  form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+      <li class="nav-item"><a href="./nuevo.php" class="btn nav-link menu-btn text-white mx-2" title="Añadir consumible"><i class="fas fa-plus-square"></i></a></li>
       <li class="nav-item">
-        <a class="btn nav-link menu-btn" href="views/login.php"><i class="fas fa-sign-out-alt text-white"></i></a>
+        <a class="btn nav-link menu-btn" href="#"><i class="fas fa-sign-out-alt text-white"></i></a>
       </li>
     </ul>
+
 
   </nav>
 
@@ -166,15 +168,39 @@
 
           </div>
           <div class="modal-footer border-top-0">
-          <div class="d-none" id="id_historial"></div>
+
             <button type="button" class="btn btn-danger mx-auto px-5 py-1" title="Anular entrega" id="btnCancel"><span class="fas fa-undo-alt "></span></button>
           </div>
 
         </div>
       </div>
     </div>
-
-
+    <!-- modal confirmacion -->
+    <div class="modal" tabindex="-1" role="dialog" id="confirmacion-retiro">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirmación</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>¿Está seguro(a) que desea proceder?</p>
+            <small>
+              <div class="alert alert-warning" role="alert">
+                *Si por alguna razón el elemento ya no existe en el sistema, volverá a ser ingresado. Por lo que tendrá que configurar el rango mínimo y máximo de stock.
+              </div>
+            </small>
+          </div>
+          <div class="modal-footer">
+            <div class="d-none" id="id_historial"></div>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancel-operation">Close</button>
+            <button type="button" class="btn btn-danger" id="btn-confirm-cancelWithdraw">Proceder</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
 

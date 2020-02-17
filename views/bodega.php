@@ -36,11 +36,13 @@
         <a class="navbar-brand ml-2" href="../index.php">Inventario</a>
 
         <!-- Navbar -->
-        <ul class="nav navbar-nav d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+        <ul class="nav navbar-nav  form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+            <li class="nav-item"><a href="./nuevo.php" class="btn nav-link menu-btn text-white mx-2" title="Añadir consumible"><i class="fas fa-plus-square"></i></a></li>
             <li class="nav-item">
-                <a class="btn nav-link menu-btn" href="views/login.php"><i class="fas fa-sign-out-alt text-white"></i></a>
+                <a class="btn nav-link menu-btn" href="#"><i class="fas fa-sign-out-alt text-white"></i></a>
             </li>
         </ul>
+
 
     </nav>
 
@@ -93,7 +95,7 @@
 
                 <div class="row">
 
-                    <form class="col-lg-12 mb-5 collapse show" id="insertPrinter" novalidate>
+                    <form class="col-lg-12 mb-5 collapse show" novalidate>
                         <legend class="h5">Añadir bodega</legend>
                         <div class="form-row">
                             <div class="col-md-6 col-xs-12 col-lg-4">
@@ -105,13 +107,13 @@
                                 </div>
                             </div>
                             <div class="col-auto">
-                                <button type="button" class="btn btn-primary" id="btnNuevabodega">Ingresar</button>
+                                <button type="submit" class="btn btn-primary" id="btnNuevabodega">Ingresar</button>
                             </div>
 
                         </div>
                     </form>
 
-                    <form class="col-lg-12 mb-5 collapse" id="updatePrinter" novalidate>
+                    <form class="col-lg-12 mb-5 collapse" novalidate>
                         <legend class="h5">Cambiar nombre</legend>
                         <div class="form-row">
                             <div class="col-auto">
@@ -124,7 +126,7 @@
                             </div>
 
                             <div class="col-auto">
-                                <button type="button" id="btnUpdateStorage" class="btn btn-primary">Modificar</button>
+                                <input type="button" id="btnUpdateStorage" class="btn btn-primary" value="Modificar">
                             </div>
 
                         </div>
@@ -173,16 +175,19 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group mx-auto mt-2 text-center w-50">
-                            <label for="cantDelete" class="col-form-label text-left">Nuevo nombre:</label>
-                            <input type="text" class="form-control w-100 mx-auto" id="newName" placeholder="Nombre" autofocus>
+                    <form>
+                        <div class="modal-body">
+
+                            <div class="form-group mx-auto mt-2 text-center w-50">
+                                <label for="cantDelete" class="col-form-label text-left">Nuevo nombre:</label>
+                                <input type="text" class="form-control w-100 mx-auto" id="newName" placeholder="Nombre" autofocus>
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary" id="btnModalUpdateStorage">Modificar</button>
-                    </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <input type="submit" class="btn btn-primary" id="btnModalUpdateStorage" value="Modificar">
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -197,15 +202,18 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body text-center">
-                        <p class="text-center">¿Está seguro de borrar esta bodega?</p>
-                        <small class="">*Todos los elementos en su interior tambien se eliminarán</small>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-danger" id="btnModalDeleteStorage">Borrar</button>
-                    </div>
+                    <form>
+                        <div class="modal-body text-center">
+                            <p class="text-center">¿Está seguro de borrar esta bodega?</p>
+                            <small class="">*Todos los elementos en su interior tambien se eliminarán</small>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <input type="submit" class="btn btn-danger" id="btnModalDeleteStorage" value="Borrar">
+                        </div>
+                    </form>
                 </div>
+
             </div>
         </div>
 

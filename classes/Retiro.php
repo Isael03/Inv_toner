@@ -141,7 +141,7 @@ class Retiro
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT DE.depart, COUNT(R.Departamento) AS Cantidad from departamentos DE INNER JOIN Retiro R ON DE.iddepart=R.Id_departamento WHERE R.Fecha BETWEEN '$inicio' AND '$termino' GROUP BY DE.depart ORDER BY Cantidad DESC";
+        $sql = "SELECT DE.depart, SUM(R.Cantidad) AS Cantidad from departamentos DE INNER JOIN Retiro R ON DE.iddepart=R.Id_departamento WHERE R.Fecha BETWEEN '$inicio' AND '$termino' GROUP BY DE.depart ORDER BY Cantidad DESC";
 
         /*    $sql = "SELECT DE.depart, COUNT(R.Departamento) AS Cantidad from departamentos DE LEFT JOIN Retiro R ON DE.iddepart=R.Id_departamento and R.Fecha BETWEEN '2020/01/01' AND '2020/02/20' GROUP BY DE.depart ORDER BY `Cantidad` DESC "; */
 
@@ -168,7 +168,7 @@ class Retiro
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT Marca, Modelo, Tipo, COUNT(Id_retiro) AS Cantidad from Retiro WHERE Fecha BETWEEN '$inicio' AND '$termino' GROUP BY Modelo ORDER BY Cantidad DESC";
+        $sql = "SELECT Marca, Modelo, Tipo, SUM(Cantidad) AS Cantidad from Retiro WHERE Fecha BETWEEN '$inicio' AND '$termino' GROUP BY Modelo ORDER BY Cantidad DESC";
 
         $result = $conn->query($sql);
 

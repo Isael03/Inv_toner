@@ -8,8 +8,9 @@
                      <span aria-hidden="true">&times;</span>
                  </button>
              </div>
-             <div class="modal-body">
-                 <form>
+             <form>
+                 <div class="modal-body">
+
                      <div class="row">
                          <div class="col-md-12 col-sm-12">
                              <div class="form-group">
@@ -52,12 +53,13 @@
                              </div>
                          </div>
                      </div>
-                 </form>
-             </div>
-             <div class="modal-footer">
-                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                 <button type="button" class="btn btn-primary" id="btnModalWithdraw">Confirmar</button>
-             </div>
+
+                 </div>
+                 <div class="modal-footer">
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                     <input type="submit" class="btn btn-primary" id="btnModalWithdraw" value="Confirmar">
+                 </div>
+             </form>
          </div>
      </div>
  </div>

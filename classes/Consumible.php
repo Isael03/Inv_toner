@@ -80,15 +80,6 @@ class Consumible
             }
         }
 
-        /* Enviar respuesta del proceso */
-        /*  if ($valid) {
-        $arreglo = array('status' => 'ok');
-        echo json_encode($arreglo);
-        } else {
-        $arreglo = array('status' => 'bad');
-        echo json_encode($arreglo);
-        } */
-
         $conn->commit();
         $conn->close();
         return $valid;
@@ -108,7 +99,7 @@ class Consumible
                 $arreglo["data"][] = array_map("utf8_encode", $data);
             }
         } else {
-            $arreglo["data"] = ["Id_consumible" => "", "Fecha" => "", "Marca" => "", "Modelo" => "", "Lugar" => "", "Tipo" => "", "Id_bodega" => "", "Impresora" => "", "Cantidad" => ""];
+            $arreglo["data"] = [];
             //die("Error");
         }
         mysqli_free_result($result);
@@ -130,7 +121,7 @@ class Consumible
             }
         } else {
             //$arreglo["data"][] = ["Id_consumible" => "", "Marca" => "", "Modelo" => "",  "Tipo" => "", "Impresora" => ""];
-            $arreglo["data"][] = [];
+            $arreglo["data"] = [];
 
             //die("Error");
         }

@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ($res) ? $status = array("status" => "ok") : $status = array("status" => "bad");
         echo json_encode($status);
     } else {
-        $status = array("status" => "bad");
+        $status = array("status" => "not_exists");
         echo json_encode($status);
     }
 

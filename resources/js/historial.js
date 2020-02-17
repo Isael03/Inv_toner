@@ -8,7 +8,15 @@ document.addEventListener("DOMContentLoaded", function() {
   namepdf();
 
   document.querySelector("#btnCancel").addEventListener("click", () => {
-    cancelWithdraw(table);
+    showModalConfirmWithdraw();
+  });
+  document
+    .querySelector("#btn-confirm-cancelWithdraw")
+    .addEventListener("click", () => {
+      cancelWithdraw(table);
+    });
+  document.querySelector("#cancel-operation").addEventListener("click", () => {
+    $("#dataHistorial").removeClass("d-none");
   });
 });
 
@@ -143,44 +151,50 @@ function DateRange(table) {
   let dateFrom = document.querySelector("#dateFrom").value;
   let dateTo = document.querySelector("#dateTo").value;
 
-  let data = new FormData();
+  let selectores = ["#dateFrom", "#dateTo"];
+  validClass(selectores);
+  if (dateFrom !== "" && dateTo !== "") {
+    let data = new FormData();
 
-  data.append("inicio", dateFrom + " 00:00:00");
-  data.append("termino", dateTo + " 23:59:59");
-  data.append("case", 2);
+    data.append("inicio", dateFrom + " 00:00:00");
+    data.append("termino", dateTo + " 23:59:59");
+    data.append("case", 2);
 
-  let config = {
-    method: "POST",
-    headers: {
-      Accept: "application/json"
-    },
-    body: data
-  };
+    let config = {
+      method: "POST",
+      headers: {
+        Accept: "application/json"
+      },
+      body: data
+    };
 
-  fetch("../api/retiro/get_retiro.php", config)
-    .then(function(response) {
-      if (response.ok) {
-        return response.json();
-      } else {
+    fetch("../api/retiro/get_retiro.php", config)
+      .then(function(response) {
+        if (response.ok) {
+          return response.json();
+        } else {
+          customAlertError("Error en la búsqueda");
+          throw "Error en la llamada fetch";
+        }
+      })
+      .then(json => {
+        if (json.data[0].Fecha != "") {
+          table.rows().remove();
+          table.rows.add(json.data).draw();
+          alertSuccess();
+          clean_Validations(selectores);
+        } else {
+          table.rows().remove();
+          table.rows.add(json.data).draw();
+          alertWarning("Nada encontrado");
+        }
+      })
+      .catch(err => {
+        console.log(err);
         customAlertError("Error en la búsqueda");
-        throw "Error en la llamada fetch";
-      }
-    })
-    .then(json => {
-      if (json.data[0].Fecha != "") {
-        table.rows().remove();
-        table.rows.add(json.data).draw();
-        alertSuccess();
-      } else {
-        table.rows().remove();
-        table.rows.add(json.data).draw();
-        alertWarning("Nada encontrado");
-      }
-    })
-    .catch(err => {
-      console.log(err);
-      customAlertError("Error en la búsqueda");
-    });
+      });
+  } else {
+  }
 }
 
 function namepdf() {
@@ -209,8 +223,14 @@ function cancelWithdraw(table) {
         alertSuccess();
         jQuery.noConflict();
         jQuery("#dataHistorial");
-        $("#dataHistorial").modal("hide");
         table.ajax.reload();
+        $("#dataHistorial").removeClass("d-none");
+        $("#dataHistorial").modal("hide");
+        $("#confirmacion-retiro").modal("hide");
+      } else if (res.status === "not_exists") {
+        customAlertError(
+          "La bodega o la impresora relacionada ya no existe en el sistema, por lo que no se puede volver a ingresar"
+        );
       } else {
         alertError();
       }
@@ -218,4 +238,11 @@ function cancelWithdraw(table) {
     .catch(function(err) {
       console.error(err);
     });
+}
+
+function showModalConfirmWithdraw() {
+  jQuery.noConflict();
+  // jQuery("#confirmacion-retiro");
+  $("#confirmacion-retiro").modal("show");
+  $("#dataHistorial").addClass("d-none");
 }

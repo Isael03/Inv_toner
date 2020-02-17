@@ -19,8 +19,9 @@ function reportGeneral() {
   let inicio = document.getElementById("inicio-gral");
   let termino = document.getElementById("termino-gral");
 
+  let selectores = ["#inicio-gral", "#termino-gral"];
+  validClass(selectores);
   if (inicio.value != "" && termino.value != "") {
-
     var data = new FormData();
     data.append("inicio", inicio.value.trim() + " 00:00:00");
     data.append("termino", termino.value.trim() + " 23:59:59");
@@ -52,8 +53,8 @@ function reportGeneral() {
           document.getElementById("tbody-depart").innerHTML = "";
           document.getElementById("tbody-model").innerHTML = "";
 
-          let fechaInicio =inicio.value + " 00:00:00";
-          let fechaTermino =termino.value + " 23:59:59";
+          let fechaInicio = inicio.value + " 00:00:00";
+          let fechaTermino = termino.value + " 23:59:59";
 
           document.getElementById(
             "linkToPdf"
@@ -68,7 +69,7 @@ function reportGeneral() {
             document.getElementById(
               "tbody-model"
             ).innerHTML += `<tr><td>${element.Marca}</td><td>${element.Modelo}</td><td>${element.Tipo}</td><td>${element.Cantidad}</td></tr>`;
-
+            clean_Validations(selectores);
             inicio.value = "";
             termino.value = "";
           }
@@ -99,6 +100,8 @@ function listDepart() {
   let inicio = document.getElementById("inicio_dep");
   let termino = document.getElementById("termino_dep");
 
+  let selectores = ["#inicio_dep", "#termino_dep"];
+  validClass(selectores);
   if (inicio.value != "" && termino.value != "") {
     var data = new FormData();
     data.append("inicio_dep", inicio.value.trim() + " 00:00:00");
@@ -134,7 +137,7 @@ function listDepart() {
               "tbody-dep"
             ).innerHTML += `<tr><td id=${dep.iddireccion}>${dep.direccion}</td><td><a href='./reporte_dep_pdf.php?iddir=${dep.iddireccion}&&nombre_dir=${dep.direccion}&&inicio_dep=${Fechainicio}&&termino_dep=${Fechatermino} ' target="_blank">Generar pdf</a></td></tr>`;
           }
-
+          clean_Validations(selectores);
           inicio.value = "";
           termino.value = "";
         } else {

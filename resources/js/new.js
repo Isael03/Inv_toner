@@ -2,29 +2,12 @@
 document.addEventListener("DOMContentLoaded", function() {
   const table = tableListConsumables();
 
-  //var forms = document.getElementsByClassName("needs-validation");
-  /**Animacion de validacion de formulario de nuevo consumible */
-  /*    var validation = Array.prototype.filter.call(forms, function(form) {
-    form.addEventListener(
-      "submit",
-      function(event) {
-        if (form.checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
-          alertError();
-        }
-        if (form.checkValidity() === true) {
-          event.preventDefault();
-          event.stopPropagation();
+  //Configuracion para cuando la tabla esta oculta en un tab
+  $('a[data-toggle="tab"]').on("shown.bs.tab", function(e) {
+    $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+  });
+  //--------------------------
 
-          //Enviar datos
-          sendData();
-        }
-        form.classList.add("was-validated");
-      },
-      false
-    );
-  }); */
   printMarcaPrinter();
 
   /**Añadir las bodegas al select input */
@@ -85,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 /**@description Enviar datos a la bd */
 async function sendData() {
-  let cantidad = document.getElementById("inputCantidad").value.trim();
+  let input = document.getElementById("inputCantidad");
   let marca = document.getElementById("inputMarca").value.trim();
   let modelo = document.getElementById("modelo_con").value.trim();
   let tipo = document.getElementById("selectTipo").value.trim();
@@ -94,6 +77,7 @@ async function sendData() {
   let minimo = document.getElementById("rangoMinimo").value.trim();
   let maximo = document.getElementById("rangoMaximo").value.trim();
 
+  let cantidad = parseInt(input.value.trim());
   let selectores = [
     "#inputCantidad",
     "#inputMarca",
@@ -107,7 +91,7 @@ async function sendData() {
   validClass(selectores);
 
   if (
-    cantidad != "" &&
+    isNaN(cantidad) === false &&
     marca != "" &&
     modelo != "" &&
     tipo != "" &&
@@ -149,6 +133,14 @@ async function sendData() {
         "El rango mínimo no puede ser mayor o igual que el rango máximo"
       );
     }
+  } else if (isNaN(cantidad)) {
+    input.classList.add("is-invalid");
+    customAlertError("Ingrese una cantidad valida");
+  } else if (cantidad <= 0) {
+    input.classList.add("is-invalid");
+    customAlertError(
+      "La cantidad seleccionada no puede ser menor o igual a cero"
+    );
   } else {
     alertErrorFormEmpty();
   }
@@ -200,7 +192,7 @@ async function printModelPrinter(marca) {
       console.log(err);
     });
 }
-
+//tabla de los consumibles existentes
 function tableListConsumables() {
   var table = $("#tableListConsumable").DataTable({
     destroy: true,
@@ -245,12 +237,17 @@ function tableListConsumables() {
   return table;
 }
 
+//Ingresar una nueva cantidad de consumibles a la bodega seleccionada
 function sendDataExists(table) {
   if (table.row(".selected").length > 0) {
-    let cantidad = document.getElementById("addMore").value;
+    let input = document.getElementById("addMore");
     let bodega = document.getElementById("selectStorage").value;
 
-    if (cantidad != 0 && bodega != "") {
+    let cantidad = parseInt(input.value.trim());
+    let selectores = ["#addMore", "#selectStorage"];
+    validClass(selectores);
+
+    if (isNaN(cantidad) === false && cantidad > 0 && bodega != "") {
       var data = table.row(".selected").data();
 
       let formaData = new FormData();
@@ -264,6 +261,7 @@ function sendDataExists(table) {
         .then(res => {
           if (res.status === "ok") {
             alertSuccess();
+            clean_Validations(selectores);
           } else {
             alertError();
           }
@@ -272,6 +270,14 @@ function sendDataExists(table) {
           alertError();
           console.log(err);
         });
+    } else if (isNaN(cantidad)) {
+      input.classList.add("is-invalid");
+      customAlertError("Ingrese una cantidad valida");
+    } else if (cantidad <= 0) {
+      input.classList.add("is-invalid");
+      customAlertError(
+        "La cantidad seleccionada no puede ser menor o igual a cero"
+      );
     } else {
       customAlertError(
         "Complete todos los campos y asegúrese que la cantidad no sea cero"

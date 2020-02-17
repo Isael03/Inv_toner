@@ -45,7 +45,7 @@ class Bodega
             }
         } else {
             //die("Error");
-            $arreglo['data'][] = array();
+            $arreglo['data'] = array();
         }
 
         mysqli_free_result($result);
@@ -93,7 +93,7 @@ class Bodega
     public function deleteStorage(int $id)
     {
 
-        if ($id > 3) {
+        if ($id > 0) {
             $conn = $this->conn->connect();
 
             $sql = "DELETE FROM Bodega WHERE Id_bodega=$id";
@@ -118,7 +118,7 @@ class Bodega
         $sql = "SELECT * FROM Bodega WHERE Id_bodega=$Id_bodega";
         $result = $conn->query($sql);
 
-        if ($result->num_rows > 0) {
+        if ($result->num_rows > 2) {
             $res = $Id_bodega;
         } else {
             $sqlquery = "SELECT Id_bodega from Bodega WHERE Lugar='$nombre'";

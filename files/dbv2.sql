@@ -51,9 +51,11 @@ Create table if not exists Retiro(
     `Modelo` varchar(20) NOT NULL,
    `Tipo` varchar(20) NOT NULL,
     Cantidad int not null,
-    Impresora varchar(30),
+    Impresora varchar(30) not null,
+    Id_impresora int not null,
     Id_direccion int not null,
-    Bodega varchar(30) not null
+    Bodega varchar(30) not null, 
+    Id_bodega int not null
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 

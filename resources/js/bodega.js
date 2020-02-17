@@ -3,21 +3,27 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelector("#nuevaBodega").value = "";
 
   /**Evento de para la creacion de la bodega  */
-  document.querySelector("#btnNuevabodega").addEventListener("click", () => {
+  document.querySelector("#btnNuevabodega").addEventListener("click", e => {
+    e.preventDefault();
+    e.stopPropagation();
     addStorage(table);
   });
 
   /**Evento del boton actualizar del modal actualizar bodega */
   document
     .querySelector("#btnModalUpdateStorage")
-    .addEventListener("click", () => {
+    .addEventListener("click", e => {
+      e.preventDefault();
+      e.stopPropagation();
       updateStorage(table);
     });
 
   /**Evento del boton delete del modal eliminar bodega */
   document
     .querySelector("#btnModalDeleteStorage")
-    .addEventListener("click", () => {
+    .addEventListener("click", e => {
+      e.preventDefault();
+      e.stopPropagation();
       deleteStorage(table);
     });
 });

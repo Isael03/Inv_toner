@@ -32,14 +32,18 @@
 
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top shadow-sm">
 
+
     <button class="btn btn-link btn-sm text-white order-0 order-sm-0" id="sidebarToggle" href="#">
-      <i class="fas fa-bars"></i>
+      <span class="fas fa-bars"></span>
     </button>
 
-    <a class="navbar-brand ml-2" href="index.php">Inventario</a>
+    <a class="navbar-brand" href="index.php">Inventario</a>
+
 
     <!-- Navbar -->
-    <ul class="nav navbar-nav d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+
+    <ul class="nav navbar-nav  form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+      <li class="nav-item "><a href="./views/nuevo.php" class="btn nav-link menu-btn text-white  mx-2" title="Añadir consumible"><i class="fas fa-plus-square"></i></a></li>
       <li class="nav-item">
         <a class="btn nav-link menu-btn" href="#"><i class="fas fa-sign-out-alt text-white"></i></a>
       </li>
@@ -120,7 +124,7 @@
 
           <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
             <!-- Datatable total -->
-          <!--   <div class="row mb-3" id="legend-color">
+            <!--   <div class="row mb-3" id="legend-color">
               <div class="col">
                 <ul class="list-unstyled">
                   <li class="float-right">

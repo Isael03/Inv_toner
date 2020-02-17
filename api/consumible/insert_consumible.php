@@ -6,7 +6,7 @@ include "../../classes/Bodega.php";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $conn = new ConexionData();
-    new Bodega($conn);
+    //new Bodega($conn);
     $consumible = new Consumible($conn);
     header('Content-Type: application/json');
 

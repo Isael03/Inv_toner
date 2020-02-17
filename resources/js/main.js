@@ -188,7 +188,7 @@ function validarCantidades(IDmin, IDmax) {
   let idmin = document.querySelector(IDmin);
   let idmax = document.querySelector(IDmax);
 
-  if (idmin.value >= idmax.value) {
+  if (parseInt(idmin.value) >= parseInt(idmax.value)) {
     idmin.classList.add("is-invalid");
     idmax.classList.add("is-invalid");
   } else {
