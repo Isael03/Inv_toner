@@ -120,7 +120,6 @@ class Consumible
                 $arreglo["data"][] = array_map("utf8_encode", $data);
             }
         } else {
-            //$arreglo["data"][] = ["Id_consumible" => "", "Marca" => "", "Modelo" => "",  "Tipo" => "", "Impresora" => ""];
             $arreglo["data"] = [];
 
             //die("Error");

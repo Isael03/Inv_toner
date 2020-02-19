@@ -168,7 +168,9 @@ class Retiro
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT ANY_VALUE(R.Marca) AS Marca, R.Modelo, ANY_VALUE(R.Tipo) AS Tipo, SUM(R.Cantidad) AS Cantidad from Retiro R WHERE R.Fecha BETWEEN '$inicio' AND '$termino' GROUP BY R.Modelo ORDER BY Cantidad DESC";
+        $sql = "SELECT R.Marca AS Marca, R.Modelo, R.Tipo AS Tipo, SUM(R.Cantidad) AS Cantidad from Retiro R WHERE R.Fecha BETWEEN '$inicio' AND '$termino' GROUP BY R.Modelo, R.Marca, R.Tipo ORDER BY Cantidad DESC";
+
+        /* $sql = "SELECT R.Marca AS Marca, R.Modelo, R.Tipo AS Tipo, SUM(R.Cantidad) AS Cantidad from Retiro R WHERE R.Fecha BETWEEN '$inicio' AND '$termino' GROUP BY R.Modelo HAVING R.Modelo=R.Modelo ORDER BY R.Cantidad DESC"; */
 
         $result = $conn->query($sql);
 

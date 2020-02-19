@@ -117,7 +117,7 @@ if ($result->num_rows > 0) {
 
                                 $id = (int) $depValue['Id_dep'];
 
-                                $sql = "SELECT  ANY_VALUE(Marca) AS Marca, SUM(Cantidad) AS Cantidad, Modelo, ANY_VALUE(Tipo) AS Tipo  FROM Retiro WHERE Fecha BETWEEN '$inicio_dep' AND '$termino_dep' AND Id_departamento=$id GROUP BY Modelo";
+                                $sql = "SELECT Marca, SUM(Cantidad) AS Cantidad, Modelo, Tipo FROM Retiro WHERE Fecha BETWEEN '2020/02/16 00:00:00' AND '2020/02/21 23:59:59' AND Id_departamento=$id GROUP BY Modelo, Marca, Tipo ORDER BY Cantidad DESC";
 
                                 /*       $sql = "SELECT DATE_FORMAT(Fecha, '%d/%m/%Y %H:%i:%s') AS Fecha, Usuario_recibe, Marca, Modelo, Tipo, Cantidad FROM Retiro WHERE Fecha BETWEEN '$inicio_dep' AND '$termino_dep' AND Id_departamento=$id"; */
 

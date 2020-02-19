@@ -99,3 +99,7 @@ strong {
   background-color: #1a1816;
   /* background-color: #3d3a36;*/
 }
+
+table.display tr td {
+  cursor: pointer;
+}

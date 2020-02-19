@@ -128,7 +128,7 @@
 
           <!-- Tabla -->
           <div class="table-responsive col-md-7 col-xs-12" id="contentTable">
-            <table class="table table-bordered " id="tablePrinters" width="100%" cellspacing="0">
+            <table class="table table-bordered display" id="tablePrinters" width="100%" cellspacing="0">
               <thead>
                 <tr>
                   <th></th>

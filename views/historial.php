@@ -195,7 +195,7 @@
           </div>
           <div class="modal-footer">
             <div class="d-none" id="id_historial"></div>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancel-operation">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancel-operation">Cerrar</button>
             <button type="button" class="btn btn-danger" id="btn-confirm-cancelWithdraw">Proceder</button>
           </div>
         </div>

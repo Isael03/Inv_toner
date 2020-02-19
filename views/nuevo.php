@@ -247,7 +247,7 @@
 
               <!-- Tabla -->
               <div class="table-responsive col-md-12 col-xs-12">
-                <table class="table table-bordered text-center" id="tableListConsumable" width="100%" cellspacing="0">
+                <table class="table table-bordered text-center display nowrap" id="tableListConsumable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
                       <th></th>

@@ -135,7 +135,7 @@
 
                     <!-- Tabla -->
                     <div class="table-responsive col-md-6 col-xs-12" id="contentTable">
-                        <table class="table table-bordered text-center" id="tableStorage" width="100%" cellspacing="0">
+                        <table class="table table-bordered text-center display" id="tableStorage" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th></th>
