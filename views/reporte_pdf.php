@@ -186,5 +186,5 @@ $pdf->load_html(ob_get_clean());
 
 $pdf->render();
 
-$pdf->stream('document.pdf', array('Attachment' => 0));
+$pdf->stream('Entregas.pdf', array('Attachment' => 0));
 ?>

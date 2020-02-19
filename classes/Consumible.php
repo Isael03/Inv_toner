@@ -90,7 +90,7 @@ class Consumible
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, C.Id_impresora, COUNT(C.Modelo) AS Cantidad, B.Lugar, BC.Id_bodega  FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON BC.Id_bodega=B.Id_bodega INNER JOIN Impresora I ON C.Id_impresora=I.Id_impresora AND BC.Id_bodega=$lugar GROUP BY C.Modelo ";
+        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, C.Id_impresora, COUNT(C.Modelo) AS Cantidad, B.Lugar, BC.Id_bodega  FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON BC.Id_bodega=B.Id_bodega INNER JOIN Impresora I ON C.Id_impresora=I.Id_impresora AND BC.Id_bodega=$lugar GROUP BY C.Id_consumible ";
 
         $result = $conn->query($sql);
 
@@ -102,7 +102,7 @@ class Consumible
             $arreglo["data"] = [];
             //die("Error");
         }
-        mysqli_free_result($result);
+        //mysqli_free_result($result);
         $conn->close();
         return $arreglo;
     }
@@ -148,9 +148,11 @@ class Consumible
 
             //die("Error");
         }
-        echo json_encode($arreglo);
+
+
         mysqli_free_result($result);
         $conn->close();
+        return $arreglo;
     }
 
     /* Mostrar algunos segun la marca, modelo o bodega*/

@@ -11,7 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     switch ($case) {
         case 'allConsumables':
-            $consumible->showAll();
+            $data = $consumible->showAll();
+
+            echo json_encode($data);
             break;
         case 'allConsumablesList':
             $data = $consumible->showListConsumable();

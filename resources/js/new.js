@@ -1,4 +1,3 @@
-"use strict";
 document.addEventListener("DOMContentLoaded", function() {
   const table = tableListConsumables();
 
@@ -196,7 +195,20 @@ async function printModelPrinter(marca) {
 function tableListConsumables() {
   var table = $("#tableListConsumable").DataTable({
     destroy: true,
-    select: true,
+    //select: true,
+    columnDefs: [
+      {
+        orderable: false,
+        className: "select-checkbox",
+        targets: 0,
+        data: null,
+        defaultContent: ""
+      }
+    ],
+    select: {
+      style: "os",
+      selector: "td"
+    },
     dom: "Bfrtip",
     buttons: [
       {
@@ -223,6 +235,7 @@ function tableListConsumables() {
       data: { case: "allConsumablesList" }
     },
     columns: [
+      {},
       { data: "Marca" },
       { data: "Modelo" },
       { data: "Tipo" },

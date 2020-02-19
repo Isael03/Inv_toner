@@ -37,6 +37,7 @@ function list() {
         text: "<span class='fas fa-file-pdf'></span>",
         titleAttr: "PDF",
         className: "btn btn-success",
+        orientation: "landscape",
         //title: `Historial de consumibles`,
         /*   messageTop:
           "Emitido el " +
@@ -47,7 +48,7 @@ function list() {
           "/" +
           new Date().getFullYear(), */
         customize: function(doc) {
-          doc.content[1].margin = [0, 0, 0, 0];
+          doc.content[1].margin = [50, 0, 50, 0];
           doc.defaultStyle.alignment = "center";
           doc.footer = function(currentPage, pageCount) {
             return currentPage.toString() + " de " + pageCount;
@@ -178,7 +179,7 @@ function DateRange(table) {
         }
       })
       .then(json => {
-        if (json.data[0].Fecha != "") {
+        if (json.data[0] != undefined) {
           table.rows().remove();
           table.rows.add(json.data).draw();
           alertSuccess();

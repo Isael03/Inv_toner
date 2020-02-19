@@ -57,31 +57,31 @@
 
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
-      <li class="nav-item active">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="../">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Inicio</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./impresoras.php">
           <i class="fas fa-print"></i>
           <span>Impresoras</span>
         </a>
       </li>
-      <li class="nav-item ">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./bodega.php">
           <i class="fas fa-warehouse"></i>
           <span>Bodegas</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./historial.php">
           <i class="fas fa-history"></i>
           <span>Historial de entregas</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar active">
         <a class="nav-link" href="./reporte.php">
           <i class="fas fa-table"></i>
           <span>Reporte de entregas</span>
@@ -101,7 +101,7 @@
         </ol>
 
         <!-- Contenido -->
-        <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+        <ul class="nav nav-tabs mb-4" id="myTabReport" role="tablist">
           <li class="nav-item">
             <a class="nav-link active" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">General</a>
           </li>

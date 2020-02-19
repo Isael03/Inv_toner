@@ -37,7 +37,7 @@
       <span class="fas fa-bars"></span>
     </button>
 
-    <a class="navbar-brand" href="index.php">Inventario</a>
+    <a class="navbar-brand ml-2" href="index.php">Inventario</a>
 
 
     <!-- Navbar -->
@@ -55,31 +55,31 @@
 
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
-      <li class="nav-item active">
+      <li class="nav-item active btn-sidebar">
         <a class="nav-link" href="index.php">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Inicio</span>
         </a>
       </li>
-      <li class="nav-item ">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./views/impresoras.php">
           <i class="fas fa-print"></i>
           <span>Impresoras</span>
         </a>
       </li>
-      <li class="nav-item ">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./views/bodega.php">
           <i class="fas fa-warehouse"></i>
           <span>Bodegas</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./views/historial.php">
           <i class="fas fa-history"></i>
           <span>Historial de entregas</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./views/reporte.php">
           <i class="fas fa-table"></i>
           <span>Reporte de entregas</span>
@@ -175,6 +175,7 @@
               <table class="table table-bordered display nowrap text-center" id="tableBodegas" width="100%" cellspacing="0">
                 <thead>
                   <tr>
+                    <th></th>
                     <th>Marca</th>
                     <th>Modelo</th>
                     <th>Tipo</th>

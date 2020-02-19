@@ -33,7 +33,20 @@ function listStorage() {
     destroy: true,
     //responsive: true,
     order: [[0, "desc"]],
-    select: true,
+    //select: true,
+    columnDefs: [
+      {
+        orderable: false,
+        className: "select-checkbox",
+        targets: 0,
+        data: null,
+        defaultContent: ""
+      }
+    ],
+    select: {
+      style: "os",
+      selector: "td"
+    },
     paging: false,
     info: false,
     searching: false,
@@ -73,7 +86,7 @@ function listStorage() {
       data: { case: "listStorage" }
     },
 
-    columns: [{ data: "Lugar" }, { data: "Cantidad" }]
+    columns: [{}, { data: "Lugar" }, { data: "Cantidad" }]
   });
 
   setInterval(function() {

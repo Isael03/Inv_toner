@@ -51,31 +51,31 @@
 
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
-      <li class="nav-item active">
+      <li class="nav-item  btn-sidebar">
         <a class="nav-link" href="../">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Inicio</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./impresoras.php">
           <i class="fas fa-print"></i>
           <span>Impresoras</span>
         </a>
       </li>
-      <li class="nav-item ">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./bodega.php">
           <i class="fas fa-warehouse"></i>
           <span>Bodegas</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar active">
         <a class="nav-link" href="./historial.php">
           <i class="fas fa-history"></i>
           <span>Historial de entregas</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./reporte.php">
           <i class="fas fa-table"></i>
           <span>Reporte de entregas</span>
@@ -186,7 +186,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <p>¿Está seguro(a) que desea proceder?</p>
+            <p>¿Está seguro(a) que desea devolver este elemento a la bodega?</p>
             <small>
               <div class="alert alert-warning" role="alert">
                 *Si por alguna razón el elemento ya no existe en el sistema, volverá a ser ingresado. Por lo que tendrá que configurar el rango mínimo y máximo de stock.

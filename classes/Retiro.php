@@ -154,7 +154,7 @@ class Retiro
         } else {
             // die("Error");
         }
-        mysqli_free_result($result);
+        //mysqli_free_result($result);
 
         $conn->close();
 
@@ -168,7 +168,7 @@ class Retiro
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT Marca, Modelo, Tipo, SUM(Cantidad) AS Cantidad from Retiro WHERE Fecha BETWEEN '$inicio' AND '$termino' GROUP BY Modelo ORDER BY Cantidad DESC";
+        $sql = "SELECT ANY_VALUE(R.Marca) AS Marca, R.Modelo, ANY_VALUE(R.Tipo) AS Tipo, SUM(R.Cantidad) AS Cantidad from Retiro R WHERE R.Fecha BETWEEN '$inicio' AND '$termino' GROUP BY R.Modelo ORDER BY Cantidad DESC";
 
         $result = $conn->query($sql);
 
@@ -179,7 +179,7 @@ class Retiro
         } else {
             // die("Error");
         }
-        mysqli_free_result($result);
+        //mysqli_free_result($result);
 
         $conn->close();
 
@@ -275,7 +275,6 @@ class Retiro
         if (isset($arreglo)) {
             return $arreglo;
         }
-
     }
 
     public function deleteWithdraw(int $Id_retiro)
@@ -293,5 +292,4 @@ class Retiro
         $conn->close();
         return $res;
     }
-
 }

@@ -52,31 +52,31 @@
 
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
-      <li class="nav-item active">
+      <li class="nav-item  btn-sidebar">
         <a class="nav-link" href="../">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Inicio</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar active">
         <a class="nav-link" href="./impresoras.php">
           <i class="fas fa-print"></i>
           <span>Impresoras</span>
         </a>
       </li>
-      <li class="nav-item ">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./bodega.php">
           <i class="fas fa-warehouse"></i>
           <span>Bodegas</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./historial.php">
           <i class="fas fa-history"></i>
           <span>Historial de entregas</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./reporte.php">
           <i class="fas fa-table"></i>
           <span>Reporte de entregas</span>
@@ -131,6 +131,7 @@
             <table class="table table-bordered " id="tablePrinters" width="100%" cellspacing="0">
               <thead>
                 <tr>
+                  <th></th>
                   <th>Marca</th>
                   <th>Modelo</th>
                 </tr>
@@ -178,7 +179,7 @@
           <div class="modal-footer">
 
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <input type="btn" class="btn btn-danger" id="btnModalDeletePrinter" value="Borrar">
+            <input type="button" class="btn btn-danger" id="btnModalDeletePrinter" value="Borrar">
 
           </div>
         </div>

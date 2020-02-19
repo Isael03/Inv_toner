@@ -1,5 +1,3 @@
-"use strict";
-
 document.addEventListener("DOMContentLoaded", function() {
   showContent();
   autocompletar();
@@ -9,12 +7,9 @@ document.addEventListener("DOMContentLoaded", function() {
     $('a[data-toggle="tab"]').on("shown.bs.tab", function(e) {
       $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
     });
-    //--------------------------
 
-    //Inicializar tablas
     var tableStorages = listStorages();
     var tableAll = listALL();
-    //----------------------------------
 
     document
       .querySelector("#change-storage")
@@ -43,8 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
       .addEventListener("click", () => {
         confirmTransfer(tableStorages);
       });
-
-    /* Desmarcar filas seleccionadas al cambiar la pestaña de la tabla */
+    //---end-----------------------------
     document.querySelector("#myTab").addEventListener("click", () => {
       tableStorages.rows().deselect();
       tableAll.rows().deselect();
@@ -379,10 +373,10 @@ function listALL() {
       {
         extend: "pdf",
         text: "<span class='fas fa-file-pdf'></span>",
-        exportOptions: {
+        /*  exportOptions: {
           columns: [0, 1, 2, 3, 4]
           //columns: ":not(.no-exportar)"
-        },
+        }, */
         titleAttr: "Generar reporte PDF",
         className: "btn btn-success",
         title: "Total en existencia",
@@ -529,7 +523,7 @@ function listStorages() {
     destroy: true,
     //responsive: true,
     order: [[0, "desc"]],
-    select: true,
+    // select: true,
     language: Datatable_ES,
     ajax: {
       method: "GET",
@@ -537,6 +531,19 @@ function listStorages() {
       data: {
         bodega: parseInt(document.querySelector("#change-storage").value)
       }
+    },
+    columnDefs: [
+      {
+        orderable: false,
+        className: "select-checkbox",
+        targets: 0,
+        data: null,
+        defaultContent: ""
+      }
+    ],
+    select: {
+      style: "os",
+      selector: "td"
     },
     dom: "Bfrtip",
     buttons: [
@@ -566,6 +573,7 @@ function listStorages() {
       }
     ],
     columns: [
+      {},
       { data: "Marca" },
       { data: "Modelo" },
       { data: "Tipo" },
@@ -582,7 +590,7 @@ function changeStorage(table) {
   let value = document.querySelector("#change-storage").value;
   fetchURL(`./api/consumible/get_consumibles.php?bodega=${value}`, "GET")
     .then(function(res) {
-      if (res.data[0].Marca != "") {
+      if (res.data[0] != undefined) {
         table.rows().remove();
         table.rows.add(res.data).draw();
         //alertSuccess();

@@ -32,7 +32,20 @@ function tablePrinter() {
   var table = $("#tablePrinters").DataTable({
     destroy: true,
     responsive: false,
-    select: true,
+    //select: true,
+    columnDefs: [
+      {
+        orderable: false,
+        className: "select-checkbox",
+        targets: 0,
+        data: null,
+        defaultContent: ""
+      }
+    ],
+    select: {
+      style: "os",
+      selector: "td"
+    },
     dom: "Bfrtip",
     buttons: [
       {
@@ -58,7 +71,7 @@ function tablePrinter() {
       url: "../api/impresora/impresora.php",
       data: { case: "showPrinters" }
     },
-    columns: [{ data: "Marca_impresora" }, { data: "Modelo_impresora" }]
+    columns: [{}, { data: "Marca_impresora" }, { data: "Modelo_impresora" }]
   });
 
   setInterval(function() {

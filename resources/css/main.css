@@ -94,3 +94,8 @@ strong {
     padding-top: 0.1rem !important;
   }
 }
+
+.btn-sidebar:hover {
+  background-color: #1a1816;
+  /* background-color: #3d3a36;*/
+}

@@ -93,21 +93,21 @@ class Bodega
     public function deleteStorage(int $id)
     {
 
-        if ($id > 0) {
-            $conn = $this->conn->connect();
+        /* if ($id < 3) { */
+        $conn = $this->conn->connect();
 
-            $sql = "DELETE FROM Bodega WHERE Id_bodega=$id";
+        $sql = "DELETE FROM Bodega WHERE Id_bodega=$id";
 
-            if ($conn->query($sql)) {
-                $valid = true;
-            } else {
-                //echo $conn->error;
-                $valid = false;
-            }
-            $conn->close();
+        if ($conn->query($sql)) {
+            $valid = true;
         } else {
+            //echo $conn->error;
             $valid = false;
         }
+        $conn->close();
+        /* }  else {
+            $valid = false;
+        } */
         return $valid;
     }
 

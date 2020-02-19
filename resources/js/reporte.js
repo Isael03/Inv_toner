@@ -13,6 +13,15 @@ document.addEventListener("DOMContentLoaded", () => {
     e.stopPropagation();
     listDepart();
   });
+  document.querySelector("#myTabReport").addEventListener("click", () => {
+    let selectores = [
+      "#inicio-gral",
+      "#termino-gral",
+      "#inicio_dep",
+      "#termino_dep"
+    ];
+    clean_Validations(selectores);
+  });
 });
 
 function reportGeneral() {

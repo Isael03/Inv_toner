@@ -95,7 +95,7 @@ if ($result->num_rows > 0) {
 
 
     <?php
-foreach ($dep as $key => $depValue) {
+    foreach ($dep as $key => $depValue) {
     ?>
         <div id="content">
             <div class="row ">
@@ -115,27 +115,27 @@ foreach ($dep as $key => $depValue) {
                             <tbody id="tbody-depart">
                                 <?php
 
-    $id = (int) $depValue['Id_dep'];
+                                $id = (int) $depValue['Id_dep'];
 
-    $sql = "SELECT  Marca, SUM(Cantidad) AS Cantidad, Modelo, Tipo FROM Retiro WHERE Fecha BETWEEN '$inicio_dep' AND '$termino_dep' AND Id_departamento=$id GROUP BY Modelo";
+                                $sql = "SELECT  ANY_VALUE(Marca) AS Marca, SUM(Cantidad) AS Cantidad, Modelo, ANY_VALUE(Tipo) AS Tipo  FROM Retiro WHERE Fecha BETWEEN '$inicio_dep' AND '$termino_dep' AND Id_departamento=$id GROUP BY Modelo";
 
-    /*       $sql = "SELECT DATE_FORMAT(Fecha, '%d/%m/%Y %H:%i:%s') AS Fecha, Usuario_recibe, Marca, Modelo, Tipo, Cantidad FROM Retiro WHERE Fecha BETWEEN '$inicio_dep' AND '$termino_dep' AND Id_departamento=$id"; */
+                                /*       $sql = "SELECT DATE_FORMAT(Fecha, '%d/%m/%Y %H:%i:%s') AS Fecha, Usuario_recibe, Marca, Modelo, Tipo, Cantidad FROM Retiro WHERE Fecha BETWEEN '$inicio_dep' AND '$termino_dep' AND Id_departamento=$id"; */
 
-    $result = $conn->query($sql);
+                                $result = $conn->query($sql);
 
-    if ($result->num_rows > 0) {
-        while ($data = mysqli_fetch_assoc($result)) {
-            $Retiro_dep[$depValue['Departamento']][] = array_map("utf8_encode", $data);
-        }
+                                if ($result->num_rows > 0) {
+                                    while ($data = mysqli_fetch_assoc($result)) {
+                                        $Retiro_dep[$depValue['Departamento']][] = array_map("utf8_encode", $data);
+                                    }
 
-        foreach ($Retiro_dep[$depValue['Departamento']] as $deptable) {
-            echo "<tr><td scope='col' class='p-0 px-2'>" . $deptable['Marca'] . "</td><td scope='col' class='p-0 px-2'>" . $deptable['Modelo'] . "</td><td scope='col' class='p-0 px-2'>" . $deptable['Tipo'] . "</td><td scope='col' class='p-0 px-2'>" . $deptable['Cantidad'] . "</td></tr>";
-        }
-    } else {
+                                    foreach ($Retiro_dep[$depValue['Departamento']] as $deptable) {
+                                        echo "<tr><td scope='col' class='p-0 px-2'>" . $deptable['Marca'] . "</td><td scope='col' class='p-0 px-2'>" . $deptable['Modelo'] . "</td><td scope='col' class='p-0 px-2'>" . $deptable['Tipo'] . "</td><td scope='col' class='p-0 px-2'>" . $deptable['Cantidad'] . "</td></tr>";
+                                    }
+                                } else {
 
-        echo "<tr><td colspan='4'>No se encontraron datos</td></tr>";
-    }
-    ?>
+                                    echo "<tr><td colspan='4'>No se encontraron datos</td></tr>";
+                                }
+                                ?>
                             </tbody>
                         </table>
                     </div>
@@ -144,7 +144,7 @@ foreach ($dep as $key => $depValue) {
         </div>
         <br><br>
     <?php
-}?>
+    } ?>
 
     <!-- <div style="page-break-after:never;"></div> -->
 
@@ -188,5 +188,5 @@ $pdf->load_html(ob_get_clean());
 
 $pdf->render();
 
-$pdf->stream('document.pdf', array('Attachment' => 0));
+$pdf->stream('Entregas a Dirección.pdf', array('Attachment' => 0));
 ?>
