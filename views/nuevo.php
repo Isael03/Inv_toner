@@ -218,35 +218,45 @@
           <div class="tab-pane fade show active" id="existingConsumable" role="tabpanel" aria-labelledby="existingConsumable-tab">
 
             <div class="row mt-4">
-              <form class="col-lg-12 mb-5 collapse show" id="insertPrinter" novalidate>
-                <div class="form-row">
-                  <div class="col-md-5 col-xs-12 col-lg-3">
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">Cantidad</span>
+              <div class="collapse" id="form-and-buttons_exists">
+                <form class="col-lg-12 mb-3" id="insertPrinter" novalidate>
+                  <div class="form-row">
+                    <div class="col-md-5 col-xs-12 col-lg-3">
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">Cantidad</span>
+                        </div>
+                        <input type="number" id="addMore" class="form-control" value="1" min="1" aria-label="addMore" aria-describedby="basic-addon1" required>
                       </div>
-                      <input type="number" id="addMore" class="form-control" value="1" min="1" aria-label="addMore" aria-describedby="basic-addon1" required>
                     </div>
-                  </div>
-                  <div class="col-md-5 col-xs-12 col-lg-4">
-                    <div class="input-group mb-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">Ubicacion</span>
-                      </div>
-                      <select class="custom-select " id="selectStorage" name="ubicacion" required>
-                        <option value="" selected>Seleccione...</option>
+                    <div class="col-md-5 col-xs-12 col-lg-4">
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">Ubicacion</span>
+                        </div>
+                        <select class="custom-select " id="selectStorage" name="ubicacion" required>
+                          <option value="" selected>Seleccione...</option>
 
-                      </select>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <button type="button" class="btn btn-primary" id="btnAddMore">Agregar</button>
                     </div>
                   </div>
-                  <div class="col-auto">
-                    <button type="button" class="btn btn-primary" id="btnAddMore">Agregar</button>
+                </form>
+
+                <!-- Botones -->
+                <div class="container mb-4">
+                  <div class="btn-group" role="group" aria-label="btn-group-actions">
+                    <button type="button" class="btn btn-warning" title="Actualizar" id="existUpdate"><span class='fas fa-wrench text-white'></span></button>
+                    <button type="button" class="btn btn-danger" title="Eliminar" id="existDelete"><span class='fas fa-trash'></span></button>
                   </div>
                 </div>
-              </form>
+              </div>
 
               <!-- Tabla -->
-              <div class="table-responsive col-md-12 col-xs-12">
+              <div class="table-responsive col-md-12 col-xs-12" id="container-tableListConsumable">
                 <table class="table table-bordered text-center display nowrap" id="tableListConsumable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
@@ -276,8 +286,7 @@
       <!-- Sticky Footer -->
       <footer class="sticky-footer">
         <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-          </div>
+
         </div>
       </footer>
 

@@ -132,15 +132,16 @@ function listDepart() {
         }
       })
       .then(json => {
-        if (json.status != "bad") {
-          /* let fecha_inicio = inicio.value.split("-");
-          let fecha_termino = termino.value.split("-"); */
+        console.table(json);
 
+        if (json.status == "ok") {
           document.getElementById("tbody-dep").innerHTML = "";
 
-          for (const dep of json) {
+          for (const dep of json.data) {
             Fechainicio = inicio.value + " 00:00:00";
             Fechatermino = termino.value + " 23:59:59";
+            /*  console.log(Fechainicio);
+            console.log(Fechatermino); */
 
             document.getElementById(
               "tbody-dep"

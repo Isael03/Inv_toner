@@ -27,16 +27,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         case 'dep':
 
-            //echo "";
-
             $dep_Report = $retiro->getDir();
 
             if (isset($dep_Report)) {
-                echo json_encode($dep_Report);
+                $res = array("status" => "ok", "data" => $dep_Report);
             } else {
-                echo json_encode(array("status" => 'bad'));
+                $res = array("status" => 'bad');
             }
-
+            echo json_encode($res);
             break;
 
 

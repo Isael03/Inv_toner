@@ -1,10 +1,22 @@
 document.addEventListener("DOMContentLoaded", () => {
   let table = tablePrinter();
 
+  document.getElementById("PrinterDelete").addEventListener("click", () => {
+    showDelete(table);
+  });
+
+  document.getElementById("PrinterUpdate").addEventListener("click", () => {
+    showFormUpdate(table);
+  });
+
   document.querySelector("#btnNuevaImpresora").addEventListener("click", e => {
     e.preventDefault();
     e.stopPropagation();
     insertNewPrinter(table);
+  });
+
+  document.querySelector("#contentTable").addEventListener("click", () => {
+    showFormAndControl(table);
   });
 
   document.querySelector("#btnUpdatePrinter").addEventListener("click", e => {
@@ -46,25 +58,6 @@ function tablePrinter() {
       style: "os",
       selector: "td"
     },
-    dom: "Bfrtip",
-    buttons: [
-      {
-        text: " <span class='fas fa-wrench text-white'></span>",
-        titleAttr: "Actualizar",
-        className: "btn btn-warning",
-        action: function() {
-          showFormUpdate(table);
-        }
-      },
-      {
-        text: " <span class='fas fa-trash'></span>",
-        titleAttr: "Eliminar",
-        className: "btn btn-danger",
-        action: function() {
-          showDelete(table);
-        }
-      }
-    ],
     language: Datatable_ES,
     ajax: {
       method: "GET",
@@ -73,10 +66,6 @@ function tablePrinter() {
     },
     columns: [{}, { data: "Marca_impresora" }, { data: "Modelo_impresora" }]
   });
-
-  setInterval(function() {
-    table.ajax.reload();
-  }, 100000);
 
   return table;
 }
@@ -122,8 +111,8 @@ function showDelete(table) {
 /**@description Enviar datos del formulario  */
 /**@param table object  */
 function insertNewPrinter(table) {
-  let marca = document.querySelector("#nuevaMarca").value;
-  let modelo = document.querySelector("#nuevoModelo").value;
+  let marca = document.querySelector("#nuevaMarca").value.trim();
+  let modelo = document.querySelector("#nuevoModelo").value.trim();
 
   validClass(["#nuevaMarca", "#nuevoModelo"]);
 
@@ -239,5 +228,15 @@ function dataForm(table) {
   if (table.row(".selected").length > 0) {
     const data = table.row(".selected").data();
     printDataUpdate(data);
+  }
+}
+
+function showFormAndControl(table) {
+  jQuery.noConflict();
+  jQuery("#container-btn");
+  if (table.row(".selected").length > 0) {
+    $("#container-btn").collapse("show");
+  } else {
+    $("#container-btn").collapse("hide");
   }
 }

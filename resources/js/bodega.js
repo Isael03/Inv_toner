@@ -2,6 +2,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const table = listStorage();
   document.querySelector("#nuevaBodega").value = "";
 
+  document
+    .querySelector("#contentTableStorage")
+    .addEventListener("click", () => {
+      showFormAndControl(table);
+    });
+
+  document.getElementById("StorageDelete").addEventListener("click", () => {
+    if (table.row(".selected").length > 0) {
+      jQuery.noConflict();
+      $("#modalDeleteStorage").modal("show");
+    } else {
+      customAlertError("Seleccione un elemento");
+    }
+  });
+
+  document.getElementById("StorageUpdate").addEventListener("click", () => {
+    if (table.row(".selected").length > 0) {
+      jQuery.noConflict();
+      $("#modalUpdateStorage").modal("show");
+    } else {
+      customAlertError("Seleccione un elemento");
+    }
+  });
+
   /**Evento de para la creacion de la bodega  */
   document.querySelector("#btnNuevabodega").addEventListener("click", e => {
     e.preventDefault();
@@ -50,35 +74,6 @@ function listStorage() {
     paging: false,
     info: false,
     searching: false,
-    dom: "Bfrtip",
-    buttons: [
-      {
-        text: " <span class='fas fa-wrench text-white'></span>",
-        titleAttr: "Actualizar",
-        className: "btn btn-warning",
-        action: function() {
-          if (table.row(".selected").length > 0) {
-            jQuery.noConflict();
-            $("#modalUpdateStorage").modal("show");
-          } else {
-            customAlertError("Seleccione un elemento");
-          }
-        }
-      },
-      {
-        text: " <span class='fas fa-trash'></span>",
-        titleAttr: "Eliminar",
-        className: "btn btn-danger",
-        action: function() {
-          if (table.row(".selected").length > 0) {
-            jQuery.noConflict();
-            $("#modalDeleteStorage").modal("show");
-          } else {
-            customAlertError("Seleccione un elemento");
-          }
-        }
-      }
-    ],
     language: Datatable_ES,
     ajax: {
       method: "GET",
@@ -182,4 +177,14 @@ function deleteStorage(table) {
     .catch(err => {
       console.log(err);
     });
+}
+
+function showFormAndControl(table) {
+  jQuery.noConflict();
+  jQuery("#container-btnStorage");
+  if (table.row(".selected").length > 0) {
+    $("#container-btnStorage").collapse("show");
+  } else {
+    $("#container-btnStorage").collapse("hide");
+  }
 }

@@ -135,7 +135,7 @@ class Consumible
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, COUNT(BC.Id_consumible) AS Cantidad, C.rango_stockMinimo AS Minimo, C.rango_stockMaximo AS Maximo, CASE WHEN COUNT(BC.Id_consumible) > C.rango_stockMaximo THEN 'Suficientes' WHEN COUNT(BC.Id_consumible) < C.rango_stockMinimo THEN 'Insuficientes' ELSE 'Dentro de lo permitido' END AS Estado FROM Consumible C LEFT JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible LEFT JOIN Bodega B ON BC.Id_bodega=B.Id_bodega LEFT JOIN Impresora I ON C.Id_impresora=I.Id_impresora GROUP BY C.Id_consumible";
+        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, COUNT(BC.Id_consumible) AS Cantidad, C.rango_stockMinimo AS Minimo, C.rango_stockMaximo AS Maximo, CASE WHEN COUNT(BC.Id_consumible) >= C.rango_stockMaximo THEN 'Suficientes' WHEN COUNT(BC.Id_consumible) <= C.rango_stockMinimo THEN 'Insuficientes' ELSE 'Dentro de lo permitido' END AS Estado FROM Consumible C LEFT JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible LEFT JOIN Bodega B ON BC.Id_bodega=B.Id_bodega LEFT JOIN Impresora I ON C.Id_impresora=I.Id_impresora GROUP BY C.Id_consumible";
 
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {

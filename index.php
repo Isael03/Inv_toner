@@ -170,8 +170,25 @@
                   </select>
                 </div>
               </div>
+
+              <div class="container mb-4">
+                <div class="collapse" id="container-btnStart">
+                  <div class="btn-group" role="group" aria-label="btn-group-actions">
+                    <button type="button" class="btn btn-info" title="Retirar" id="PrinterUpdate"><span class='fas fa-box-open text-white'></span></button>
+                    <button type="button" class="btn btn-dark" title="Trasladar" id="PrinterDelete"><span class='fas fa-exchange-alt text-white'></span></button>
+                    <button type="button" class="btn btn-danger" title="Eliminar" id="PrinterDelete"><span class='fas fa-trash'></span></button>
+                  </div>
+                </div>
+              </div>
+
+
             </div>
-            <div class="table-responsive">
+
+            <!-- Botones -->
+
+
+
+            <div class="table-responsive" id="table-containerStart">
               <table class="table table-bordered display nowrap text-center" id="tableBodegas" width="100%" cellspacing="0">
                 <thead>
                   <tr>
@@ -198,9 +215,7 @@
       <!-- Sticky Footer -->
       <footer class="sticky-footer">
         <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <!-- <span>Copyright © Your Website 2019</span> -->
-          </div>
+
         </div>
       </footer>
 
@@ -215,7 +230,6 @@
 
   include "./components/modalDelete.php";
   include "./components/modalWithdraw.php";
-  include "./components/modalUpdate.php";
   include "./components/modalTransfer.php";
   ?>
 

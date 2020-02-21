@@ -219,6 +219,8 @@ class Retiro
     {
         $conn = $this->conn->connect();
 
+        $idDirecciones = (int) self::getDir();
+
         $sql = "SELECT iddepart AS Id_dep, depart AS Departamento FROM departamentos where direccion=$iddir";
 
         $result = $conn->query($sql);
@@ -234,7 +236,7 @@ class Retiro
             $id = (int) $depValue['Id_dep'];
 
             /* $sql = "SELECT DATE_FORMAT(Fecha, '%d/%m/%Y %H:%i:%s') AS Fecha, Usuario_recibe, Marca, Modelo, Tipo, Cantidad FROM Retiro WHERE Fecha BETWEEN '$inicio' AND '$termino' AND Id_departamento=$id"; */
-            $sql = "SELECT  Marca, COUNT(Modelo) AS Cantidad, Modelo, Tipo FROM Retiro WHERE Fecha BETWEEN '$inicio' AND '$termino' AND Id_departamento=$id GROUP BY Modelo";
+            $sql = "SELECT Marca, SUM(Cantidad) AS Cantidad, Modelo, Tipo FROM Retiro WHERE Fecha BETWEEN '$inicio' AND '$termino' AND Id_departamento=$id GROUP BY Modelo, Marca, Tipo ORDER BY Cantidad DESC";
 
             $result = $conn->query($sql);
 

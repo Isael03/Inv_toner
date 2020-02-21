@@ -1,6 +1,12 @@
 document.addEventListener("DOMContentLoaded", function() {
   const table = tableListConsumables();
 
+  document
+    .querySelector("#container-tableListConsumable")
+    .addEventListener("click", () => {
+      showFormAndControl(table);
+    });
+
   //Configuracion para cuando la tabla esta oculta en un tab
   $('a[data-toggle="tab"]').on("shown.bs.tab", function(e) {
     $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
@@ -55,13 +61,25 @@ document.addEventListener("DOMContentLoaded", function() {
   /**Desmarcar fila selecionada al pulsar el tab */
   document.getElementById("myTabAdd").addEventListener("click", () => {
     table.rows().deselect();
+    table.ajax.reload();
+    $("#form-and-buttons_exists").collapse("hide");
   });
 
   document.getElementById("btnNuevoToner").addEventListener("click", e => {
     e.preventDefault();
     e.stopPropagation();
-
     sendData();
+  });
+
+  document.getElementById("existUpdate").addEventListener("click", () => {
+    getDataUpdate(table);
+  });
+  document.getElementById("existDelete").addEventListener("click", () => {
+    showModalDelete(table);
+  });
+
+  document.getElementById("existDelete").addEventListener("click", () => {
+    showModalDelete(table);
   });
 });
 
@@ -121,7 +139,8 @@ async function sendData() {
           if (res.status === "ok") {
             alertSuccess();
             document.getElementById("formNuevo").reset();
-            setTimeout(() => document.location.reload(), 1000);
+            clean_Validations(selectores);
+            //setTimeout(() => document.location.reload(), 1000);
           } else {
             alertError();
           }
@@ -209,25 +228,6 @@ function tableListConsumables() {
       style: "os",
       selector: "td"
     },
-    dom: "Bfrtip",
-    buttons: [
-      {
-        text: " <span class='fas fa-wrench text-white'></span>",
-        titleAttr: "Actualizar",
-        className: "btn btn-warning",
-        action: function() {
-          getDataUpdate(table);
-        }
-      },
-      {
-        text: " <span class='fas fa-trash'></span>",
-        titleAttr: "Eliminar",
-        className: "btn btn-danger",
-        action: function() {
-          showModalDelete(table);
-        }
-      }
-    ],
     language: Datatable_ES,
     ajax: {
       method: "GET",
@@ -242,10 +242,6 @@ function tableListConsumables() {
       { data: "Impresora" }
     ]
   });
-
-  setInterval(function() {
-    table.ajax.reload();
-  }, 100000);
 
   return table;
 }
@@ -469,7 +465,7 @@ function showModalDelete(table) {
   if (table.row(".selected").length > 0) {
     //abrir modal
     jQuery.noConflict();
-    //jQuery("#modalDeleteConsumable");
+    jQuery("#modalDeleteConsumable");
     $("#modalDeleteConsumable").modal("show");
   } else {
     customAlertError("Seleccione un elemento");
@@ -498,4 +494,14 @@ function confirmDeleteAll(table) {
       console.log(err);
       alertError();
     });
+}
+
+function showFormAndControl(table) {
+  jQuery.noConflict();
+  jQuery("#form-and-buttons_exists");
+  if (table.row(".selected").length > 0) {
+    $("#form-and-buttons_exists").collapse("show");
+  } else {
+    $("#form-and-buttons_exists").collapse("hide");
+  }
 }

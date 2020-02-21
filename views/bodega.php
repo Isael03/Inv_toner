@@ -95,7 +95,7 @@
 
                 <div class="row">
 
-                    <form class="col-lg-12 mb-5 collapse show" novalidate>
+                    <form class="col-lg-12 mb-3 collapse show" novalidate>
                         <legend class="h5">Añadir bodega</legend>
                         <div class="form-row">
                             <div class="col-md-6 col-xs-12 col-lg-4">
@@ -113,28 +113,18 @@
                         </div>
                     </form>
 
-                    <form class="col-lg-12 mb-5 collapse" novalidate>
-                        <legend class="h5">Cambiar nombre</legend>
-                        <div class="form-row">
-                            <div class="col-auto">
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1">Nombre</span>
-                                    </div>
-                                    <input type="text" class="form-control" id="updateNameStorage" placeholder="Marca" aria-label="Marca" aria-describedby="basic-addon1" required>
-                                </div>
-                            </div>
 
-                            <div class="col-auto">
-                                <input type="button" id="btnUpdateStorage" class="btn btn-primary" value="Modificar">
+                    <div class="container mb-4">
+                        <div class="collapse" id="container-btnStorage">
+                            <div class="btn-group" role="group" aria-label="btn-group-actions">
+                                <button type="button" class="btn btn-warning" title="Actualizar" id="StorageUpdate"><span class='fas fa-wrench text-white'></span></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar" id="StorageDelete"><span class='fas fa-trash'></span></button>
                             </div>
-
                         </div>
-                    </form>
-
+                    </div>
 
                     <!-- Tabla -->
-                    <div class="table-responsive col-md-6 col-xs-12" id="contentTable">
+                    <div class="table-responsive col-md-6 col-xs-12" id="contentTableStorage">
                         <table class="table table-bordered text-center display" id="tableStorage" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
@@ -155,8 +145,7 @@
                 <!-- Sticky Footer -->
                 <footer class="sticky-footer">
                     <div class="container my-auto">
-                        <div class="copyright text-center my-auto">
-                        </div>
+
                     </div>
                 </footer>
 

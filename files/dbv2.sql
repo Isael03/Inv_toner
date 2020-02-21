@@ -42,8 +42,8 @@ CREATE TABLE IF NOT EXISTS Bodega_Consumible(
 Create table if not exists Retiro(
     Id_retiro int AUTO_INCREMENT PRIMARY KEY,
     Fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    Usuario_retira varchar(100) NOT NULL,
-    Usuario_recibe varchar(100) not null,
+    Usuario_retira varchar(120) NOT NULL,
+    Usuario_recibe varchar(120) not null,
     Id_recibe int not null,
     Id_departamento int not null,
     Departamento varchar(100) not null,
@@ -59,7 +59,7 @@ Create table if not exists Retiro(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-CREATE TABLE `funcionarios` (
+CREATE TABLE if not exists `funcionarios` (
   `id` int(100) NOT NULL,
   `rut` varchar(10) COLLATE latin1_spanish_ci NOT NULL,
   `nombres` varchar(150) COLLATE latin1_spanish_ci NOT NULL,
@@ -560,7 +560,7 @@ INSERT INTO `funcionarios` (`id`, `rut`, `nombres`, `apellidos`, `fechanac`, `do
 (135, '9987930-0', 'Jenny ', 'Morales Morales', '1963-10-09', 'Nueva Caldera s/n', 0, '', 'JMorales@caldera.cl', 460000, 'si', 'no', 'Caldera', 10, 29, 9, '', 'no', 1, 'si', '', 0, 0, '', '', '', '', '', 0, '', '', 'Barrido Calle', 0, '0000-00-00');
 
 
-CREATE TABLE `departamentos` (
+CREATE TABLE if not exists `departamentos` (
   `iddepart` int(10) NOT NULL,
   `depart` varchar(200) COLLATE latin1_spanish_ci NOT NULL,
   `direccion` int(10) NOT NULL
@@ -630,7 +630,7 @@ INSERT INTO `departamentos` (`iddepart`, `depart`, `direccion`) VALUES
 (56, 'FISCALIZACION', 3);
 
 
-CREATE TABLE `direcciones` (
+CREATE TABLE if not exists `direcciones` (
   `iddireccion` int(12) NOT NULL,
   `direccion` varchar(150) COLLATE latin1_spanish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;

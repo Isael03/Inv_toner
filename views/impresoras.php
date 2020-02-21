@@ -97,7 +97,7 @@
 
         <div class="row">
 
-          <form class="col-lg-12 mb-5" id="insertPrinter" novalidate>
+          <form class="col-lg-12 mb-3" id="insertPrinter" novalidate>
             <legend class="h5">Añadir impresora</legend>
             <div class="form-row">
               <div class="col-md-6 col-xs-12 col-lg-3">
@@ -125,6 +125,17 @@
             </div>
           </form>
 
+          <!-- Botones -->
+
+          <div class="container mb-4">
+            <div class="collapse" id="container-btn">
+              <div class="btn-group" role="group" aria-label="btn-group-actions">
+                <button type="button" class="btn btn-warning" title="Actualizar" id="PrinterUpdate"><span class='fas fa-wrench text-white'></span></button>
+                <button type="button" class="btn btn-danger" title="Eliminar" id="PrinterDelete"><span class='fas fa-trash'></span></button>
+              </div>
+            </div>
+          </div>
+
 
           <!-- Tabla -->
           <div class="table-responsive col-md-7 col-xs-12" id="contentTable">
@@ -148,8 +159,6 @@
         <!-- Sticky Footer -->
         <footer class="sticky-footer">
           <div class="container my-auto">
-            <div class="copyright text-center my-auto">
-            </div>
           </div>
         </footer>
 

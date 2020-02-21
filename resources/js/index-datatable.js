@@ -17,6 +17,12 @@ document.addEventListener("DOMContentLoaded", function() {
         changeStorage(tableStorages);
       });
 
+    document
+      .querySelector("#table-containerStart")
+      .addEventListener("click", () => {
+        showFormAndControl(tableStorages);
+      });
+
     /*------------------------- Botones de modals ----------------------------*/
 
     /* boton eliminar del modal */
@@ -61,14 +67,6 @@ document.addEventListener("DOMContentLoaded", function() {
       document.getElementById("mCantidad").value = data.Cantidad;
     });
   }, 1000);
-
-  /* Evento del input marca del modal actualizar */
-  document.querySelector("#updMarca").addEventListener("input", () => {
-    printModelPrinter();
-    document.querySelector(
-      "#updImpresora"
-    ).innerHTML = `<option value="">Seleccione...</option>`;
-  });
 });
 
 //***************************************************************************************************************************** */
@@ -408,15 +406,15 @@ function listALL() {
       url: "./api/consumible/get_consumibleALL.php",
       data: { case: "allConsumables" }
     },
-    /**Colores en las celdas de cantidad */
+    /**Colores en las celdas de estado */
     createdRow: function(row, data, dataIndex) {
       let cantidad = parseInt(data.Cantidad);
       let minimo = parseInt(data.Minimo);
       let maximo = parseInt(data.Maximo);
 
-      if (cantidad < minimo) {
+      if (cantidad <= minimo) {
         $($(row).find("td")[5]).addClass("bg-danger text-white");
-      } else if (cantidad > maximo) {
+      } else if (cantidad => maximo) {
         $($(row).find("td")[5]).addClass("bg-success text-white");
       } else {
         $($(row).find("td")[5]).addClass("bg-warning text-white");
@@ -545,7 +543,7 @@ function listStorages() {
       style: "os",
       selector: "td"
     },
-    dom: "Bfrtip",
+    /*  dom: "Bfrtip",
     buttons: [
       {
         text: " <span class='fas fa-box-open text-white'></span>",
@@ -571,7 +569,7 @@ function listStorages() {
           getDataDelete(table);
         }
       }
-    ],
+    ], */
     columns: [
       {},
       { data: "Marca" },
@@ -603,4 +601,14 @@ function changeStorage(table) {
     .catch(function(err) {
       console.log(err);
     });
+}
+
+function showFormAndControl(table) {
+  jQuery.noConflict();
+  jQuery("#container-btnStart");
+  if (table.row(".selected").length > 0) {
+    $("#container-btnStart").collapse("show");
+  } else {
+    $("#container-btnStart").collapse("hide");
+  }
 }
