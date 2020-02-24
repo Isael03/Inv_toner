@@ -56,3 +56,50 @@ strong {
 .autocompletar-active strong {
   color: #fff;
 }
+
+.select-max:hover {
+  color: dodgerblue;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  div.alert,
+  .input-group-text {
+    font-size: 0.8em;
+  }
+
+  li a,
+  table,
+  p,
+  #legend-color {
+    font-size: 0.9em;
+  }
+
+  h1 {
+    font-size: 1.2em;
+  }
+
+  .card-body {
+    padding: 0.7rem;
+  }
+
+  .card-footer {
+    padding: 0.4rem;
+  }
+
+  #btnAdd {
+    padding-left: 0.6rem !important;
+    padding-right: 0.6rem !important;
+    padding-bottom: 0 !important;
+    padding-top: 0.1rem !important;
+  }
+}
+
+.btn-sidebar:hover {
+  background-color: #1a1816;
+  /* background-color: #3d3a36;*/
+}
+
+table.display tr td {
+  cursor: pointer;
+}

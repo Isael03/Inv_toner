@@ -1,33 +1,28 @@
 document.addEventListener("DOMContentLoaded", function() {
   const table = list();
-  document.querySelector("#filter").value = "";
-  document.querySelector("#mes").value = "";
 
-  document.querySelector("#btnBuscarMes").addEventListener("click", e => {
-    e.preventDefault();
-    search(table);
-  });
-  document.querySelector("#filter").addEventListener("input", () => {
-    let filter = document.querySelector("#filter").value;
-
-    if (filter === "") {
-      table.rows().remove();
-      table.ajax.reload();
-      document.title = "Historial";
-    }
-    showForm();
-  });
   document.querySelector("#btnBuscarRango").addEventListener("click", () => {
     DateRange(table);
   });
 
   namepdf();
+
+  document.querySelector("#btnCancel").addEventListener("click", () => {
+    showModalConfirmWithdraw();
+  });
+  document
+    .querySelector("#btn-confirm-cancelWithdraw")
+    .addEventListener("click", () => {
+      cancelWithdraw(table);
+    });
+  document.querySelector("#cancel-operation").addEventListener("click", () => {
+    $("#dataHistorial").removeClass("d-none");
+  });
 });
 
 function list() {
   const table = $("#tableHist").DataTable({
     destroy: true,
-    //responsive: true,
     select: true,
     order: [[0, "desc"]],
     /*  pageLength: 5,
@@ -42,17 +37,9 @@ function list() {
         text: "<span class='fas fa-file-pdf'></span>",
         titleAttr: "PDF",
         className: "btn btn-success",
-        //title: `Historial de consumibles`,
-        /*   messageTop:
-          "Emitido el " +
-          new Date().getDate() +
-          "/" +
-          new Date().getMonth() +
-          1 +
-          "/" +
-          new Date().getFullYear(), */
+        orientation: "landscape",
         customize: function(doc) {
-          doc.content[1].margin = [0, 0, 0, 0];
+          doc.content[1].margin = [50, 0, 50, 0];
           doc.defaultStyle.alignment = "center";
           doc.footer = function(currentPage, pageCount) {
             return currentPage.toString() + " de " + pageCount;
@@ -87,28 +74,98 @@ function list() {
       { data: "Modelo" },
       { data: "Tipo" },
       { data: "Cantidad" },
-      { data: "Impresora" }
+      { data: "Impresora" },
+      { data: "Bodega" }
     ]
   });
-  setInterval(function() {
-    table.ajax.reload();
-  }, 100000);
+
+  showModal("#tableHist tbody", table);
 
   return table;
 }
 
-function search(table) {
-  let mes = document.querySelector("#mes").value;
+/**Mostral modal con informacion de la fila */
+var showModal = function(tbody, table) {
+  $(tbody).on("click", "tr", function() {
+    //var data = table.row($(this).parents("tr")).data();
+    var data = table.row(this).data();
+    jQuery.noConflict();
+    jQuery("#dataHistorial");
+    $("#dataHistorial").modal("show");
 
-  if (mes !== "") {
+    document.querySelector(
+      "#mMistorialHeader"
+    ).innerHTML = `Recibe: ${data.Recibe}`;
+
+    let size_font = ".9em";
+
+    let dataModal = [
+      "Fecha: ",
+      "Departamento que recibe: ",
+      "Quién entrega: ",
+      "Marca: ",
+      "Modelo: ",
+      "Tipo: ",
+      "Cantidad: ",
+      "Impresora: ",
+      "Bodega: "
+    ];
+
+    let infoModal = [
+      data.Fecha,
+      data.Departamento,
+      data.Retira,
+      data.Marca,
+      data.Modelo,
+      data.Tipo,
+      data.Cantidad,
+      data.Impresora,
+      data.Bodega
+    ];
+
+    document.querySelector("#id_historial").innerHTML = data.Id_retiro;
+
+    document.querySelector("#body-history").innerHTML = "";
+
+    for (let index = 0; index < dataModal.length; index++) {
+      document.querySelector(
+        "#body-history"
+      ).innerHTML += `<div class='row'><div class='col-6'> <p class='m-0' style="font-size:${size_font}">${dataModal[index]}</p></div><div class='col-6 font-weight-bold'  style="font-size:${size_font}">${infoModal[index]}</div></div> `;
+    }
+  });
+};
+
+/** Buscar datos por rango de fechas*/
+function DateRange(table) {
+  let input_dateFrom = document.querySelector("#dateFrom");
+  let input_dateTo = document.querySelector("#dateTo");
+
+  let dateFrom = input_dateFrom.value.trim();
+  let dateTo = input_dateTo.value.trim();
+
+  let selectores = ["#dateFrom", "#dateTo"];
+  validClass(selectores);
+
+  if (
+    dateFrom !== "" &&
+    dateTo !== "" &&
+    Date.parse(dateFrom) <= Date.parse(dateTo)
+  ) {
     let data = new FormData();
-    data.append("mes", mes);
-    data.append("case", 1);
 
-    fetch("../api/retiro/get_retiro.php", {
+    data.append("inicio", dateFrom + " 00:00:00");
+    data.append("termino", dateTo + " 23:59:59");
+    data.append("case", 2);
+
+    let config = {
       method: "POST",
+      headers: {
+        Accept: "application/json"
+      },
       body: data
-    })
+    };
+
+    fetch("../api/retiro/get_retiro.php", config)
       .then(function(response) {
         if (response.ok) {
           return response.json();
@@ -118,10 +175,11 @@ function search(table) {
         }
       })
       .then(json => {
-        if (json.data[0].Fecha != "") {
+        if (json.data[0] != undefined) {
           table.rows().remove();
           table.rows.add(json.data).draw();
           alertSuccess();
+          clean_Validations(selectores);
         } else {
           table.rows().remove();
           table.rows.add(json.data).draw();
@@ -133,137 +191,13 @@ function search(table) {
         customAlertError("Error en la búsqueda");
       });
   } else {
-    table.rows().remove();
-    table.ajax.reload();
-    customAlertError("Seleccione un mes");
+    input_dateFrom.classList.add("is-invalid");
+    input_dateTo.classList.add("is-invalid");
+    customAlertError("Especifique un rango de fechas válido");
   }
-}
-
-function showForm() {
-  //let formMes = document.querySelector("#formMesHistorial");
-  //let formRange = document.querySelector("#formRange");
-  let filter = document.querySelector("#filter");
-  jQuery.noConflict();
-  jQuery("#formRange");
-  jQuery("#formMesHistorial");
-
-  if (filter.value === "mes") {
-    $("#formRange").collapse("hide");
-
-    setTimeout(() => {
-      $("#formMesHistorial").collapse("show");
-    }, 260);
-  }
-
-  if (filter.value === "rango") {
-    $("#formMesHistorial").collapse("hide");
-    setTimeout(() => {
-      $("#formRange").collapse("show");
-    }, 260);
-  }
-
-  if (filter.value === "") {
-    $("#formMesHistorial").collapse("hide");
-    $("#formRange").collapse("hide");
-  }
-}
-
-function DateRange(table) {
-  let dateFrom = document.querySelector("#dateFrom").value;
-  let dateTo = document.querySelector("#dateTo").value;
-
-  let data = new FormData();
-
-  data.append("inicio", dateFrom);
-  data.append("termino", dateTo);
-  data.append("case", 2);
-
-  let config = {
-    method: "POST",
-    headers: {
-      Accept: "application/json"
-    },
-    body: data
-  };
-
-  fetch("../api/retiro/get_retiro.php", config)
-    .then(function(response) {
-      if (response.ok) {
-        return response.json();
-      } else {
-        customAlertError("Error en la búsqueda");
-        throw "Error en la llamada fetch";
-      }
-    })
-    .then(json => {
-      if (json.data[0].Fecha != "") {
-        table.rows().remove();
-        table.rows.add(json.data).draw();
-        alertSuccess();
-      } else {
-        table.rows().remove();
-        table.rows.add(json.data).draw();
-        alertWarning("Nada encontrado");
-      }
-    })
-    .catch(err => {
-      console.log(err);
-      customAlertError("Error en la búsqueda");
-    });
 }
 
 function namepdf() {
-  document.querySelector("#mes").addEventListener("input", () => {
-    var mes = document.querySelector("#mes").value;
-    var nameMes;
-
-    switch (mes) {
-      case "01":
-        nameMes = " del mes de Enero";
-        break;
-      case "02":
-        nameMes = " del mes de Febrero";
-        break;
-      case "03":
-        nameMes = " del mes de Marzo";
-        break;
-      case "04":
-        nameMes = " del mes de Abril";
-        break;
-      case "05":
-        nameMes = " del mes de Mayo";
-        break;
-      case "06":
-        nameMes = " del mes de Junio";
-        break;
-      case "07":
-        nameMes = " del mes de Julio";
-        break;
-      case "08":
-        nameMes = " del mes de Agosto";
-        break;
-      case "09":
-        nameMes = " del mes de Septiembre";
-        break;
-      case "10":
-        nameMes = " del mes de Obtubre";
-        break;
-      case "11":
-        nameMes = " del mes de Noviembre";
-        break;
-      case "12":
-        nameMes = " del mes de Diciembre";
-        break;
-
-      default:
-        nameMes = "";
-        break;
-    }
-
-    let name = "Historial de retiros de consumibles de impresoras" + nameMes;
-    document.title = name;
-  });
-
   document.querySelector("#btnBuscarRango").addEventListener("click", () => {
     let dateFrom = document.getElementById("dateFrom").value;
     let dateTo = document.getElementById("dateTo").value;
@@ -275,4 +209,43 @@ function namepdf() {
     let name = "Historial de retiros de consumibles de impresoras" + range;
     document.title = name;
   });
+}
+function cancelWithdraw(table) {
+  let data = new FormData();
+
+  let id_historial = document.querySelector("#id_historial").innerHTML;
+
+  data.append("id_retiro", id_historial);
+
+  fetchURL("../api/retiro/cancelar_retiro.php", "POST", data)
+    .then(function(res) {
+      if (res.status === "ok") {
+        alertSuccess();
+        jQuery.noConflict();
+        jQuery("#dataHistorial");
+        table.ajax.reload();
+        $("#dataHistorial").removeClass("d-none");
+        $("#dataHistorial").modal("hide");
+        $("#confirmacion-retiro").modal("hide");
+      } else if (res.status === "not_exists") {
+        customAlertError(
+          "La bodega o la impresora relacionada ya no existe en el sistema, por lo que no se puede volver a ingresar"
+        );
+      } else {
+        alertError();
+      }
+    })
+    .catch(function(err) {
+      console.error(err);
+    });
+}
+
+function showModalConfirmWithdraw() {
+  jQuery.noConflict();
+  // jQuery("#confirmacion-retiro");
+  $("#confirmacion-retiro").modal("show");
+  $("#confirmacion-retiro").on("hidden.bs.modal", function(e) {
+    $("#dataHistorial").removeClass("d-none");
+  });
+  $("#dataHistorial").addClass("d-none");
 }

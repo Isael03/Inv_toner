@@ -6,12 +6,31 @@ $conn = new ConexionData();
 $consumible = new Consumible($conn);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    header('Content-Type: application/json');
+    $case = $_POST['case'];
+    switch ($case) {
+            //Borrar cantidades de la tabla bodega_consumible
+        case 'deleteCon':
+            $cantidad = (int) $_POST['cantidad'];
+            $id_bodega = (int) $_POST['id_bodega'];
+            $Id_consumible = (int) $_POST['Id_consumible'];
 
-    $cantidad = (int) $_POST['cantidad'];
-    $modelo = strtoupper($_POST['modelo']);
-    $marca = strtoupper($_POST['marca']);
-    $tipo = $_POST['tipo'];
+            $res = $consumible->deleteCon($cantidad, $id_bodega, $Id_consumible);
+            ($res) ?  $status = array("status" => "ok") :   $status = array("status" => "bad");
+            header('Content-Type: application/json');
+            echo json_encode($status);
+            break;
 
-    $consumible->deleteCon($cantidad, $modelo, $marca, $tipo);
+            //Borrar consumible de la tabla consumible
+        case 'deleteAll':
+            $Id_consumible = (int) $_POST['Id_consumible'];
+            $res = $consumible->deleteAll($Id_consumible);
+            ($res) ?  $status = array("status" => "ok") :   $status = array("status" => "bad");
+            header('Content-Type: application/json');
+            echo json_encode($status);
+            break;
+
+        default:
+            # code...
+            break;
+    }
 }

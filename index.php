@@ -32,14 +32,18 @@
 
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top shadow-sm">
 
+
     <button class="btn btn-link btn-sm text-white order-0 order-sm-0" id="sidebarToggle" href="#">
-      <i class="fas fa-bars"></i>
+      <span class="fas fa-bars"></span>
     </button>
 
     <a class="navbar-brand ml-2" href="index.php">Inventario</a>
 
+
     <!-- Navbar -->
-    <ul class="nav navbar-nav d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+
+    <ul class="nav navbar-nav  form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+      <li class="nav-item "><a href="./views/nuevo.php" class="btn nav-link menu-btn text-white  mx-2" title="Añadir consumible"><i class="fas fa-plus-square"></i></a></li>
       <li class="nav-item">
         <a class="btn nav-link menu-btn" href="#"><i class="fas fa-sign-out-alt text-white"></i></a>
       </li>
@@ -51,25 +55,31 @@
 
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
-      <li class="nav-item active">
+      <li class="nav-item active btn-sidebar">
         <a class="nav-link" href="index.php">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Inicio</span>
         </a>
       </li>
-      <li class="nav-item ">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./views/impresoras.php">
           <i class="fas fa-print"></i>
           <span>Impresoras</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar">
+        <a class="nav-link" href="./views/bodega.php">
+          <i class="fas fa-warehouse"></i>
+          <span>Bodegas</span>
+        </a>
+      </li>
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./views/historial.php">
           <i class="fas fa-history"></i>
           <span>Historial de entregas</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./views/reporte.php">
           <i class="fas fa-table"></i>
           <span>Reporte de entregas</span>
@@ -84,61 +94,53 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
-            <a href="#" class="text-decoration-none text-dark">Inventario de consumibles</a>
+            <a href="./index.php" class="text-decoration-none text-dark">Inventario de consumibles</a>
           </li>
         </ol>
         <div class="text-right mb-1">
-          <a class='btn btn-primary text-white px-4 py-1 ' id='btnAdd' href="./views/nuevo.php" title="Añadir" role="button">
+          <a class='btn btn-primary text-white px-4 py-1 rounded-pill' id='btnAdd' href="./views/nuevo.php" title="Añadir consumible" role="button">
             <span class="fas fa-plus"></span>
           </a>
         </div>
 
 
         <!-- Icon Cards-->
-        <div class="row justify-content-center">
-          <div class="col-xl-3 col-sm-6 mb-3">
-            <div class="card text-white bg-primary o-hidden h-100">
-              <div class="card-body">
-                <!--   <div class="card-body-icon">
-                  <i class="fas fa-fw fa-comments"></i>
-                </div> -->
-                <div class="text-center font-weight-bold" id="amount-inf">Calculando...</div>
-              </div>
-              <a class="card-footer text-white clearfix small z-1" href="#">
-                <span class="float-left font-weight-bold">Informática</span>
-              </a>
-            </div>
-          </div>
-          <div class="col-xl-3 col-sm-6 mb-3">
-            <div class="card text-white bg-warning o-hidden h-100">
-              <div class="card-body">
-                <div class="text-center font-weight-bold" id="amount-mo">Calculando...</div>
-              </div>
-              <a class="card-footer text-white clearfix small z-1" href="#">
-                <span class="float-left font-weight-bold">Manuel Orella</span>
-              </a>
-            </div>
-          </div>
+        <div class="row justify-content-center" id="rowCards">
+
         </div>
 
-        <ul class="nav nav-tabs mt-5 mb-3" id="myTab" role="tablist">
-          <li class="nav-item" id="tabAll">
-            <a class="nav-link active" id="view-all" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Todos</a>
+        <ul class="nav nav-tabs mt-5 mb-3 text-capitalize" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="true">Todos</a>
           </li>
-          <li class="nav-item" id="tabINF">
-            <a class="nav-link" id="view-inf" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Informática</a>
-          </li>
-          <li class="nav-item" id="tabMO">
-            <a class="nav-link" id="view-str" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Manuel Orella</a>
+
+          <li class="nav-item">
+            <a class="nav-link  id-tab" data-toggle="tab" href="#bodegas" role="tab" aria-controls="bodegas" aria-selected="false">Entrega de consumibles</a>
           </li>
         </ul>
 
         <!-- Pestañas -->
         <div class="tab-content  mb-4" id="myTabContent">
 
-
-          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
             <!-- Datatable total -->
+            <!--   <div class="row mb-3" id="legend-color">
+              <div class="col">
+                <ul class="list-unstyled">
+                  <li class="float-right">
+                    <p class="my-0 mr-3"><span class="bg-danger px-4 mr-3 rounded text-white">Insuficiente</span> </p>
+                  </li>
+                  <li class="float-right">
+                    <p class="my-0 mr-3"><span class="bg-warning px-4 mr-3 rounded text-white">Dentro de lo permitido</span> </p>
+                  </li>
+                  <li class="float-right">
+                    <p class="my-0 mr-3"><span class="bg-success px-4 mr-3 rounded text-white">Excedente</span> </p>
+                  </li>
+                </ul>
+              </div>
+            </div> -->
+
+
             <div class="table-responsive">
               <table class="table table-bordered display nowrap text-center" id="tableALL" width="100%" cellspacing="0">
                 <thead>
@@ -148,7 +150,7 @@
                     <th>Tipo</th>
                     <th>Cantidad</th>
                     <th>Impresora</th>
-                    <!--  <th class="no-exportar">Acciones</th> -->
+                    <th>Estado</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -158,44 +160,46 @@
             </div>
           </div>
 
-          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+          <!-- Bodegas-->
+          <div class="tab-pane fade" id="bodegas" role="tabpanel" aria-labelledby="bodegas">
+            <div class="row">
+              <div class="col-md-4 col-sm-12">
+                <div class="form-group ">
+                  <label for="change-storage" class="form-label">Bodega</label>
+                  <select class="custom-select" id="change-storage" name="tipo" required>
+                  </select>
+                </div>
+              </div>
 
-            <!-- Datatable de informatica -->
-            <div class="table-responsive">
-              <table class="table table-bordered display nowrap text-center" id="tableINF" width="100%" cellspacing="0">
-                <thead>
-                  <tr>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Tipo</th>
-                    <th>Cantidad</th>
-                    <th>Impresora</th>
-                    <!--   <th>Bodega</th> -->
-                  </tr>
-                </thead>
-                <tbody>
+              <div class="container mb-4">
+                <div class="collapse" id="container-btnStart">
+                  <div class="btn-group" role="group" aria-label="btn-group-actions">
+                    <button type="button" class="btn btn-info" title="Retirar" id="withdraw-Storage"><span class='fas fa-box-open text-white'></span></button>
+                    <button type="button" class="btn btn-dark" title="Trasladar" id="transfer-Storage"><span class='fas fa-exchange-alt text-white'></span></button>
+                    <button type="button" class="btn btn-danger" title="Eliminar" id="delete-Consumables"><span class='fas fa-trash'></span></button>
+                  </div>
+                </div>
+              </div>
 
-                </tbody>
-              </table>
+
             </div>
 
-          </div>
-          <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+            <!-- Botones -->
 
-            <!-- DataTable MO-->
-            <div class="table-responsive">
-              <table class="table table-bordered display nowrap text-center" id="tableMO" width="100%" cellspacing="0">
+
+
+            <div class="table-responsive" id="table-containerStart">
+              <table class="table table-bordered display nowrap text-center" id="tableBodegas" width="100%" cellspacing="0">
                 <thead>
                   <tr>
+                    <th></th>
                     <th>Marca</th>
                     <th>Modelo</th>
                     <th>Tipo</th>
                     <th>Cantidad</th>
                     <th>Impresora</th>
-                    <!--                   <th>Bodega</th> -->
                   </tr>
                 </thead>
-
                 <tbody>
 
                 </tbody>
@@ -211,9 +215,7 @@
       <!-- Sticky Footer -->
       <footer class="sticky-footer">
         <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <!-- <span>Copyright © Your Website 2019</span> -->
-          </div>
+
         </div>
       </footer>
 
@@ -228,7 +230,6 @@
 
   include "./components/modalDelete.php";
   include "./components/modalWithdraw.php";
-  include "./components/modalUpdate.php";
   include "./components/modalTransfer.php";
   ?>
 

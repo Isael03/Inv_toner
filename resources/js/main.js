@@ -1,4 +1,4 @@
-/**Funcion para llamar al toast de exito  */
+/**@description Funciones para llamar a los toast */
 function alertSuccess() {
   toastr.success("Operación exitosa", "Exito", {
     positionClass: "toast-bottom-right",
@@ -12,7 +12,6 @@ function alertWarning(mensaje) {
   });
 }
 
-/**Funcion para llamar al toast de error  */
 function alertError() {
   toastr.error("Operación fallida", "Error", {
     positionClass: "toast-bottom-right"
@@ -39,6 +38,8 @@ function alertErrorFormEmpty() {
     timeOut: "3500"
   });
 }
+//--------------------------------------------------------------------------------------------------------
+/**@description  lista de autocompletado del modal retirar*/
 
 function autocompletar() {
   const inputFuncionarios = document.querySelector("#receivedBy");
@@ -66,9 +67,11 @@ function autocompletar() {
       /* validar arreglo vs input */
       if (ListaFuncionarios.length == 0) return false;
 
+      //miembro.substr(0, funcionario.length).toLowerCase()
       for (miembro of ListaFuncionarios) {
         if (
-          miembro.substr(0, funcionario.length).toLowerCase() === funcionario
+          miembro.substr(0, funcionario.length).toLowerCase() ===
+          funcionario.toLowerCase()
         ) {
           const elementoLista = document.createElement("div");
           elementoLista.innerHTML = `<strong>${miembro.substr(
@@ -142,7 +145,6 @@ function cerrarLista() {
   }
   indexFocus = -1;
 }
-//autocompletar(["perro", "gato", "conejo", "pez"]);
 
 function httpRequest(url, callback) {
   const http = new XMLHttpRequest();
@@ -155,14 +157,15 @@ function httpRequest(url, callback) {
     }
   };
 }
+//-------------------------------------------------------------
 
-/**@param {array} selectores */
-
+/**@description marcar bordes para indicar si el input es valido o no
+ * @param {string[]} selectores */
 function validClass(selectores) {
   for (let index = 0; index < selectores.length; index++) {
     let input = document.querySelector(selectores[index]);
 
-    if (input.value === "") {
+    if (input.value === "" || input.value < 1) {
       if (input.classList.contains("is-valid")) {
         input.classList.remove("is-valid");
         input.classList.add("is-invalid");
@@ -181,6 +184,21 @@ function validClass(selectores) {
   }
 }
 
+function validarCantidades(IDmin, IDmax) {
+  let idmin = document.querySelector(IDmin);
+  let idmax = document.querySelector(IDmax);
+
+  if (parseInt(idmin.value) >= parseInt(idmax.value)) {
+    idmin.classList.add("is-invalid");
+    idmax.classList.add("is-invalid");
+  } else {
+    idmin.classList.add("is-valid");
+    idmax.classList.add("is-valid");
+  }
+}
+
+/**@description limpiar bordes de los input validados
+ * @param {array} selectores */
 function clean_Validations(selectores) {
   for (let index = 0; index < selectores.length; index++) {
     let input = document.querySelector(selectores[index]);
@@ -193,14 +211,25 @@ function clean_Validations(selectores) {
   }
 }
 
+/**@description funcion generica para hacer peticiones a la bd  */
 async function fetchURL(url, method = "GET", data = {}) {
-  let config = {
-    method: method,
-    headers: {
-      Accept: "application/json"
-    },
-    body: data
-  };
+  if (method === "GET") {
+    var config = {
+      method: method,
+      headers: {
+        Accept: "application/json"
+      }
+    };
+  }
+  if (method === "POST") {
+    var config = {
+      method: method,
+      headers: {
+        Accept: "application/json"
+      },
+      body: data
+    };
+  }
 
   try {
     const response = await fetch(url, config);
@@ -215,4 +244,19 @@ async function fetchURL(url, method = "GET", data = {}) {
     alertError();
     console.log(error);
   }
+}
+
+/**Mostrar bodegas en el select de Ubicacion */
+function selectStorage(idinput, url) {
+  fetchURL(url)
+    .then(res => {
+      res.data.forEach(bodega => {
+        document.getElementById(
+          idinput
+        ).innerHTML += `<option value=${bodega.Id_bodega}>${bodega.Lugar}</option>`;
+      });
+    })
+    .catch(err => {
+      console.log(err);
+    });
 }

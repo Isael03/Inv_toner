@@ -8,6 +8,7 @@ class Funcionario
         $this->conn = $db;
     }
 
+    /**Listar nombres y apellidos de los funcionarios */
     public function search(string $texto)
     {
 
@@ -30,6 +31,7 @@ class Funcionario
         $this->conn->connect()->close();
     }
 
+    /**Obtener informacion del funcionario con el nombre+apellido */
     public function officialData(string $nombre)
     {
         $nameArray = explode(' ', $nombre);
@@ -52,6 +54,9 @@ class Funcionario
             }
         } else {
             //die("Error");
+            /**
+             * si la primera query no reconoce el $name se intentará esta para obtener los datos
+             */
             $sql = "SELECT F.id AS IdFuncionario, F.rut, F.direccion AS IdDireccion ,F.depart AS ID_departamento, DE.depart AS Departamento FROM funcionarios F INNER JOIN departamentos DE ON F.depart=DE.iddepart INNER JOIN direcciones DI ON F.direccion=DI.iddireccion WHERE CONCAT(TRIM(F.nombres),' ',TRIM(F.apellidos)) LIKE '$name'";
 
             $result = $conn->query($sql);

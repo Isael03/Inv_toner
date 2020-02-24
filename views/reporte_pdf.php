@@ -20,8 +20,14 @@ $termino = $_GET['termino'];
 
 $general_Report = $retiro->general_Report($inicio, $termino);
 
-$inicio = explode('-', $inicio);
-$termino = explode('-', $termino);
+$inicio = explode(" ", $inicio);
+$termino = explode(" ", $termino);
+
+$inicio = explode('-', $inicio[0]);
+$termino = explode('-', $termino[0]);
+
+date_default_timezone_set('UTC');
+date_default_timezone_set("America/Santiago");
 ?>
 
 <!DOCTYPE html>
@@ -34,6 +40,19 @@ $termino = explode('-', $termino);
     <title>Reporte General</title>
     <link href="../resources/css/sb-admin.css" rel="stylesheet">
     <style type="text/css">
+        @page {
+            margin: 130px 50px;
+        }
+
+        #header {
+            position: fixed;
+            left: 0px;
+            top: -130px;
+            right: 0px;
+            height: 0;
+            text-align: center;
+        }
+
         thead:before,
         thead:after {
             display: none;
@@ -44,14 +63,6 @@ $termino = explode('-', $termino);
             display: none;
         }
 
-        html {
-            margin: 0;
-        }
-
-        body {
-            font-family: "Helvetica", serif;
-            margin: 0;
-        }
 
         h1 {
             font-size: 1.8em;
@@ -65,28 +76,59 @@ $termino = explode('-', $termino);
 </head>
 
 <body>
-    <h1 class="text-center mb-5 mt-5 fixed-top" id="title_report">
-        <font><b>Entregas <?php echo $inicio[2] . '-' . $inicio[1] . '-' . $inicio[0] . ' a ' . $termino[2] . '-' . $termino[1] . '-' . $termino[0] ?> </b></font>
-    </h1>
-    <br><br><br><br><br>
-    <h2 class="text-center">
-        <font face="helvetica"><b>Departamentos</b></font>
-    </h2>
+    <div id="header">
 
-    <div class="row">
-        <div class="mx-auto col-10">
-            <div class="table-responsive-sm text-center ">
-                <table class="table table-sm table-hover table-striped table-bordered">
+        <h1 class="text-center mb-5 mt-5">
+            <font><b>Entregas <?php echo $inicio[2] . '-' . $inicio[1] . '-' . $inicio[0] . ' a ' . $termino[2] . '-' . $termino[1] . '-' . $termino[0] ?> </b></font>
+        </h1>
+    </div>
+
+    <div id="content">
+        <!--  <br><br><br><br><br> -->
+        <h2 class="text-center">
+            <font face="helvetica"><b>Departamentos</b></font>
+        </h2>
+
+        <div class="row">
+            <div class="mx-auto col-10">
+                <div class="table-responsive-sm text-center ">
+                    <table class="table table-sm table-hover table-striped table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col" class="p-0 px-2">Departamento</th>
+                                <th scope="col" class="p-0 px-2">Cant. de elementos entregados</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-depart">
+                            <?php
+                            foreach ($general_Report['depart'] as $value) {
+                                echo '<tr><td  scope="col" class="p-0 px-2">' . strtoupper($value['depart'])  . '</td><td scope="col" class="p-0 px-2">' . $value['Cantidad'] . '</td></tr>';
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                    <caption class="text-left"><small>Emitido el <?php echo date("d-m-Y") ?></small> </caption>
+                </div>
+            </div>
+        </div>
+
+        <div style="page-break-after:always;"></div>
+        <h2 class="text-center"><b>Consumibles<b></h2>
+        <div class="row mt-5">
+            <div class="mx-auto col-10">
+                <table class="table table-sm table-striped table-bordered text-center">
                     <thead class="thead-light">
                         <tr>
-                            <th scope="col" class="p-0 px-2">Departamento</th>
-                            <th scope="col" class="p-0 px-2">Cant. de elementos entregados</th>
+                            <th scope="col" class="p-0">Marca</th>
+                            <th scope="col" class="p-0">Modelo</th>
+                            <th scope="col" class="p-0">Tipo</th>
+                            <th scope="col" class="p-0">Cantidad</th>
                         </tr>
                     </thead>
-                    <tbody id="tbody-depart">
+                    <tbody id="tbody-model">
                         <?php
-                        foreach ($general_Report['depart'] as $value) {
-                            echo '<tr><td  scope="col" class="p-0 px-2">' . strtoupper($value['depart'])  . '</td><td scope="col" class="p-0 px-2">' . $value['Cantidad'] . '</td></tr>';
+                        foreach ($general_Report['model'] as $value) {
+                            echo '<tr><td  scope="col" class="p-0 px-2">' . $value['Marca'] . '</td><td scope="col" class="p-0 px-2">' . $value['Modelo'] . '</td><td scope="col" class="p-0 px-2">' . $value['Tipo'] . '</td><td scope="col" class="p-0 px-2">' . $value['Cantidad'] . '</td></tr>';
                         }
                         ?>
                     </tbody>
@@ -94,33 +136,12 @@ $termino = explode('-', $termino);
                 <caption class="text-left"><small>Emitido el <?php echo date("d-m-Y") ?></small> </caption>
             </div>
         </div>
+
     </div>
 
-    <div style="page-break-after:always;"></div>
-    <br><br><br><br><br>
-    <h2 class="text-center"><b>Consumibles<b></h2>
-    <div class="row mt-5">
-        <div class="mx-auto col-10">
-            <table class="table table-sm table-striped table-bordered text-center">
-                <thead class="thead-light">
-                    <tr>
-                        <th scope="col" class="p-0">Marca</th>
-                        <th scope="col" class="p-0">Modelo</th>
-                        <th scope="col" class="p-0">Tipo</th>
-                        <th scope="col" class="p-0">Cantidad</th>
-                    </tr>
-                </thead>
-                <tbody id="tbody-model">
-                    <?php
-                    foreach ($general_Report['model'] as $value) {
-                        echo '<tr><td  scope="col" class="p-0 px-2">' . $value['Marca'] . '</td><td scope="col" class="p-0 px-2">' . $value['Modelo'] . '</td><td scope="col" class="p-0 px-2">' . $value['Tipo'] . '</td><td scope="col" class="p-0 px-2">' . $value['Cantidad'] . '</td></tr>';
-                    }
-                    ?>
-                </tbody>
-            </table>
-            <caption class="text-left"><small>Emitido el <?php echo date("d-m-Y") ?></small> </caption>
-        </div>
-    </div>
+
+
+
 
 
 
@@ -165,5 +186,5 @@ $pdf->load_html(ob_get_clean());
 
 $pdf->render();
 
-$pdf->stream('document.pdf', array('Attachment' => 0));
+$pdf->stream('Entregas.pdf', array('Attachment' => 0));
 ?>

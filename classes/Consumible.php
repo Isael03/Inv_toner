@@ -9,70 +9,88 @@ class Consumible
         $this->conn = $db;
     }
 
-    /* Insertar nuevos Consumibles  */
-    public function addPrinterConsumables(int $cantidad, string $marca, string $tipo, string $modelo, int $bodega, string $impresora)
+    /**Añadir solo cantidades de consumibles */
+    public function addConsumablesExists(int $cantidad, int $Id_consumible, int $Id_bodega)
     {
+
         $conn = $this->conn->connect();
-
-        $query = "SELECT Id_impresora from Impresora WHERE Modelo_impresora='$impresora' AND Marca_impresora='$marca'";
-        $result = $conn->query($query);
-
-        if ($result->num_rows > 0) {
-            while ($data = $result->fetch_assoc()) {
-                $arreglo = array_map('utf8_encode', $data);
-            }
-        } else {
-            $valid = false;
-        }
-        $Id_impresora = (int) $arreglo['Id_impresora'];
-
-        $sql = "INSERT INTO Consumible (Marca, Modelo, Tipo, Id_impresora) VALUES ('$marca', '$modelo', '$tipo', '$Id_impresora')";
-
+        $valid = true;
         $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
 
-        $valid = true;
-
+        $sql2 = "INSERT INTO Bodega_Consumible (Id_bodega, Id_consumible) VALUES ($Id_bodega, $Id_consumible)";
         for ($i = 0; $i < $cantidad; $i++) {
-
-            if ($conn->query($sql)) {
-
-                $last_idConsumible = $conn->insert_id;
-
-                $sql2 = "INSERT INTO Bodega_Consumible (Id_bodega, Id_consumible) VALUES ($bodega, $last_idConsumible)";
-                if ($conn->query($sql2) === false) {
-                    $valid = false;
-                    $conn->rollback();
-                    //echo "Error: " . $sql . "<br>" . $conn->error;
-                    break;
-                }
-            } else {
-                //echo "Error: " . $sql . "<br>" . $conn->error;
-                $conn->rollback();
+            if ($conn->query($sql2) === false) {
                 $valid = false;
+                $conn->rollback();
+                //echo "Error: " . $sql . "<br>" . $conn->error;
                 break;
             }
         }
+        $conn->commit();
+        $conn->close();
+        return $valid;
+    }
 
-        /* Enviar respuesta del proceso */
-        if ($valid) {
-            $arreglo = array('status' => 'ok');
-            echo json_encode($arreglo);
+    /* Insertar nuevos Consumibles  */
+    public function addPrinterConsumables(int $cantidad, string $marca, string $tipo, string $modelo, int $bodega, int $Id_impresora, int $rangoMinimo = 0, int $rangoMaximo = 0)
+    {
+        $conn = $this->conn->connect();
+        $valid = true;
+
+        $query = "SELECT Id_consumible from Consumible WHERE Marca='$marca' AND Modelo='$modelo' AND Tipo='$tipo' AND Id_impresora=$Id_impresora";
+        $result = $conn->query($query);
+        if ($result->num_rows > 0) {
+
+            while ($data = $result->fetch_assoc()) {
+                $arreglo = array_map('utf8_encode', $data);
+            }
+
+            $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+
+            $last_idConsumible = $arreglo['Id_consumible'];
+            $sql2 = "INSERT INTO Bodega_Consumible (Id_bodega, Id_consumible) VALUES ($bodega, $last_idConsumible)";
+            for ($i = 0; $i < $cantidad; $i++) {
+                if ($conn->query($sql2) === false) {
+                    $valid = false;
+                    $conn->rollback();
+                    echo "Error: " . $sql2 . "<br>" . $conn->error;
+                    break;
+                }
+            }
         } else {
-            $arreglo = array('status' => 'bad');
-            echo json_encode($arreglo);
+            $sql = "INSERT INTO Consumible (Marca, Modelo, Tipo, Id_impresora, rango_stockMinimo, rango_stockMaximo) VALUES ('$marca', '$modelo', '$tipo', $Id_impresora, $rangoMinimo, $rangoMaximo)";
+
+            $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+
+            if ($conn->query($sql)) {
+                $last_idConsumible = $conn->insert_id;
+                $sql2 = "INSERT INTO Bodega_Consumible (Id_bodega, Id_consumible) VALUES ($bodega, $last_idConsumible)";
+                for ($i = 0; $i < $cantidad; $i++) {
+                    if ($conn->query($sql2) === false) {
+                        $valid = false;
+                        $conn->rollback();
+                        // echo "Error: " . $sql . "<br>" . $conn->error;
+                        break;
+                    }
+                }
+            } else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+                // $conn->rollback();
+                $valid = false;
+            }
         }
 
         $conn->commit();
         $conn->close();
+        return $valid;
     }
 
-    /* Mostrar todos los consumibles del Manuel Orella */
-
-    public function showAllMO()
+    /**Obtener el contenido de cada bodega*/
+    public function getConsumiblesStorage(int $lugar = null)
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo,  CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, COUNT(C.Modelo) AS Cantidad, B.Lugar FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON BC.Id_bodega=B.Id_bodega INNER JOIN Impresora I ON C.Id_impresora=I.Id_impresora AND B.Lugar='Manuel Orella' GROUP BY C.Modelo";
+        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, C.Id_impresora, COUNT(C.Modelo) AS Cantidad, B.Lugar, BC.Id_bodega  FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON BC.Id_bodega=B.Id_bodega INNER JOIN Impresora I ON C.Id_impresora=I.Id_impresora AND BC.Id_bodega=$lugar GROUP BY C.Id_consumible ";
 
         $result = $conn->query($sql);
 
@@ -80,117 +98,73 @@ class Consumible
             while ($data = mysqli_fetch_assoc($result)) {
                 $arreglo["data"][] = array_map("utf8_encode", $data);
             }
-            echo json_encode($arreglo);
         } else {
-            $arreglo["data"][] = ["Id_consumible" => "", "Fecha" => "", "Marca" => "", "Modelo" => "", "Lugar" => "", "Tipo" => "", "Id_bodega" => "", "Impresora" => "", "Cantidad" => ""];
-            echo json_encode($arreglo);
+            $arreglo["data"] = [];
             //die("Error");
         }
-        mysqli_free_result($result);
+        //mysqli_free_result($result);
         $conn->close();
+        return $arreglo;
     }
 
-    /**Mostrar todos los consumibles de informatica */
-    public function showAllINF()
+    /**Mostrar solo los consumibles  */
+    public function showListConsumable()
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, COUNT(C.Modelo) AS Cantidad, B.Lugar FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON BC.Id_bodega=B.Id_bodega INNER JOIN Impresora I ON C.Id_impresora=I.Id_impresora AND B.Lugar='Informatica' GROUP BY C.Modelo";
+        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, I.Id_impresora, C.rango_stockMinimo AS Minimo, C.rango_stockMaximo AS Maximo FROM Consumible C INNER JOIN Impresora I ON C.Id_impresora=I.Id_impresora";
 
         $result = $conn->query($sql);
-
         if ($result->num_rows > 0) {
             while ($data = mysqli_fetch_assoc($result)) {
                 $arreglo["data"][] = array_map("utf8_encode", $data);
             }
-            echo json_encode($arreglo);
         } else {
-            $arreglo["data"][] = ["Id_consumible" => "", "Fecha" => "", "Marca" => "", "Modelo" => "", "Lugar" => "", "Tipo" => "", "Id_bodega" => "", "Impresora" => "", "Cantidad" => ""];
-            echo json_encode($arreglo);
+            $arreglo["data"] = [];
+
             //die("Error");
         }
         mysqli_free_result($result);
         $conn->close();
+
+        return $arreglo;
     }
 
-    /* Mostrar el contenido de la tabla consumible sin importar la bodega */
+    /* Mostrar el contenido de la tabla consumible incluyendo cantidades de stock sin importar la bodega */
     public function showAll()
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, COUNT(C.Modelo) AS Cantidad FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON BC.Id_bodega=B.Id_bodega INNER JOIN Impresora I ON C.Id_impresora=I.Id_impresora GROUP BY C.Modelo ";
+        $sql = "SELECT C.Id_consumible, C.Modelo, C.Marca, C.Tipo, CONCAT(I.Marca_impresora, ' ', I.Modelo_impresora) AS Impresora, COUNT(BC.Id_consumible) AS Cantidad, C.rango_stockMinimo AS Minimo, C.rango_stockMaximo AS Maximo, CASE WHEN COUNT(BC.Id_consumible) >= C.rango_stockMaximo THEN 'Suficientes' WHEN COUNT(BC.Id_consumible) <= C.rango_stockMinimo THEN 'Insuficientes' ELSE 'Dentro de lo permitido' END AS Estado FROM Consumible C LEFT JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible LEFT JOIN Bodega B ON BC.Id_bodega=B.Id_bodega LEFT JOIN Impresora I ON C.Id_impresora=I.Id_impresora GROUP BY C.Id_consumible";
 
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             while ($data = mysqli_fetch_assoc($result)) {
                 $arreglo["data"][] = array_map("utf8_encode", $data);
             }
-            echo json_encode($arreglo);
         } else {
-            $arreglo["data"][] = ["Id_consumible" => "", "Fecha" => "", "Marca" => "", "Modelo" => "", "Lugar" => "", "Tipo" => "", "Id_bodega" => "", "Impresora" => "", "Cantidad" => ""];
-            echo json_encode($arreglo);
+            $arreglo["data"] = [];
+
             //die("Error");
         }
+
+
         mysqli_free_result($result);
         $conn->close();
+        return $arreglo;
     }
 
-    /**@deprecated */
-    /* Mostrar algunos segun la marca, modelo o bodega*/
-    public function showSome($array)
-    {
-        $element = $array;
 
-        $conn = $this->conn->connect();
-        $condicion = "";
-
-        if (!empty($element['bodega'])) {
-            $bodega = $element['bodega'];
-            $condicion .= "T.Id_bodega = $bodega";
-        }
-
-        if (!empty($element['marca'])) {
-            if ($condicion != "") {
-                $condicion .= " AND ";
-            }
-            $marca = $element['marca'];
-            $condicion .= "T.Marca='$marca'";
-        }
-
-        if (!empty($element['modelo'])) {
-            if ($condicion != "") {
-                $condicion .= " AND ";
-            }
-            $modelo = $element['modelo'];
-            $condicion .= "T.Modelo='$modelo'";
-        }
-
-        $sql = "SELECT T.Id_consumible, T.Marca, T.Modelo, T.Tipo, T.Codigo_barra, T.Id_impresora, T.Id_bodega, B.Lugar FROM Consumible T INNER JOIN Bodega B WHERE $condicion AND T.Id_bodega=B.Id_bodega";
-
-        $result = $conn->query($sql);
-
-        if ($result->num_rows > 0) {
-            while ($data = mysqli_fetch_assoc($result)) {
-                $arreglo["data"][] = array_map("utf8_encode", $data);
-            }
-            echo json_encode($arreglo);
-        } else {
-            $arreglo["data"][] = ["Id_consumible" => "", "Marca" => "", "Modelo" => "", "Tipo" => "", "Codigo_barra" => "", "Modelo_impresora" => "", "Id_bodega" => "", "Lugar" => ""];
-            //  die("Error");
-            echo json_encode($arreglo);
-        }
-        mysqli_free_result($result);
-        $conn->close();
-    }
-
-    /* Funcion que borra primero los de informatica y si falta los del manuel orella */
-    public function deleteCon(int $cantidad, string $modelo, string $marca, string $tipo)
+    /**Funcion que comprueba que existan los modelos de consumibles antes de borrarlos*/
+    public function deleteCon(int $cantidad, int $id_bodega, int $Id_consumible)
     {
         $conn = $this->conn->connect();
+
         /* Si es distinto a cero solo se borrarán algunos*/
         if ($cantidad != 0) {
-            /* Comprobar la cantidad de consumibles en informatica */
-            $sqlquery = "SELECT COUNT(C.Modelo) AS Cantidad FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON BC.Id_bodega=B.Id_bodega AND B.Lugar = 'Informatica' AND C.Marca='$marca' AND C.Modelo='$modelo' AND C.Tipo='$tipo'";
+            /* Comprobar la cantidad de consumibles en bodega */
+
+            $sqlquery = "SELECT COUNT(Id_ubicacion) AS Cantidad FROM Bodega_Consumible WHERE Id_consumible=$Id_consumible AND Id_bodega=$id_bodega";
 
             $result = $conn->query($sqlquery);
 
@@ -199,93 +173,73 @@ class Consumible
                     $arreglo = array_map("utf8_encode", $data);
                 }
 
-                if ($cantidad <=  $arreglo['Cantidad'] && $arreglo['Cantidad'] != 0) {
-                    self::deleteConsumables($cantidad, $marca, $tipo, $modelo, 'Informatica');
-                }
-                /* Si la cantidad a eliminar es menor a la que existe en informatica */
-                if ($cantidad > $arreglo['Cantidad']) {
-                    $resto = $cantidad - $arreglo['Cantidad'];
-                    self::deleteConsumables($arreglo['Cantidad'], $marca, $tipo, $modelo, 'Informatica');
-
-
-                    self::deleteConsumables($resto, $marca, $tipo, $modelo, 'Manuel Orella');
+                if ($cantidad <= $arreglo['Cantidad'] && $arreglo['Cantidad'] != 0) {
+                    $res = self::deleteConsumables($cantidad, $id_bodega, $Id_consumible);
                 }
             }
-            $status = array("status" => "ok");
-            echo json_encode($status);
             mysqli_free_result($result);
             $conn->close();
-
-            /* Si es igual a 0 se borraran todos los modelos de todas las bodegas*/
+            return $res;
         } else {
-            self::deleteAll($marca, $tipo, $modelo);
+            return false;
         }
     }
 
-    /* Borra elementos consumibles segun cantidad*/
-    public function deleteConsumables($cantidad, $marca, $tipo, $modelo, $bodega)
+    /* Borra modelos de consumibles segun cantidad*/
+    public function deleteConsumables(int $cantidad, int $bodega, int $Id_consumible)
     {
         $conn = $this->conn->connect();
 
-        $sqlquery = "SELECT C.Id_consumible FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON B.Lugar = '$bodega' AND C.Marca='$marca' AND C.Modelo='$modelo' AND C.Tipo='$tipo' LIMIT $cantidad";
+        $sqlquery = "SELECT Id_ubicacion FROM Bodega_Consumible WHERE Id_consumible=$Id_consumible AND Id_bodega=$bodega LIMIT $cantidad";
 
         $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
 
         $result = $conn->query($sqlquery);
+        $arreglo = [];
         if ($result->num_rows > 0) {
             while ($data = mysqli_fetch_assoc($result)) {
-                $arreglo['id'][] = array_map("utf8_encode", $data);
+                array_push($arreglo, $data['Id_ubicacion']);
             }
-            foreach ($arreglo['id'] as $value) {
-                foreach ($value as $id) {
-                    $conn->query("DELETE FROM Consumible WHERE Id_consumible=$id");
+            $valid = true;
+            foreach ($arreglo as $id) {
+                if ($conn->query("DELETE FROM Bodega_Consumible WHERE Id_ubicacion=$id AND Id_bodega=$bodega") === false) {
+                    $valid = false;
+                    $conn->rollback();
+                    break;
                 }
             }
-            /*  $status = array("status" => "ok");
-            echo json_encode($status); */
         }
         mysqli_free_result($result);
         $conn->commit();
         $conn->close();
+        return $valid;
     }
-
 
     /* Borra todos los modelos de las bodegas */
-    private function deleteAll(string $marca, string $tipo, string $modelo)
+    public function deleteAll(int $Id_consumible)
     {
         $conn = $this->conn->connect();
 
-        $sql = "DELETE FROM Consumible WHERE Modelo='$modelo' AND Marca='$marca' AND Tipo='$tipo'";
-
-        $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+        $sql = "DELETE FROM Consumible WHERE Id_consumible=$Id_consumible";
 
         if ($conn->query($sql)) {
-            $arreglo = array("status" => "ok");
-            echo json_encode($arreglo);
+            $valid = true;
         } else {
             //echo "Error deleting record: " . $conn->error;
-            $arreglo = array("status" => "bad");
-            echo json_encode($arreglo);
+            $valid = false;
         }
-
-        $conn->commit();
         $conn->close();
+        return $valid;
     }
 
-    public function transfer(int $cantidad, string $marca, string $modelo, string $tipo, string $origen, string $destino)
+    /**Comprueba que existan modelos de consumibles antes de transferirlos */
+    public function transfer(int $cantidad, int $origen, int $destino, int $Id_consumible)
     {
         $conn = $this->conn->connect();
 
-        if ($destino == "Manuel Orella") {
-            $codDestino = 1;
-        }
-        if ($destino == "Informatica") {
-            $codDestino = 2;
-        }
-
         if ($cantidad != 0) {
-            /* Comprobar la cantidad de consumibles en informatica */
-            $sqlquery = "SELECT COUNT(C.Modelo) AS Cantidad FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON BC.Id_bodega=B.Id_bodega AND B.Lugar = '$origen' AND C.Marca='$marca' AND C.Modelo='$modelo' AND C.Tipo='$tipo'";
+
+            $sqlquery = "SELECT COUNT(Id_ubicacion) AS Cantidad FROM Bodega_Consumible WHERE Id_consumible=$Id_consumible AND Id_bodega=$origen";
 
             $result = $conn->query($sqlquery);
 
@@ -294,76 +248,56 @@ class Consumible
                     $arreglo = array_map("utf8_encode", $data);
                 }
 
-                if ($cantidad <=  $arreglo['Cantidad']) {
-
-                    self::transferUpdate($cantidad,  $marca,  $tipo,  $modelo,  $origen,  $codDestino);
-                    $status = array("status" => "ok");
-                    echo json_encode($status);
+                if ($cantidad <= $arreglo['Cantidad']) {
+                    $res = self::transferUpdate($cantidad, $origen, $destino, $Id_consumible);
                 }
             }
 
             mysqli_free_result($result);
-
-
-            /* Si es igual a 0 se moveran todos los modelos de todas la bodega*/
+            return $res;
         } else {
-            $sqlquery = "SELECT C.Id_consumible FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON BC.Id_bodega=B.Id_bodega AND B.Lugar = '$origen' AND C.Marca='$marca' AND C.Modelo='$modelo' AND C.Tipo='$tipo'";
-
-            $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
-
-            $result = $conn->query($sqlquery);
-            if ($result->num_rows > 0) {
-                while ($data = mysqli_fetch_assoc($result)) {
-                    $arreglo['id'][] = array_map("utf8_encode", $data);
-                }
-                foreach ($arreglo['id'] as $value) {
-                    foreach ($value as $id) {
-                        $conn->query("UPDATE `Bodega_Consumible` SET `Id_bodega`=$codDestino WHERE Id_consumible=$id");
-                    }
-                }
-            }
-            mysqli_free_result($result);
-            $conn->commit();
-
-            $status = array("status" => "ok");
-            echo json_encode($status);
+            return false;
         }
-        $conn->close();
     }
 
-    private function transferUpdate(int $cantidad, string $marca, string $tipo, string $modelo, string $bodega, int $codDestino)
+    /**Modifica la bodega a la que pertenece el consumible */
+    private function transferUpdate(int $cantidad, int $bodega, int $codDestino, int $Id_consumible)
     {
 
         $conn = $this->conn->connect();
 
-        $sqlquery = "SELECT C.Id_consumible FROM Consumible C INNER JOIN Bodega_Consumible BC ON C.Id_consumible=BC.Id_consumible INNER JOIN Bodega B ON BC.Id_bodega=B.Id_bodega AND B.Lugar = '$bodega' AND C.Marca='$marca' AND C.Modelo='$modelo' AND C.Tipo='$tipo' LIMIT $cantidad";
+        $sqlquery = "SELECT Id_ubicacion FROM Bodega_Consumible WHERE Id_consumible=$Id_consumible AND Id_bodega=$bodega LIMIT $cantidad";
 
         $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
 
+        $arreglo = [];
         $result = $conn->query($sqlquery);
         if ($result->num_rows > 0) {
             while ($data = mysqli_fetch_assoc($result)) {
-                $arreglo['id'][] = array_map("utf8_encode", $data);
+                array_push($arreglo, $data['Id_ubicacion']);
             }
-            foreach ($arreglo['id'] as $value) {
-                foreach ($value as $id) {
-                    $conn->query("UPDATE `Bodega_Consumible` SET `Id_bodega`=$codDestino WHERE Id_consumible=$id");
+
+            $valid = true;
+            foreach ($arreglo as $id) {
+                if ($conn->query("UPDATE `Bodega_Consumible` SET `Id_bodega`=$codDestino WHERE Id_ubicacion=$id") === false) {
+                    $valid = false;
+                    $conn->rollback();
+                    break;
                 }
             }
         }
         mysqli_free_result($result);
         $conn->commit();
         $conn->close();
+        return $valid;
     }
 
-    /*  Actualizar  */
-    public function update(string $marca_new, string $modelo_new, string $tipo_new, int $impresora_new, string $marca_old, string $modelo_old, string $tipo_old, int $impresora_old)
+    /*  Actualizar modelos de consumibles */
+    public function update(string $marca_new, string $modelo_new, string $tipo_new, int $impresora_new, int $Id_consumible, int $rangoMinimo, int $rangoMaximo)
     {
         $conn = $this->conn->connect();
 
-
-        $sql = "UPDATE Consumible SET Marca='$marca_new', Modelo='$modelo_new', Tipo='$tipo_new', Id_impresora='$impresora_new' WHERE Marca='$marca_old' AND Modelo='$modelo_old' AND Tipo='$tipo_old' AND Id_impresora='$impresora_old'";
-
+        $sql = "UPDATE Consumible SET Marca='$marca_new', Modelo='$modelo_new', Tipo='$tipo_new', Id_impresora=$impresora_new, rango_stockMinimo=$rangoMinimo, rango_stockMaximo=$rangoMaximo WHERE Id_consumible=$Id_consumible";
 
         if ($conn->query($sql)) {
             $valid = true;
@@ -371,7 +305,8 @@ class Consumible
             $valid = false;
             //echo "Error updating record: " . $conn->error;
         }
-        return $valid;
+
         $conn->close();
+        return $valid;
     }
 }

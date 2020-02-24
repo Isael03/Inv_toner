@@ -1,7 +1,7 @@
 <!-- Modal Delete-->
 
 <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Confirmar eliminación</h5>
@@ -13,8 +13,7 @@
                 ¿Esta seguro de que desea borrarlo?
                 <div class="form-group mx-auto mt-2 text-center w-50">
                     <label for="recipient-name" class="col-form-label">Cantidad a eliminar</label>
-                    <input type="number" class="form-control w-100 mx-auto" id="cantDelete" placeholder="Cantidad a eliminar" value="1" min="0">
-                    <small>*Si escoge cero se eliminarán todos los elementos</small>
+                    <input type="number" class="form-control w-100 mx-auto" id="cantDelete" placeholder="Cantidad a eliminar" value="1" min="1"><small class="select-max" id="max-delete">Seleccionar máxima cantidad</small>
                 </div>
             </div>
             <div class="modal-footer">

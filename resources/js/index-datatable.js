@@ -1,93 +1,96 @@
-"use strict";
 document.addEventListener("DOMContentLoaded", function() {
-  const tableINF = listINF();
-  const tableMO = listMO();
-  const tableAll = listALL();
-  amountHeld();
+  showContent();
   autocompletar();
-  printMarcaPrinter();
+  /**Las tablas y eventos relacionados cargan 1 segundo despues de cargar las cartas, para evitar conflictos de variables desconocidas */
+  setTimeout(() => {
+    //Configuracion para cuando la tabla esta oculta en un tab
+    $('a[data-toggle="tab"]').on("shown.bs.tab", function(e) {
+      $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+    });
 
-  /*------------------------- Botones de modals ----------------------------*/
+    var tableStorages = listStorages();
+    var tableAll = listALL();
 
-  /* boton eliminar del modal */
-  document.querySelector("#btnModalDelete").addEventListener("click", () => {
-    confirmDelete(tableAll);
-  });
+    //btn-groups
 
-  /* boton actualizar del modal */
-  document.querySelector("#btnModalUpdate").addEventListener("click", () => {
-    confirmUpdate(tableAll);
-  });
+    document
+      .getElementById("withdraw-Storage")
+      .addEventListener("click", () => {
+        getDataWithdraw(tableStorages);
+      });
+    document
+      .getElementById("transfer-Storage")
+      .addEventListener("click", () => {
+        transfer(tableStorages);
+      });
+    document
+      .getElementById("delete-Consumables")
+      .addEventListener("click", () => {
+        getDataDelete(tableStorages);
+      });
 
-  /* Boton retirar del modal */
-  document.querySelector("#btnModalWithdraw").addEventListener("click", () => {
-    if (tableAll.row(".selected").length > 0) {
-      confirmWithdraw(tableAll);
-    }
-    if (tableMO.row(".selected").length > 0) {
-      confirmWithdrawINF_MO(tableMO);
-    }
-    if (tableINF.row(".selected").length > 0) {
-      confirmWithdrawINF_MO(tableINF);
-    }
-  });
+    document
+      .querySelector("#change-storage")
+      .addEventListener("input", function() {
+        changeStorage(tableStorages);
+      });
 
-  document.querySelector("#btnModalTransfer").addEventListener("click", () => {
-    if (tableMO.row(".selected").length > 0) {
-      confirmTransfer(tableMO, tableINF);
-    }
-    if (tableINF.row(".selected").length > 0) {
-      confirmTransfer(tableINF, tableMO);
-    }
-  });
+    document
+      .querySelector("#table-containerStart")
+      .addEventListener("click", () => {
+        showFormAndControl(tableStorages);
+      });
 
-  /* Desmarcar filas seleccionadas al cambiar la pestaña de la tabla */
-  document.querySelector("#tabAll").addEventListener("click", () => {
-    tableMO.rows().deselect();
-    tableINF.rows().deselect();
-    tableAll.ajax.reload();
-  });
-  document.querySelector("#tabINF").addEventListener("click", () => {
-    tableMO.rows().deselect();
-    tableAll.rows().deselect();
-    tableINF.ajax.reload();
-  });
-  document.querySelector("#tabMO").addEventListener("click", () => {
-    tableAll.rows().deselect();
-    tableINF.rows().deselect();
-    tableMO.ajax.reload();
-  });
+    /*------------------------- Botones de modals ----------------------------*/
 
-  document.querySelector("#updMarca").addEventListener("input", () => {
-    printModelPrinter();
-  });
-  //btnupdate(tableAll);
+    /* boton eliminar del modal */
+    document.querySelector("#btnModalDelete").addEventListener("click", () => {
+      confirmDelete(tableStorages);
+    });
+
+    /* Boton retirar del modal */
+    document.querySelector("#btnModalWithdraw").addEventListener("click", e => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (tableStorages.row(".selected").length > 0) {
+        confirmWithdrawINF_MO(tableStorages);
+      }
+    });
+
+    document
+      .querySelector("#btnModalTransfer")
+      .addEventListener("click", () => {
+        confirmTransfer(tableStorages);
+      });
+    //---end-----------------------------
+    document.querySelector("#myTab").addEventListener("click", () => {
+      tableStorages.rows().deselect();
+      tableAll.rows().deselect();
+      tableAll.ajax.reload();
+      tableStorages.ajax.reload();
+    });
+
+    document.getElementById("max-transfer").addEventListener("click", () => {
+      var data = tableStorages.row(".selected").data();
+      document.getElementById("amountTtoINF").value = data.Cantidad;
+    });
+
+    document.getElementById("max-delete").addEventListener("click", () => {
+      var data = tableStorages.row(".selected").data();
+      document.getElementById("cantDelete").value = data.Cantidad;
+    });
+
+    document.getElementById("max-withdraw").addEventListener("click", () => {
+      var data = tableStorages.row(".selected").data();
+      document.getElementById("mCantidad").value = data.Cantidad;
+    });
+  }, 1000);
 });
 
-/* Acción modificar */
-function getDataUpdate(table) {
-  var data = table.row(".selected").data();
+//***************************************************************************************************************************** */
 
-  if (table.row(".selected").length > 0) {
-    //abrir modal
-    jQuery.noConflict();
-    jQuery("#modalUpdate");
-    $("#modalUpdate").modal("show");
-    console.log(data);
-
-    let marca = data.Marca;
-    let modelo = data.Modelo;
-    let tipo = data.Tipo;
-    let impresora = data.Impresora;
-
-    //Pasar datos al modal
-    setModalUpdate(marca, modelo, tipo, impresora);
-  } else {
-    customAlertError("Seleccione un elemento");
-  }
-}
-
-/* Acción boton eliminar */
+/* Acción boton eliminar-abrir modal */
+/**@param {object} table*/
 function getDataDelete(table) {
   if (table.row(".selected").length > 0) {
     jQuery.noConflict();
@@ -99,103 +102,56 @@ function getDataDelete(table) {
   }
 }
 
-/* Enviar id para eliminar */
+/* Enviar datos para eliminar */
+/**@param {object} table*/
 function confirmDelete(table) {
   const data = table.row(".selected").data();
-  let cant_delete = document.getElementById("cantDelete").value;
+  let input = document.getElementById("cantDelete");
+  let cant_delete = parseInt(input.value);
 
-  if (cant_delete <= parseInt(data.Cantidad) || cant_delete === 0) {
+  let selectores = ["#cantDelete"];
+  validClass(selectores);
+
+  cant_delete = parseInt(cant_delete);
+  if (cant_delete <= parseInt(data.Cantidad) && cant_delete > 0) {
     const dataDelete = new FormData();
     dataDelete.append("cantidad", parseInt(cant_delete));
-    dataDelete.append("modelo", data.Modelo.toUpperCase());
-    dataDelete.append("marca", data.Marca.toUpperCase());
-    dataDelete.append("tipo", data.Tipo);
+    dataDelete.append("id_bodega", parseInt(data.Id_bodega));
+    dataDelete.append("Id_consumible", parseInt(data.Id_consumible));
+    dataDelete.append("case", "deleteCon");
 
     fetchURL("./api/consumible/delete_consumible.php", "POST", dataDelete)
       .then(res => {
         if (res.status === "ok") {
           customAlertSuccess("Elemento eliminado");
-          table.ajax.reload();
+          changeStorage(table);
           //Ocultar modal
           $("#modalDelete").modal("hide");
-          amountHeld();
+          updateCountCard();
         } else {
           alertError();
         }
       })
-      .catch(err => console.log(err));
-  } else {
+      .catch(err => {
+        console.log(err);
+        alertError();
+      });
+  } else if (cant_delete > parseInt(data.Cantidad)) {
     customAlertError("La cantidad seleccionada sobrepasa la que existe");
-  }
-}
-
-/* Pasar datos al modal de modificar */
-/**@param {string} marca,  @param {string} modelo, @param {string} tipo, @param {string} impresora*/
-
-function setModalUpdate(marca, modelo, tipo, impresora) {
-  document.getElementById("updMarca").value = marca;
-  printModelPrinter();
-  document.getElementById("updModelo").value = modelo;
-  document.getElementById("updTipo").value = tipo;
-  document.getElementById("updImpresora").value = impresora;
-}
-
-/* validacion de datos del modal modificar */
-function validFields() {
-  let marca = document.getElementById("updMarca").value;
-  let modelo = document.getElementById("updModelo").value;
-  let tipo = document.getElementById("updTipo").value;
-  let modelo_impresora = document.getElementById("updImpresora").value;
-
-  if (marca != "" && modelo != "" && tipo != "" && modelo_impresora != "") {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-/* Botón confirmación del modal modificar */
-/**@param {object} table */
-async function confirmUpdate(table) {
-  var datatable = table.row(".selected").data();
-
-  if (validFields()) {
-    let _marca = document.getElementById("updMarca").value.trim();
-    let _modelo = document.getElementById("updModelo").value.trim();
-    let _tipo = document.getElementById("updTipo").value.trim();
-    let _impresora = document.getElementById("updImpresora").value.trim();
-
-    _modelo = _modelo.toUpperCase().replace(/ /g, "-");
-
-    //Pasar datos al objeto formatData
-    let data = new FormData();
-    data.append("marca_new", _marca.toUpperCase());
-    data.append("modelo_new", _modelo.toUpperCase());
-    data.append("tipo_new", _tipo);
-    data.append("impresora_new", _impresora.toUpperCase());
-    data.append("marca_old", datatable.Marca);
-    data.append("modelo_old", datatable.Modelo);
-    data.append("tipo_old", datatable.Tipo);
-    data.append("impresora_old", datatable.Impresora);
-
-    fetchURL("./api/consumible/update_consumible.php", "POST", data)
-      .then(res => {
-        if (res.status === "ok") {
-          customAlertSuccess("Elemento actualizado");
-
-          $("#modalUpdate").modal("hide");
-          table.ajax.reload();
-        } else {
-          alertError();
-        }
-      })
-      .catch(err => console.log(err));
+    input.classList.add("is-invalid");
+  } else if (cant_delete <= 0) {
+    customAlertError(
+      "La cantidad seleccionada no puede ser menor o igual a cero"
+    );
+    input.classList.add("is-invalid");
   } else {
     alertErrorFormEmpty();
+    input.classList.add("is-invalid");
   }
 }
 
 /* Abrir modal para retirar */
+/**@param {object} table*/
 function getDataWithdraw(table) {
   if (table.row(".selected").length > 0) {
     jQuery.noConflict();
@@ -203,16 +159,21 @@ function getDataWithdraw(table) {
     $("#modalWithdraw").modal("show");
 
     setModalWithdraw(table);
+    /**Al cerrar el modal las validaciones desaparecen */
+    $("#modalWithdraw").on("hidden.bs.modal", function() {
+      let selectores = ["#receivedBy", "#mCantidad"];
+      clean_Validations(selectores);
+    });
   } else {
     customAlertError("Seleccione un elemento");
   }
 }
 
 /* Pasar datos a los input del modal */
+/**@param {object} table*/
 function setModalWithdraw(table) {
   var data = table.row(".selected").data();
 
-  //document.querySelector("#submitter").value = "Falta";
   document.querySelector("#receivedBy").value = "";
   document.querySelector("#mMarca").value = data.Marca;
   document.querySelector("#mModelo").value = data.Modelo;
@@ -220,111 +181,76 @@ function setModalWithdraw(table) {
   document.querySelector("#mCantidad").value = 1;
 }
 
-/* Confirmar retiro */
-function confirmWithdraw(table) {
-  var data = table.row(".selected").data();
-  let receivedBy = document.querySelector("#receivedBy");
-
-  let cantidad = document.querySelector("#mCantidad").value.trim();
-
-  if (receivedBy.value.trim() === "" || parseInt(data.Cantidad) < cantidad) {
-    customAlertError(
-      "La cantidad sobrepasa a la existente o hay algún campo vacío"
-    );
-  } else {
-    //let usuarioRetira = document.querySelector("#submitter").value.trim();
-
-    let form = new FormData();
-    //form.append("usuarioRetira", usuarioRetira);
-    form.append("usuarioRecibe", receivedBy.value.trim());
-    form.append("marca", data.Marca);
-    form.append("modelo", data.Modelo);
-    form.append("tipo", data.Tipo);
-    form.append("impresora", data.Impresora);
-    form.append("cantidad", parseInt(cantidad));
-
-    fetchURL("./api/retiro/insert_retiro.php", "POST", form)
-      .then(res => {
-        if (res.status === "bad") {
-          alertError();
-        } else {
-          jQuery.noConflict();
-          jQuery("#modalWithdraw");
-          $("#modalWithdraw").modal("hide");
-
-          alertSuccess();
-          table.ajax.reload();
-        }
-      })
-      .catch(err => console.log(err));
-  }
-}
-
-async function amountHeld() {
-  let config = {
-    method: "GET",
-    headers: {
-      Accept: "application/json"
-    }
-  };
-  await fetch("./api/bodega/stock_quantity.php", config)
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        console.log("Error en la llamada");
-      }
-    })
-    .then(json => {
-      document.querySelector("#amount-inf").innerHTML = json.INF.Cantidad_INF;
-      document.querySelector("#amount-mo").innerHTML = json.MO.Cantidad_MO;
-    })
-    .catch(err => console.log(err));
-}
-
+/**@description abrir modal para transferir, @param {object} table*/
 function transfer(table) {
   if (table.row(".selected").length > 0) {
-    var data = table.row(".selected").data();
+    /**obtener bodega del select */
+    let changeStorage = document.querySelector("#change-storage");
+    var textSelect = changeStorage.options[changeStorage.selectedIndex].text;
 
-    /* Titulo del modal transferir a .... */
-    data.Lugar === "Manuel Orella"
-      ? (document.querySelector("#titleTransfer").innerHTML = "Informática")
-      : (document.querySelector("#titleTransfer").innerHTML = "Manuel Orella");
+    /**pasar bodega al input desabilitado */
+    document.querySelector("#current-storage").value = textSelect;
+
+    /**resetear input select */
+    document.getElementById(
+      "transfer-select"
+    ).innerHTML = `<option value="">Seleccione...</option>`;
+
+    fetchURL("./api/bodega/bodegaGet.php?case=listStorage")
+      .then(res => {
+        let selectBodegas = res.data.filter(function(bodega) {
+          return bodega.Lugar !== textSelect;
+        });
+
+        selectBodegas.forEach(bodega => {
+          document.getElementById(
+            "transfer-select"
+          ).innerHTML += `<option value=${bodega.Id_bodega}>${bodega.Lugar}</option>`;
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+    document.querySelector("#current-storage").value = textSelect;
 
     jQuery.noConflict();
     jQuery("#modalTransfer");
     $("#modalTransfer").modal("show");
 
     document.querySelector("#amountTtoINF").value = 1;
+
+    /**Al cerrar el modal las validaciones desaparecen */
+    $("#modalTransfer").on("hidden.bs.modal", function() {
+      let selectores = ["#amountTtoINF", "#transfer-select"];
+      clean_Validations(selectores);
+    });
   } else {
     customAlertError("Seleccione un elemento");
   }
 }
 
 /* Boton confirmar del  modal transferir del modal */
-function confirmTransfer(table, table2) {
-  let cantidad = document.querySelector("#amountTtoINF").value;
-  if (cantidad != "") {
+/**@param {object} table, @param {object} table */
+function confirmTransfer(table) {
+  let input = document.querySelector("#amountTtoINF");
+  let destino = document.querySelector("#transfer-select").value;
+
+  let cantidad = parseInt(input.value);
+
+  let selectores = ["#amountTtoINF", "#transfer-select"];
+  validClass(selectores);
+
+  if (cantidad != "" && destino != "" && cantidad > 0) {
     var data = table.row(".selected").data();
-    cantidad = parseInt(cantidad);
 
     if (cantidad <= parseInt(data.Cantidad)) {
       let formData = new FormData();
 
-      let destino;
-      if (data.Lugar === "Manuel Orella") {
-        destino = "Informatica";
-      }
-      if (data.Lugar === "Informatica") {
-        destino = "Manuel Orella";
-      }
-
       formData.append("cantidad", cantidad);
-      formData.append("marca", data.Marca);
-      formData.append("modelo", data.Modelo);
-      formData.append("tipo", data.Tipo);
-      formData.append("origen", data.Lugar);
-      formData.append("destino", destino);
+      formData.append("origen", parseInt(data.Id_bodega));
+      formData.append("destino", parseInt(destino));
+      formData.append("Id_consumible", parseInt(data.Id_consumible));
 
       let config = {
         method: "POST",
@@ -333,52 +259,84 @@ function confirmTransfer(table, table2) {
         },
         body: formData
       };
+
       fetch("./api/consumible/transfer_consumible.php", config)
         .then(response => {
           if (response.ok) {
-            jQuery.noConflict();
-            jQuery("#modalTransfer");
-            $("#modalTransfer").modal("hide");
-            table.ajax.reload();
-            table2.ajax.reload();
-
-            alertSuccess();
+            return response.json();
           } else {
             alertError();
           }
         })
-        .catch(err => console.log(err));
+        .then(json => {
+          if (json.status === "ok") {
+            updateCountCard();
+            jQuery.noConflict();
+            jQuery("#modalTransfer");
+            $("#modalTransfer").modal("hide");
+            changeStorage(table);
+            alertSuccess();
+            clean_Validations(selectores);
+          } else {
+            alertError();
+          }
+        })
+        .catch(err => {
+          alertError();
+          console.log(err);
+        });
     } else {
       customAlertError("La cantidad especificada supera a la existente");
+      input.classList.add("is-invalid");
     }
-  } else {
+  } else if (cantidad <= 0) {
+    customAlertError(
+      "La cantidad seleccionada no puede ser menor o igual a cero"
+    );
+    input.classList.add("is-invalid");
+  } else if (isNaN(cantidad) || destino === "") {
     alertErrorFormEmpty();
   }
 }
 
 /* -------------------------------------------------------------------------------------------------- */
 /* Confirmar retiro */
+/**@param {object} table */
 function confirmWithdrawINF_MO(table) {
   var data = table.row(".selected").data();
-  let receivedBy = document.querySelector("#receivedBy");
+  let receivedBy = document.querySelector("#receivedBy").value.trim();
   let cantidad = document.querySelector("#mCantidad").value.trim();
 
-  if (receivedBy.value.trim() === "" || parseInt(data.Cantidad) < cantidad) {
-    customAlertError(
-      "La cantidad sobrepasa a la existente o hay algún campo vacío"
-    );
-  } else {
-    //let usuarioRetira = document.querySelector("#submitter").value.trim();
+  let input = document.querySelector("#mCantidad");
 
+  cantidad = parseInt(cantidad);
+  let selectores = ["#receivedBy", "#mCantidad"];
+  validClass(selectores);
+
+  if (receivedBy === "" || isNaN(cantidad)) {
+    alertErrorFormEmpty();
+  } else if (parseInt(data.Cantidad) < cantidad) {
+    //Comprobar que la cantidad sea mayor a 0 y menor o igual a la que existe
+    customAlertError("La cantidad sobrepasa a la existente");
+    input.classList.add("is-invalid");
+  } else if (cantidad <= 0) {
+    customAlertError(
+      "La cantidad seleccionada no puede ser menor o igual a cero"
+    );
+    input.classList.add("is-invalid");
+  } else {
+    //Proceder a efectuar el retiro
     let form = new FormData();
-    // form.append("usuarioRetira", usuarioRetira);
-    form.append("usuarioRecibe", receivedBy.value.trim());
+    form.append("usuarioRecibe", receivedBy);
     form.append("marca", data.Marca);
     form.append("modelo", data.Modelo);
     form.append("tipo", data.Tipo);
     form.append("impresora", data.Impresora);
+    form.append("id_impresora", data.Id_impresora);
     form.append("cantidad", parseInt(cantidad));
-    form.append("bodega", data.Lugar);
+    form.append("bodega", parseInt(data.Id_bodega));
+    form.append("nombreBodega", data.Lugar);
+    form.append("Id_consumible", data.Id_consumible);
 
     let config = {
       method: "POST",
@@ -402,14 +360,19 @@ function confirmWithdrawINF_MO(table) {
           jQuery.noConflict();
           jQuery("#modalWithdraw");
           $("#modalWithdraw").modal("hide");
-
-          alertSuccess();
           table.ajax.reload();
+          alertSuccess();
+          updateCountCard();
+          changeStorage(table);
+          clean_Validations(selectores);
         } else {
           alertError();
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        alertError();
+      });
   }
 }
 
@@ -426,15 +389,15 @@ function listALL() {
       {
         extend: "pdf",
         text: "<span class='fas fa-file-pdf'></span>",
-        exportOptions: {
+        /*  exportOptions: {
           columns: [0, 1, 2, 3, 4]
           //columns: ":not(.no-exportar)"
-        },
-        titleAttr: "PDF",
+        }, */
+        titleAttr: "Generar reporte PDF",
         className: "btn btn-success",
         title: "Total en existencia",
         customize: function(doc) {
-          doc.content[1].margin = [100, 10, 100, 0];
+          doc.content[1].margin = [50, 10, 50, 0];
           doc.defaultStyle.alignment = "center";
           doc.footer = function(currentPage, pageCount) {
             return currentPage.toString() + " de " + pageCount;
@@ -453,87 +416,27 @@ function listALL() {
             };
           };
         }
-      },
-      {
-        text: " <span class='fas fa-box-open text-white'></span>",
-        titleAttr: "Retirar",
-        className: "btn btn-info",
-        action: function() {
-          getDataWithdraw(table);
-        }
-      },
-      {
-        text: " <span class='fas fa-wrench text-white'></span>",
-        titleAttr: "Actualizar",
-        className: "btn btn-warning",
-        action: function() {
-          getDataUpdate(table);
-        }
-      },
-      {
-        text: " <span class='fas fa-trash'></span>",
-        titleAttr: "Eliminar",
-        className: "btn btn-danger",
-        action: function() {
-          getDataDelete(table);
-        }
       }
     ],
     language: Datatable_ES,
     ajax: {
       method: "GET",
-      url: "./api/consumible/get_consumibleALL.php"
+      url: "./api/consumible/get_consumibleALL.php",
+      data: { case: "allConsumables" }
     },
+    /**Colores en las celdas de estado */
+    createdRow: function(row, data, dataIndex) {
+      let cantidad = parseInt(data.Cantidad);
+      let minimo = parseInt(data.Minimo);
+      let maximo = parseInt(data.Maximo);
 
-    columns: [
-      { data: "Marca" },
-      { data: "Modelo" },
-      { data: "Tipo" },
-      { data: "Cantidad" },
-      {
-        data: "Impresora"
-      } /* ,
-      {
-        defaultContent:
-          "<div class='btn-group btn-group-sm' role='group' aria-label='Basic example'>" +
-          "<button class='btn btn-info' id='btnWithdraw'><span class='fas fa-box-open'></span></button>" +
-          "<button  id='btnUpdate' class='btn btn-warning mx-2'><span class='fas fa-wrench text-white'></span>" +
-          "</button > <button class='btn btn-danger' id='btnDelete'>" +
-          "<span class='fas fa-trash'></span></button></div>"
-      } */
-    ]
-  });
-
-  setInterval(function() {
-    table.ajax.reload();
-  }, 100000);
-
-  return table;
-}
-
-/**@description Experimental */
-/* function btnupdate(table) {
-  $("tbody").on("click", "#btnUpdate", function() {
-    var data = table.row($(this).parents("tr")).data();
-
-    getDataUpdate(table);
-  });
-} */
-
-/* Datatable Manuel Orella */
-function listMO() {
-  /**Configuración Datatable*/
-  /** Variable Datatable_ES se encuentra en /scripts/main.js */
-  var table = $("#tableMO").DataTable({
-    destroy: true,
-    //responsive: true,
-    //scrollX: true,
-    order: [[0, "desc"]],
-    select: true,
-    language: Datatable_ES,
-    ajax: {
-      method: "GET",
-      url: "./api/consumible/get_consumibleMO.php"
+      if (cantidad <= minimo) {
+        $($(row).find("td")[5]).addClass("bg-danger text-white");
+      } else if (cantidad >= maximo) {
+        $($(row).find("td")[5]).addClass("bg-success text-white");
+      } else {
+        $($(row).find("td")[5]).addClass("bg-warning text-white");
+      }
     },
     columns: [
       { data: "Marca" },
@@ -542,52 +445,9 @@ function listMO() {
       { data: "Cantidad" },
       {
         data: "Impresora"
-      }
-    ],
-    dom: "Bfrtip",
-    buttons: [
-      {
-        extend: "pdf",
-        text: "<span class='fas fa-file-pdf'></span>",
-        titleAttr: "PDF",
-        className: "btn btn-success",
-        title: "Elementos en bodega",
-        customize: function(doc) {
-          doc.content[1].margin = [100, 10, 100, 0];
-          doc.defaultStyle.alignment = "center";
-          doc.footer = function(currentPage, pageCount) {
-            return currentPage.toString() + " de " + pageCount;
-          };
-          doc.header = function() {
-            return {
-              text:
-                "Emitido el " +
-                new Date().getDate() +
-                "/" +
-                new Date().getMonth() +
-                1 +
-                "/" +
-                new Date().getFullYear(),
-              alignment: "left"
-            };
-          };
-        }
       },
       {
-        text: " <span class='fas fa-box-open text-white'></span>",
-        titleAttr: "Retirar",
-        className: "btn btn-info",
-        action: function() {
-          getDataWithdraw(table);
-        }
-      },
-      {
-        text: "<span class='fas fa-exchange-alt text-white'></span>",
-        titleAttr: "trasladar",
-        className: "btn btn-dark",
-        action: function() {
-          transfer(table);
-        }
+        data: "Estado"
       }
     ]
   });
@@ -599,66 +459,109 @@ function listMO() {
   return table;
 }
 
-function listINF() {
-  /**Configuración Datatable*/
-  var table = $("#tableINF").DataTable({
+/**Mostrar cartas con nombres y cantidad */
+function showContent() {
+  /**Iniciar el select de bodegas */
+  selectStorage(
+    "change-storage",
+    "./api/bodega/bodegaGet.php?case=listStorage"
+  );
+
+  document.getElementById("rowCards").innerHTML = "";
+
+  fetchURL("./api/bodega/bodegaGet.php?case=listStorage")
+    .then(function(res) {
+      let i = 0;
+
+      res.data.forEach(function(bodega) {
+        if (i === 10) {
+          i = 0;
+        }
+        showCards(bodega.Cantidad, bodega.Lugar, i);
+
+        i++;
+      });
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+}
+
+/**Actualizar el contador de las cartas */
+function updateCountCard() {
+  fetchURL("./api/bodega/bodegaGet.php?case=listStorage")
+    .then(function(res) {
+      let i = 0;
+      let card = document.querySelectorAll(".idstg");
+      res.data.forEach(function(bodega) {
+        card[i++].innerHTML = bodega.Cantidad;
+      });
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+}
+
+/**Imprimir las cartas de las bodegas en pantalla */
+function showCards(cantidad, lugar, i) {
+  const color = [
+    "primary",
+    "warning",
+    "success",
+    "danger",
+    "info",
+    "dark",
+    "secondary",
+    "light",
+    "white"
+  ];
+  document.getElementById(
+    "rowCards"
+  ).innerHTML += `  <div class="col-xl-3 col-md-3 col-sm-12" style="margin-bottom:.5rem; margin-top:1rem">
+  <div class="card text-white bg-${color[i]} o-hidden h-100">
+    <div class="card-body">
+      <div class="card-body-icon">
+        <i class="fas fa-boxes"></i>
+      </div>
+      <div class="text-center font-weight-bold idstg">${cantidad}</div>
+    </div>
+    <a class="card-footer text-white clearfix small z-1">
+      <span class="float-left font-weight-bold text-capitalize">${lugar}</span>
+    </a>
+  </div>
+</div>`;
+}
+
+/* DataTabla de bodegas */
+function listStorages() {
+  var table = $("#tableBodegas").DataTable({
     destroy: true,
     //responsive: true,
-    //scrollX: true,
     order: [[0, "desc"]],
-    select: true,
+    // select: true,
     language: Datatable_ES,
     ajax: {
       method: "GET",
-      url: "./api/consumible/get_consumibleINF.php"
+      url: "./api/consumible/get_consumibles.php",
+      data: {
+        bodega: parseInt(document.querySelector("#change-storage").value)
+      }
     },
-    dom: "Bfrtip",
-    buttons: [
+    columnDefs: [
       {
-        extend: "pdf",
-        text: "<span class='fas fa-file-pdf'></span>",
-        titleAttr: "PDF",
-        className: "btn btn-success",
-        title: "Consumibles en Informática",
-        customize: function(doc) {
-          doc.content[1].margin = [100, 10, 100, 0];
-          doc.defaultStyle.alignment = "center";
-          doc.footer = function(currentPage, pageCount) {
-            return currentPage.toString() + " de " + pageCount;
-          };
-          doc.header = function() {
-            return {
-              text:
-                "Emitido el " +
-                new Date().getDate() +
-                "/" +
-                new Date().getMonth() +
-                1 +
-                "/" +
-                new Date().getFullYear(),
-              alignment: "left"
-            };
-          };
-        }
-      },
-      {
-        text: " <span class='fas fa-box-open text-white'></span>",
-        titleAttr: "Retirar",
-        className: "btn btn-info",
-        action: function() {
-          getDataWithdraw(table);
-        }
-      },
-      {
-        text: "<span class='fas fa-exchange-alt text-white'></span>",
-        titleAttr: "Trasladar",
-        className: "btn btn-dark",
-        action: function() {
-          transfer(table);
-        }
+        orderable: false,
+        className: "select-checkbox",
+        targets: 0,
+        data: null,
+        defaultContent: ""
       }
     ],
+    select: {
+      style: "os",
+      selector: "td"
+    },
     columns: [
+      {},
       { data: "Marca" },
       { data: "Modelo" },
       { data: "Tipo" },
@@ -667,70 +570,35 @@ function listINF() {
     ]
   });
 
-  setInterval(function() {
-    table.ajax.reload();
-  }, 100000);
-
   return table;
 }
 
-async function printModelPrinter() {
-  //case: namePrinter
-
-  /* resetear select */
-  document.querySelector(
-    "#updImpresora"
-  ).innerHTML = `<option value=''>Seleccione...</option>`;
-
-  let marca = document.querySelector("#updMarca");
-
-  /*Consulta y llenar select con resultados */
-  await fetch(
-    `./api/impresora/impresora.php?case=namePrinter&&marca=${marca.value.toUpperCase()}`
-  )
-    .then(response => {
-      return response.json();
-    })
-    .then(json => {
-      for (const impresora of json) {
-        console.log(impresora);
-
-        document.querySelector(
-          "#updImpresora"
-        ).innerHTML += `<option value=${impresora.Impresora}>${impresora.Impresora}</option>`;
+/**Cambiar la informacion de la datatable bodega */
+function changeStorage(table) {
+  let value = document.querySelector("#change-storage").value;
+  fetchURL(`./api/consumible/get_consumibles.php?bodega=${value}`, "GET")
+    .then(function(res) {
+      if (res.data[0] != undefined) {
+        table.rows().remove();
+        table.rows.add(res.data).draw();
+        //alertSuccess();
+      } else {
+        table.rows().remove();
+        table.rows.add(res.data).draw();
+        alertWarning("Nada encontrado");
       }
     })
-    .catch(err => {
+    .catch(function(err) {
       console.log(err);
     });
 }
 
-async function printMarcaPrinter() {
-  //case:printersBrand
-  await fetch("./api/impresora/impresora.php?case=printersBrand")
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        alertError();
-        //throw "Error en la llamada fetch";
-      }
-    })
-    .then(json => {
-      if (json.marca[0].Marca_impresora != "") {
-        for (const impresora of json.marca) {
-          document.querySelector(
-            "#updMarca"
-          ).innerHTML += `<option value=${impresora.Marca_impresora}>${impresora.Marca_impresora}</option>`;
-        }
-      } else {
-        document.querySelector(
-          "#updMarca"
-        ).innerHTML += `<option value="">No hay impresoras en el sistema</option>`;
-      }
-    })
-    .catch(err => {
-      alertError();
-      console.log(err);
-    });
+function showFormAndControl(table) {
+  jQuery.noConflict();
+  jQuery("#container-btnStart");
+  if (table.row(".selected").length > 0) {
+    $("#container-btnStart").collapse("show");
+  } else {
+    $("#container-btnStart").collapse("hide");
+  }
 }

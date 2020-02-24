@@ -8,14 +8,15 @@
                      <span aria-hidden="true">&times;</span>
                  </button>
              </div>
-             <div class="modal-body">
-                 <form>
+             <form>
+                 <div class="modal-body">
+
                      <div class="row">
                          <div class="col-md-12 col-sm-12">
                              <div class="form-group">
                                  <label for="receivedBy" class="col-form-label">Recibido por:</label>
                                  <div class="autocomplete">
-                                     <input type="text" class="form-control is-invalid" id="receivedBy" name="receivedBy" placeholder="Quién recibe" required>
+                                     <input type="text" class="form-control" id="receivedBy" name="receivedBy" placeholder="Quién recibe" required>
                                  </div>
 
                              </div>
@@ -48,15 +49,17 @@
                              <div class="form-group">
                                  <label for="mCantidad" class="col-form-label">Cantidad</label>
                                  <input type="number" class="form-control" id="mCantidad" placeholder="Cantidad a retirar" min="1">
+                                 <small class="select-max" id="max-withdraw">Seleccionar máxima cantidad</small>
                              </div>
                          </div>
                      </div>
-                 </form>
-             </div>
-             <div class="modal-footer">
-                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                 <button type="button" class="btn btn-primary" id="btnModalWithdraw">Confirmar</button>
-             </div>
+
+                 </div>
+                 <div class="modal-footer">
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                     <input type="submit" class="btn btn-primary" id="btnModalWithdraw" value="Confirmar">
+                 </div>
+             </form>
          </div>
      </div>
  </div>

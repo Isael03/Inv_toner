@@ -27,17 +27,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         case 'dep':
 
-            //echo "";
-            $inicio = $_POST['inicio_dep'];
-            $termino = $_POST['termino_dep'];
-            $dep_Report = $retiro->getDir($inicio,  $termino);
+            $fecha_inicio = $_POST['fecha_inicio'];
+            $fecha_termino = $_POST['fecha_termino'];
+            $dep_Report = $retiro->getDir($fecha_inicio,  $fecha_termino);
 
             if (isset($dep_Report)) {
-                echo json_encode($dep_Report);
+                $res = array("status" => "ok", "data" => $dep_Report);
             } else {
-                echo json_encode(array("status" => 'bad'));
+                $res = array("status" => 'bad');
             }
-
+            echo json_encode($res);
             break;
 
 

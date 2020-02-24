@@ -18,14 +18,20 @@ $termino_dep = $_GET['termino_dep'];
 $nombre_dir = $_GET['nombre_dir'];
 $iddir = $_GET['iddir'];
 
-$inicio = explode('-', $inicio_dep);
-$termino = explode('-', $termino_dep);
+$array_inicio = explode(" ", $inicio_dep);
+$array_termino = explode(" ", $termino_dep);
+
+$inicio = explode('-', $array_inicio[0]);
+$termino = explode('-', $array_termino[0]);
+
+date_default_timezone_set('UTC');
+date_default_timezone_set("America/Santiago");
 
 $conn = $db->connect();
 
 $sql = "SELECT iddepart AS Id_dep, depart AS Departamento FROM departamentos where direccion=$iddir";
 
-$result =  $conn->query($sql);
+$result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     while ($data = mysqli_fetch_assoc($result)) {
@@ -57,8 +63,6 @@ if ($result->num_rows > 0) {
             text-align: center;
         }
 
-
-
         thead:before,
         thead:after {
             display: none;
@@ -84,7 +88,7 @@ if ($result->num_rows > 0) {
 
     <div id="header"">
         <h1 class=" text-center mt-5" id="title_report">
-        <b>Entregas a la Dirección de <?php echo strtoupper($nombre_dir) . " " .  $inicio[2] . '-' . $inicio[1] . '-' . $inicio[0] . ' a ' . $termino[2] . '-' . $termino[1] . '-' . $termino[0] ?> </b>
+        <b>Entregas a la Dirección de <?php echo strtoupper($nombre_dir) . " " . $inicio[2] . '-' . $inicio[1] . '-' . $inicio[0] . ' a ' . $termino[2] . '-' . $termino[1] . '-' . $termino[0] ?> </b>
         <caption class="text-center"><small>Emitido el <?php echo date("d-m-Y") ?></small> </caption>
         </h1>
     </div>
@@ -113,18 +117,18 @@ if ($result->num_rows > 0) {
 
                                 $id = (int) $depValue['Id_dep'];
 
-                                $sql = "SELECT  Marca, COUNT(Modelo) AS Cantidad, Modelo, Tipo FROM Retiro WHERE Fecha BETWEEN '$inicio_dep' AND '$termino_dep' AND Id_departamento=$id GROUP BY Modelo";
+                                $sql = "SELECT Marca, SUM(Cantidad) AS Cantidad, Modelo, Tipo FROM Retiro WHERE Fecha BETWEEN '$inicio_dep' AND '$termino_dep' AND Id_departamento=$id GROUP BY Modelo, Marca, Tipo ORDER BY Cantidad DESC";
 
                                 /*       $sql = "SELECT DATE_FORMAT(Fecha, '%d/%m/%Y %H:%i:%s') AS Fecha, Usuario_recibe, Marca, Modelo, Tipo, Cantidad FROM Retiro WHERE Fecha BETWEEN '$inicio_dep' AND '$termino_dep' AND Id_departamento=$id"; */
 
-                                $result =  $conn->query($sql);
+                                $result = $conn->query($sql);
 
                                 if ($result->num_rows > 0) {
                                     while ($data = mysqli_fetch_assoc($result)) {
                                         $Retiro_dep[$depValue['Departamento']][] = array_map("utf8_encode", $data);
                                     }
 
-                                    foreach ($Retiro_dep[$depValue['Departamento']] as  $deptable) {
+                                    foreach ($Retiro_dep[$depValue['Departamento']] as $deptable) {
                                         echo "<tr><td scope='col' class='p-0 px-2'>" . $deptable['Marca'] . "</td><td scope='col' class='p-0 px-2'>" . $deptable['Modelo'] . "</td><td scope='col' class='p-0 px-2'>" . $deptable['Tipo'] . "</td><td scope='col' class='p-0 px-2'>" . $deptable['Cantidad'] . "</td></tr>";
                                     }
                                 } else {
@@ -138,10 +142,11 @@ if ($result->num_rows > 0) {
                 </div>
             </div>
         </div>
-    <?php echo "<br><br>";
+        <br><br>
+    <?php
     } ?>
 
-    <div style="page-break-after:never;"></div>
+    <!-- <div style="page-break-after:never;"></div> -->
 
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -183,5 +188,5 @@ $pdf->load_html(ob_get_clean());
 
 $pdf->render();
 
-$pdf->stream('document.pdf', array('Attachment' => 0));
+$pdf->stream('Entregas a Dirección.pdf', array('Attachment' => 0));
 ?>

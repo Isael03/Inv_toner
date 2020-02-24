@@ -17,14 +17,12 @@
   <!-- Page level plugin CSS-->
   <link rel="stylesheet" href="../vendor/datatables/datatables.min.css">
 
-
-
   <!-- Custom styles for this template-->
   <link href="../resources/css/sb-admin.css" rel="stylesheet">
+  <link rel="stylesheet" href="../resources/css/main.css">
 
   <!-- toastr -->
   <link rel="stylesheet" href="../vendor/toastr/toastr.min.css">
-
 
 </head>
 
@@ -39,11 +37,13 @@
     <a class="navbar-brand ml-2" href="../index.php">Inventario</a>
 
     <!-- Navbar -->
-    <ul class="nav navbar-nav d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+    <ul class="nav navbar-nav  form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+      <li class="nav-item"><a href="./nuevo.php" class="btn nav-link menu-btn text-white mx-2" title="Añadir consumible"><i class="fas fa-plus-square"></i></a></li>
       <li class="nav-item">
-        <a class="btn nav-link menu-btn" href="views/login.php"><i class="fas fa-sign-out-alt text-white"></i></a>
+        <a class="btn nav-link menu-btn" href="#"><i class="fas fa-sign-out-alt text-white"></i></a>
       </li>
     </ul>
+
 
   </nav>
 
@@ -51,25 +51,31 @@
 
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
-      <li class="nav-item active">
+      <li class="nav-item  btn-sidebar">
         <a class="nav-link" href="../">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Inicio</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./impresoras.php">
           <i class="fas fa-print"></i>
           <span>Impresoras</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar">
+        <a class="nav-link" href="./bodega.php">
+          <i class="fas fa-warehouse"></i>
+          <span>Bodegas</span>
+        </a>
+      </li>
+      <li class="nav-item btn-sidebar active">
         <a class="nav-link" href="./historial.php">
           <i class="fas fa-history"></i>
           <span>Historial de entregas</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./reporte.php">
           <i class="fas fa-table"></i>
           <span>Reporte de entregas</span>
@@ -84,70 +90,35 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb mb-5">
           <li class="breadcrumb-item">
-            <a href="#" class="text-decoration-none text-dark">Historial de entregas</a>
+            <a href="./historial.php" class="text-decoration-none text-dark">Historial de entregas</a>
           </li>
         </ol>
 
         <div class="row">
-          <div class="col-md-4 col-xs-12">
-            <!-- Select para seleccionar filtro -->
-            <div class="form-group">
-              <label>Filtrar por:</label>
-              <select class="custom-select my-1 mr-sm-2 col-md-8 col-xs-4 form-control" id="filter">
-                <option value="" selected>Seleccione...</option>
-                <option value="mes">Mes</option>
-                <option value="rango">Rango de fechas</option>
-              </select>
-            </div>
-          </div>
-
-
-          <div class="col-md-6 col-xs-12">
-            <!-- Formulario para el mes-->
-
-            <form class="form-inline mb-5 collapse" id="formMesHistorial">
-              <div class="form-group">
-                <label for="mes" class="my-1 mr-2">Mes</label>
-                <select class="custom-select my-1 mr-sm-2" id="mes">
-                  <option value="" selected>Seleccione el mes...</option>
-                  <option value="01">Enero</option>
-                  <option value="02">Febrero</option>
-                  <option value="03">Marzo</option>
-                  <option value="04">Abril</option>
-                  <option value="05">Mayo</option>
-                  <option value="06">Junio</option>
-                  <option value="07">Julio</option>
-                  <option value="08">Agosto</option>
-                  <option value="09">Septiembre</option>
-                  <option value="10">Obtubre</option>
-                  <option value="11">Noviembre</option>
-                  <option value="12">Diciembre</option>
-                </select>
-              </div>
-              <button type="button" class="btn btn-primary my-1" id="btnBuscarMes">Buscar</button>
-            </form>
-
+          <div class="col-md-8 col-xs-12">
             <!-- Formulario por rango de fecha -->
-            <form class="form-inline mb-5 collapse" id="formRange">
+            <form class="form-inline mb-5 " id="formRange">
               <div class="form-group">
                 <label for="dateFrom" class="my-1">Desde</label>
                 <input type="date" id="dateFrom" name="dateFrom" class="form-control mx-3 my-1" aria-describedby="dateFrom">
               </div>
               <div class="form-group">
                 <label for="dateTo">Hasta</label>
-                <input type="date" id="dateTo" name="dateTo" class="form-control mx-3 my-1 " aria-describedby="dateTo">
+                <input type="date" id="dateTo" name="dateTo" class="form-control mx-3 my-1" aria-describedby="dateTo">
               </div>
-              <button type="button" class="btn btn-primary my-1" id="btnBuscarRango">Buscar</button>
+              <div class="form-group mx-3">
+                <button type="button" class="btn btn-primary mx-2" id="btnBuscarRango">Buscar</button>
+              </div>
+
             </form>
           </div>
 
         </div>
 
 
-
         <!-- Tabla -->
         <div class="table-responsive">
-          <table class="table table-bordered text-center" id="tableHist" width="100%" cellspacing="0">
+          <table class="table table-bordered text-center display" id="tableHist" cellspacing="0" style="width:100%">
             <thead>
               <tr>
                 <th>Fecha</th>
@@ -159,22 +130,19 @@
                 <th>Tipo</th>
                 <th>Cantidad</th>
                 <th>Impresora</th>
+                <th>Bodega</th>
               </tr>
             </thead>
             <tbody>
             </tbody>
           </table>
-
-
         </div>
         <!-- /.container-fluid -->
 
         <!-- Sticky Footer -->
         <footer class="sticky-footer">
           <div class="container my-auto">
-            <div class="copyright text-center my-auto">
-              <!-- <span>Copyright © Your Website 2019</span> -->
-            </div>
+
           </div>
         </footer>
 
@@ -184,7 +152,54 @@
     </div>
     <!-- /#wrapper -->
 
+    <!-- Modal info row -->
+    <div class="modal" tabindex="-1" role="dialog" id='dataHistorial'>
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h6 class="modal-title  font-weight-bold" id="mMistorialHeader"></h6>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="body-history">
 
+
+          </div>
+          <div class="modal-footer border-top-0">
+
+            <button type="button" class="btn btn-danger mx-auto px-5 py-1" title="Anular entrega" id="btnCancel"><span class="fas fa-undo-alt "></span></button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- modal confirmacion -->
+    <div class="modal" tabindex="-1" role="dialog" id="confirmacion-retiro">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirmación</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>¿Está seguro(a) que desea devolver este elemento a la bodega?</p>
+            <small>
+              <div class="alert alert-warning" role="alert">
+                *Si por alguna razón el elemento ya no existe en el sistema, volverá a ser ingresado. Por lo que tendrá que configurar el rango mínimo y máximo de stock.
+              </div>
+            </small>
+          </div>
+          <div class="modal-footer">
+            <div class="d-none" id="id_historial"></div>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancel-operation">Cerrar</button>
+            <button type="button" class="btn btn-danger" id="btn-confirm-cancelWithdraw">Proceder</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
 
@@ -194,12 +209,11 @@
 
     <!-- Core plugin JavaScript-->
     <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
-
     <!-- Toastr -->
     <script src="../vendor/toastr/toastr.min.js"></script>
 
-    <!-- Page level plugin JavaScript-->
-
+    <!-- Datatable-->
+    <script src="../resources/js/datatableES.js"></script>
     <script src="../vendor/datatables/jquery.dataTables.js"></script>
     <script src="../vendor/datatables/datatables.min.js"></script>
 
@@ -207,7 +221,6 @@
     <script src="../resources/js/sb-admin.min.js"></script>
 
     <!-- OWN-->
-    <script src="../resources/js/datatableES.js"></script>
     <script src="../resources/js/historial.js"></script>
 
     <script src="../resources/js/main.js"></script>

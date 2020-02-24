@@ -6,9 +6,7 @@ class ConexionData
     private $servername = "localhost";
     private $username = "root";
     private $password = "root";
-    private $dbname = "Consumibles_impresoras_v2";
-
-
+    private $dbname = "Consumibles_impresoras";
 
     public function connect()
     {

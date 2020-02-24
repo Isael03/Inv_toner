@@ -35,12 +35,16 @@
 
     <a class="navbar-brand ml-2" href="../index.php">Inventario</a>
 
+
     <!-- Navbar -->
-    <ul class="nav navbar-nav d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+
+    <ul class="nav navbar-nav  form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+      <li class="nav-item"><a href="./nuevo.php" class="btn nav-link menu-btn text-white mx-2" title="Añadir consumible"><i class="fas fa-plus-square"></i></a></li>
       <li class="nav-item">
-        <a class="btn nav-link menu-btn" href="views/login.php"><i class="fas fa-sign-out-alt text-white"></i></a>
+        <a class="btn nav-link menu-btn" href="#"><i class="fas fa-sign-out-alt text-white"></i></a>
       </li>
     </ul>
+
 
   </nav>
 
@@ -48,25 +52,31 @@
 
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
-      <li class="nav-item active">
+      <li class="nav-item  btn-sidebar">
         <a class="nav-link" href="../">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Inicio</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar active">
         <a class="nav-link" href="./impresoras.php">
           <i class="fas fa-print"></i>
           <span>Impresoras</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar">
+        <a class="nav-link" href="./bodega.php">
+          <i class="fas fa-warehouse"></i>
+          <span>Bodegas</span>
+        </a>
+      </li>
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./historial.php">
           <i class="fas fa-history"></i>
           <span>Historial de entregas</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./reporte.php">
           <i class="fas fa-table"></i>
           <span>Reporte de entregas</span>
@@ -81,13 +91,13 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb mb-5">
           <li class="breadcrumb-item">
-            <a href="#" class="text-decoration-none text-dark">Impresoras</a>
+            <a href="./impresoras.php" class="text-decoration-none text-dark">Impresoras</a>
           </li>
         </ol>
 
         <div class="row">
 
-          <form class="col-lg-12 mb-5 collapse show" id="insertPrinter" novalidate>
+          <form class="col-lg-12 mb-3" id="insertPrinter" novalidate>
             <legend class="h5">Añadir impresora</legend>
             <div class="form-row">
               <div class="col-md-6 col-xs-12 col-lg-3">
@@ -109,46 +119,30 @@
               </div>
 
               <div class="col-auto">
-                <button type="button" class="btn btn-primary" id="btnNuevaImpresora">Ingresar</button>
+                <input type="submit" class="btn btn-primary" id="btnNuevaImpresora" value="Ingresar">
               </div>
 
             </div>
           </form>
 
-          <form class="col-lg-12 mb-5 collapse" id="updatePrinter" novalidate>
-            <legend class="h5">Modificar impresora</legend>
-            <div class="form-row">
-              <div class="col-auto">
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">Marca</span>
-                  </div>
-                  <input type="text" class="form-control" id="updateMarcaPrinter" placeholder="Marca" aria-label="Marca" aria-describedby="basic-addon1" required>
-                </div>
-              </div>
+          <!-- Botones -->
 
-              <div class="col-auto">
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">Modelo</span>
-                  </div>
-                  <input type="text" class="form-control" id="updateModeloPrinter" placeholder="Modelo" aria-label="Modelo" aria-describedby="basic-addon1" required>
-                </div>
+          <div class="container mb-4">
+            <div class="collapse" id="container-btn">
+              <div class="btn-group" role="group" aria-label="btn-group-actions">
+                <button type="button" class="btn btn-warning" title="Actualizar" id="PrinterUpdate"><span class='fas fa-wrench text-white'></span></button>
+                <button type="button" class="btn btn-danger" title="Eliminar" id="PrinterDelete"><span class='fas fa-trash'></span></button>
               </div>
-
-              <div class="col-auto">
-                <button type="button" id="btnUpdatePrinter" class="btn btn-primary">Modificar</button>
-              </div>
-
             </div>
-          </form>
+          </div>
 
 
           <!-- Tabla -->
           <div class="table-responsive col-md-7 col-xs-12" id="contentTable">
-            <table class="table table-bordered " id="tablePrinters" width="100%" cellspacing="0">
+            <table class="table table-bordered display" id="tablePrinters" width="100%" cellspacing="0">
               <thead>
                 <tr>
+                  <th></th>
                   <th>Marca</th>
                   <th>Modelo</th>
                 </tr>
@@ -165,8 +159,6 @@
         <!-- Sticky Footer -->
         <footer class="sticky-footer">
           <div class="container my-auto">
-            <div class="copyright text-center my-auto">
-            </div>
           </div>
         </footer>
 
@@ -188,16 +180,55 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
+
           <div class="modal-body">
             <p class="text-center">¿Está seguro de borrar esta impresora?</p>
+            <small class="text-danger">*Todos los consumibles asociados a esta impresora también serán eliminados.</small>
           </div>
           <div class="modal-footer">
+
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-danger" id="btnModalDeletePrinter">Borrar</button>
+            <input type="button" class="btn btn-danger" id="btnModalDeletePrinter" value="Borrar">
+
           </div>
         </div>
       </div>
     </div>
+
+    <!-- modal confirmacion -->
+    <div class="modal" tabindex="-1" role="dialog" id="update-impresora">
+      <div class="modal-dialog " role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Modificar impresora</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form class="col-lg-12" id="updatePrinter" novalidate>
+            <div class="modal-body">
+
+              <div class="form-row">
+                <div class="col-lg-6 col-sm-12">
+                  <label for="validationDefault01">Marca</label>
+                  <input type="text" class="form-control" id="updateMarcaPrinter" placeholder="Marca" aria-label="Marca" aria-describedby="basic-addon1" required>
+                </div>
+                <div class="col-lg-6 col-sm-12 ">
+                  <label for="validationDefault02">Modelo</label>
+                  <input type="text" class="form-control" id="updateModeloPrinter" placeholder="Modelo" aria-label="Modelo" aria-describedby="basic-addon1" required>
+                </div>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <input type="submit" id="btnUpdatePrinter" class="btn btn-primary" value="Modificar">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>

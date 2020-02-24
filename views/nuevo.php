@@ -42,12 +42,16 @@
 
     <a class="navbar-brand ml-2" href="../index.php">Inventario</a>
 
+
     <!-- Navbar -->
-    <ul class="nav navbar-nav d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+
+    <ul class="nav navbar-nav  form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+      <li class="nav-item"><a href="./nuevo.php" class="btn nav-link menu-btn text-white  mx-2" title="Añadir consumible"><i class="fas fa-plus-square"></i></a></li>
       <li class="nav-item">
-        <a class="btn nav-link menu-btn" href="views/login.php"><i class="fas fa-sign-out-alt text-white"></i></a>
+        <a class="btn nav-link menu-btn" href="#"><i class="fas fa-sign-out-alt text-white"></i></a>
       </li>
     </ul>
+
 
   </nav>
 
@@ -55,25 +59,31 @@
 
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
-      <li class="nav-item active">
+      <li class="nav-item active btn-sidebar">
         <a class="nav-link" href="../">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Inicio</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./impresoras.php">
           <i class="fas fa-print"></i>
           <span>Impresoras</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar">
+        <a class="nav-link" href="./bodega.php">
+          <i class="fas fa-warehouse"></i>
+          <span>Bodegas</span>
+        </a>
+      </li>
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./historial.php">
           <i class="fas fa-history"></i>
           <span>Historial de entregas</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item btn-sidebar">
         <a class="nav-link" href="./reporte.php">
           <i class="fas fa-table"></i>
           <span>Reporte de entregas</span>
@@ -87,93 +97,197 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb mb-5">
           <li class="breadcrumb-item">
-            <a href="#" class="text-decoration-none text-dark">Añadir consumibles</a>
+            <a href="./nuevo.php" class="text-decoration-none text-dark">Añadir consumibles</a>
           </li>
         </ol>
 
-        <!-- Form-->
-        <form class="mx-5 mt-5 needs-validation" id="formNuevo" novalidate>
-          <div class="form-group row">
-            <label for="inputCantidad" class="col-sm-2 col-form-label">Cantidad</label>
-            <div class="col-sm-10">
-              <input type="number" name="cantidad" class="form-control col-md-6 mb-2 col-lg-4" id="inputCantidad" required />
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="inputMarca" class="col-sm-2 col-form-label">Marca</label>
-            <div class="col-sm-10">
-              <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="inputMarca" name="marca" required>
-                <option value="" selected>Seleccione...</option>
+        <!-- tabs -->
+        <ul class="nav nav-tabs" id="myTabAdd" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#existingConsumable" role="tab" aria-controls="existingConsumable" aria-selected="false">Existente</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#newConsumable" role="tab" aria-controls="newConsumable" aria-selected="true">Nuevo</a>
+          </li>
 
-              </select>
+        </ul>
+        <div class="tab-content" id="myTabContentCon">
+
+          <!-- tab nuevo -->
+          <div class="tab-pane fade" id="newConsumable" role="tabpanel" aria-labelledby="newConsumable-tab">
+
+            <div class="alert alert-warning text-center mt-3 " role="alert">
+              Recuerda: Antes de añadir un nuevo consumible, asegúrese que las bodegas e impresoras esten añadidas en el sistema.
+            </div>
+            <!-- Form-->
+            <div class="container">
+              <div class="row">
+                <div class="col d-flex justify-content-center">
+                  <form class="mt-5 needs-validation" id="formNuevo" novalidate>
+                    <div class="row">
+                      <div class="form-group col-lg-6 col-sm-12">
+                        <label for="inputCantidad" class=" col-form-label">Cantidad</label>
+                        <div>
+                          <input type="number" name="cantidad" class="form-control  mb-2 " id="inputCantidad" required min="1" value="1" />
+                        </div>
+                      </div>
+                      <div class="form-group col-lg-6 col-sm-12">
+                        <label for="inputMarca" class="col-form-label">Marca</label>
+                        <div>
+                          <select class="custom-select mr-sm-2" id="inputMarca" name="marca" required>
+                            <option value="" selected>Seleccione...</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="form-group col-lg-6 col-sm-12">
+                        <label for="modelo_con" class="col-form-label">Modelo</label>
+                        <div>
+                          <input list="inputModelo" name="modelo" class="form-control" autocomplete="off" id="modelo_con" required />
+                          <!--  <datalist id="inputModelo"> </datalist> -->
+                        </div>
+                      </div>
+                      <div class="form-group col-lg-6 col-sm-12">
+                        <label for="selectTipo" class="col-form-label">Tipo</label>
+                        <div>
+                          <select class="custom-select mr-sm-2" id="selectTipo" name="tipo" required>
+                            <option value="" selected>Seleccione...</option>
+                            <option value="Fusor">Fusor</option>
+                            <option value="Tinta">Tinta</option>
+                            <option value="Tambor">Tambor</option>
+                            <option value="Toner">Tóner</option>
+                            <option value="Tambor de residuo">Tambor de residuo</option>
+                            <option value="Tambor de arrastre">Tambor de arrastre</option>
+                            <option value="Correa de arrastre">Correa de arrastre</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="form-group col-lg-6 col-sm-12">
+                        <label for="modelo_imp" class="col-form-label">Impresora <a href="./impresoras.php"><span class="fas fa-plus-circle" title="Añadir impresora"></span></a></label>
+                        <div>
+                          <select class="custom-select mr-sm-2" id="modelo_imp" name="impresora" required>
+                            <option value="" selected>Seleccione...</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="form-group col-lg-6 col-sm-12">
+                        <label for="selectUbicacion" class="col-form-label">Ubicación<a href="./bodega.php" class="ml-2"><span class="fas fa-plus-circle" title="Añadir bodega"></span></a></label>
+                        <div>
+                          <select class="custom-select mr-sm-2" id="selectUbicacion" name="ubicacion" required>
+                            <option value="" selected>Seleccione...</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="form-group col-lg-6 col-sm-12">
+                        <label for="inputCantidad" class="col-form-label">Rango mínimo</label>
+                        <div>
+                          <input type="number" name="cantidad" class="form-control" id="rangoMinimo" required min="1" value="1" />
+                        </div>
+                      </div>
+
+                      <div class="form-group col-lg-6 col-sm-12">
+                        <label for="inputCantidad" class="col-form-label">Rango máximo</label>
+                        <div>
+                          <input type="number" name="cantidad" class="form-control" id="rangoMaximo" required min="1" value="1" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mt-4">
+                      <a href="../index.php" class="mr-3">Volver</a>
+                      <button type="submit" class="btn btn-primary px-4" id="btnNuevoToner">
+                        Añadir
+                      </button>
+                    </div>
+
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="form-group row">
-            <label for="modelo_con" class="col-sm-2 col-form-label">Modelo</label>
-            <div class="col-sm-10">
-              <!-- <input type="text" name="modelo" class="form-control mb-2 col-md-6 mb-2 col-lg-4" id="inputModelo" required /> -->
-              <input list="inputModelo" name="modelo" class="form-control mb-2 col-md-6 mb-2 col-lg-4" autocomplete="off" id="modelo_con" required>
-              <datalist id="inputModelo">
-              </datalist>
+
+          <!-- tab existente -->
+          <div class="tab-pane fade show active" id="existingConsumable" role="tabpanel" aria-labelledby="existingConsumable-tab">
+
+            <div class="row mt-4">
+              <div class="collapse" id="form-and-buttons_exists">
+                <form class="col-lg-12 mb-3" id="insertPrinter" novalidate>
+                  <div class="form-row">
+                    <div class="col-md-5 col-xs-12 col-lg-4
+                    ">
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">Cantidad</span>
+                        </div>
+                        <input type="number" id="addMore" class="form-control" value="1" min="1" aria-label="addMore" aria-describedby="basic-addon1" required>
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-xs-12 col-lg-6">
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">Ubicacion</span>
+                        </div>
+                        <select class="custom-select " id="selectStorage" name="ubicacion" required>
+                          <option value="" selected>Seleccione...</option>
+
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <button type="button" class="btn btn-primary" id="btnAddMore">Agregar</button>
+                    </div>
+                  </div>
+                </form>
+
+                <!-- Botones -->
+                <div class="container">
+                  <div class="btn-group" role="group" aria-label="btn-group-actions">
+                    <button type="button" class="btn btn-warning" title="Actualizar" id="existUpdate"><span class='fas fa-wrench text-white'></span></button>
+                    <button type="button" class="btn btn-danger" title="Eliminar" id="existDelete"><span class='fas fa-trash'></span></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tabla -->
+              <div class="table-responsive col-md-12 col-xs-12 mt-4" id="container-tableListConsumable">
+                <table class="table table-bordered text-center display nowrap" id="tableListConsumable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Marca</th>
+                      <th>Modelo</th>
+                      <th>Tipo</th>
+                      <th>Impresora</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+
 
             </div>
-          </div>
-          <div class="form-group row">
-            <label for="selectTipo" class="col-sm-2 col-form-label">Tipo</label>
-            <div class="col-sm-10">
-              <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="selectTipo" name="tipo" required>
-                <option value="" selected>Seleccione...</option>
-                <option value="Fusor">Fusor</option>
-                <option value="Tinta">Tinta</option>
-                <option value="Tambor">Tambor</option>
-                <option value="Toner">Tóner</option>
-                <option value="Tambor de residuo">Tambor de residuo</option>
-                <option value="Tambor de arrastre">Tambor de arrastre</option>
-                <option value="Correa de arrastre">Correa de arrastre</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="modelo_imp" class="col-sm-2 col-form-label">Impresora</label>
-            <div class="col-sm-10">
-              <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="modelo_imp" name="impresora" required>
-                <option value="" selected>Seleccione...</option>
-                <!--<option value="1">Manuel Orella</option>
-                <option value="2">Informática</option> -->
-              </select>
-              <!--  <input list="inputModeloImpresora" name="impresora" class="form-control mb-2 col-md-6 mb-2 col-lg-4" id="modelo_imp" autocomplete="off" required>
-              <datalist id="inputModeloImpresora">
-              </datalist> -->
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="selectUbicacion" class="col-sm-2 col-form-label">Ubicación</label>
-            <div class="col-sm-10">
-              <select class="custom-select my-1 mr-sm-2 mb-2 col-md-6 mb-2 col-lg-4" id="selectUbicacion" name="ubicacion" required>
-                <option value="" selected>Seleccione...</option>
-                <option value="1">Manuel Orella</option>
-                <option value="2">Informática</option>
-              </select>
-            </div>
-          </div>
-          <div class="mt-4">
-            <a href="../index.php" class="mr-3">Volver</a>
-            <button type="submit" class="btn btn-primary px-4" id="btnNuevoToner">
-              Añadir
-            </button>
-          </div>
 
-        </form>
 
+          </div>
+        </div>
+
+        <!--end tabs  -->
       </div>
       <!-- /.container-fluid -->
 
       <!-- Sticky Footer -->
       <footer class="sticky-footer">
         <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <!-- <span>Copyright © Your Website 2019</span> -->
-          </div>
+
         </div>
       </footer>
 
@@ -183,8 +297,34 @@
   </div>
   <!-- /#wrapper -->
 
+  <?php
+  include_once "../components/modalUpdate.php"
+  ?>
 
-
+  <!-- Modal eliminar -->
+  <div class="modal" tabindex="-1" role="dialog" id='modalDeleteConsumable'>
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            Confirmar eliminación
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-center" id="body-history">
+          <p> ¿Esta seguro de que desea borrarlo?</p>
+          <small class="text-danger">*Todos los elementos asociados se eliminarán</small>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-danger" id="btnDeleteAll">Borrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end modal -->
 
   <!-- Bootstrap core JavaScript-->
   <script src="../vendor/jquery/jquery.min.js"></script>
