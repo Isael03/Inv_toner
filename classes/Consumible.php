@@ -154,53 +154,6 @@ class Consumible
         return $arreglo;
     }
 
-    /* Mostrar algunos segun la marca, modelo o bodega*/
-    /**@deprecated */
-    /*  public function showSome($array)
-    {
-    $element = $array;
-
-    $conn = $this->conn->connect();
-    $condicion = "";
-
-    if (!empty($element['bodega'])) {
-    $bodega = $element['bodega'];
-    $condicion .= "T.Id_bodega = $bodega";
-    }
-
-    if (!empty($element['marca'])) {
-    if ($condicion != "") {
-    $condicion .= " AND ";
-    }
-    $marca = $element['marca'];
-    $condicion .= "T.Marca='$marca'";
-    }
-
-    if (!empty($element['modelo'])) {
-    if ($condicion != "") {
-    $condicion .= " AND ";
-    }
-    $modelo = $element['modelo'];
-    $condicion .= "T.Modelo='$modelo'";
-    }
-
-    $sql = "SELECT T.Id_consumible, T.Marca, T.Modelo, T.Tipo, T.Codigo_barra, T.Id_impresora, T.Id_bodega, B.Lugar FROM Consumible T INNER JOIN Bodega B WHERE $condicion AND T.Id_bodega=B.Id_bodega";
-
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-    while ($data = mysqli_fetch_assoc($result)) {
-    $arreglo["data"][] = array_map("utf8_encode", $data);
-    }
-    echo json_encode($arreglo);
-    } else {
-    $arreglo["data"][] = ["Id_consumible" => "", "Marca" => "", "Modelo" => "", "Tipo" => "", "Codigo_barra" => "", "Modelo_impresora" => "", "Id_bodega" => "", "Lugar" => ""];
-    //  die("Error");
-    echo json_encode($arreglo);
-    }
-    mysqli_free_result($result);
-    $conn->close();
-    } */
 
     /**Funcion que comprueba que existan los modelos de consumibles antes de borrarlos*/
     public function deleteCon(int $cantidad, int $id_bodega, int $Id_consumible)

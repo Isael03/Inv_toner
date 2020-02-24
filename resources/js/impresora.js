@@ -70,33 +70,6 @@ function tablePrinter() {
   return table;
 }
 
-/**Cambiar formulario */
-/**@deprecated */
-/* function changeForm() {
-  let updateForm = document.querySelector("#updatePrinter");
-  jQuery.noConflict();
-
-  jQuery("#update-impresora");
-
-  $("#update-impresora").modal("show");
-
-  if (updateForm.classList.contains("show") === false) {
-    $("#insertPrinter").collapse("hide");
-
-    $("#insertPrinter").on("hidden.bs.collapse", () => {
-      $("#updatePrinter").collapse("show");
-    });
-  }
-
-  if (updateForm.classList.contains("show")) {
-    $("#updatePrinter").collapse("hide");
-
-    $("#updatePrinter").on("hidden.bs.collapse", () => {
-      $("#insertPrinter").collapse("show");
-    });
-  }
-} */
-
 /**@description Mostrar modal para eliminar */
 
 function showDelete(table) {

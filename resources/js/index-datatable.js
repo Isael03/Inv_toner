@@ -451,7 +451,6 @@ function listALL() {
       }
     ]
   });
-  //getUpdate("#tableALL tbody", table);
 
   setInterval(function() {
     table.ajax.reload();

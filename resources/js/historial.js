@@ -38,15 +38,6 @@ function list() {
         titleAttr: "PDF",
         className: "btn btn-success",
         orientation: "landscape",
-        //title: `Historial de consumibles`,
-        /*   messageTop:
-          "Emitido el " +
-          new Date().getDate() +
-          "/" +
-          new Date().getMonth() +
-          1 +
-          "/" +
-          new Date().getFullYear(), */
         customize: function(doc) {
           doc.content[1].margin = [50, 0, 50, 0];
           doc.defaultStyle.alignment = "center";
@@ -87,9 +78,6 @@ function list() {
       { data: "Bodega" }
     ]
   });
-  /*  setInterval(function() {
-    table.ajax.reload();
-  }, 100000); */
 
   showModal("#tableHist tbody", table);
 

@@ -1,10 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  /*  document.getElementById("inicio-gral").value = "";
-  document.getElementById("termino-gral").value = ""; */
-
   document.getElementById("btn-searchGeneral").addEventListener("click", () => {
-    /* e.preventDefault();
-    e.stopPropagation(); */
     reportGeneral();
   });
 
