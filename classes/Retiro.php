@@ -190,23 +190,29 @@ class Retiro
         }
     }
 
-    /**Obtener informacion de las direcciones*/
-    public function getDir()
+    /**Obtener informacion de las direcciones, si es que hay informacion entre las fechas */
+    public function getDir(string $inicio, string $termino)
     {
         $conn = $this->conn->connect();
 
-        $sql = "SELECT iddireccion, direccion FROM direcciones";
+        $sql = "SELECT Marca, SUM(Cantidad) AS Cantidad, Modelo, Tipo FROM Retiro WHERE Fecha BETWEEN '$inicio' AND '$termino' GROUP BY Modelo, Marca, Tipo ORDER BY Cantidad DESC";
 
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
-            while ($data = mysqli_fetch_assoc($result)) {
-                $arreglo["data"][] = array_map("utf8_encode", $data);
+            $sql = "SELECT iddireccion, direccion FROM direcciones";
+
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                while ($data = mysqli_fetch_assoc($result)) {
+                    $arreglo["data"][] = array_map("utf8_encode", $data);
+                }
+            } else {
+                $arreglo['data'] = [];
             }
-        } else {
-            // die("Error");
+            mysqli_free_result($result);
         }
-        mysqli_free_result($result);
 
         $conn->close();
 
@@ -219,7 +225,7 @@ class Retiro
     {
         $conn = $this->conn->connect();
 
-        $idDirecciones = (int) self::getDir();
+
 
         $sql = "SELECT iddepart AS Id_dep, depart AS Departamento FROM departamentos where direccion=$iddir";
 

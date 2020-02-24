@@ -150,7 +150,7 @@
 
                 <div class="col-md-8 col-xs-12 mx-auto">
                   <div class="table-responsive-sm text-center">
-                    <table class="table table-sm table-hover table-striped">
+                    <table class="table table-sm table-hover table-striped nowrap">
                       <thead>
                         <tr>
                           <th scope="col">Departamento</th>
@@ -168,7 +168,7 @@
               <div class="row mt-5">
                 <div class="col-md-8 col-xs-12 mx-auto">
                   <div class="table-responsive-sm text-center">
-                    <table class="table table-sm table-hover table-striped">
+                    <table class="table table-sm table-hover table-striped nowrap">
                       <thead>
                         <tr>
                           <th scope="col">Marca</th>
@@ -220,7 +220,7 @@
             <div class="row mt-4">
               <div class="col-md-8 col-xs-12 mx-auto">
                 <div class="table-responsive-sm text-center">
-                  <table class="table table-sm table-hover table-striped">
+                  <table class="table table-sm table-hover table-striped nowrap">
                     <thead>
                       <tr>
                         <th scope="col">Dirección</th>

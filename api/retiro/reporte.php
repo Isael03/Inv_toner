@@ -27,7 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         case 'dep':
 
-            $dep_Report = $retiro->getDir();
+            $fecha_inicio = $_POST['fecha_inicio'];
+            $fecha_termino = $_POST['fecha_termino'];
+            $dep_Report = $retiro->getDir($fecha_inicio,  $fecha_termino);
 
             if (isset($dep_Report)) {
                 $res = array("status" => "ok", "data" => $dep_Report);

@@ -149,12 +149,20 @@ var showModal = function(tbody, table) {
 
 /** Buscar datos por rango de fechas*/
 function DateRange(table) {
-  let dateFrom = document.querySelector("#dateFrom").value;
-  let dateTo = document.querySelector("#dateTo").value;
+  let input_dateFrom = document.querySelector("#dateFrom");
+  let input_dateTo = document.querySelector("#dateTo");
+
+  let dateFrom = input_dateFrom.value.trim();
+  let dateTo = input_dateTo.value.trim();
 
   let selectores = ["#dateFrom", "#dateTo"];
   validClass(selectores);
-  if (dateFrom !== "" && dateTo !== "") {
+
+  if (
+    dateFrom !== "" &&
+    dateTo !== "" &&
+    Date.parse(dateFrom) <= Date.parse(dateTo)
+  ) {
     let data = new FormData();
 
     data.append("inicio", dateFrom + " 00:00:00");
@@ -195,6 +203,9 @@ function DateRange(table) {
         customAlertError("Error en la búsqueda");
       });
   } else {
+    input_dateFrom.classList.add("is-invalid");
+    input_dateTo.classList.add("is-invalid");
+    customAlertError("Especifique un rango de fechas válido");
   }
 }
 
@@ -245,5 +256,8 @@ function showModalConfirmWithdraw() {
   jQuery.noConflict();
   // jQuery("#confirmacion-retiro");
   $("#confirmacion-retiro").modal("show");
+  $("#confirmacion-retiro").on("hidden.bs.modal", function(e) {
+    $("#dataHistorial").removeClass("d-none");
+  });
   $("#dataHistorial").addClass("d-none");
 }

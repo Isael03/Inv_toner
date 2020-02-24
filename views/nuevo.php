@@ -221,7 +221,8 @@
               <div class="collapse" id="form-and-buttons_exists">
                 <form class="col-lg-12 mb-3" id="insertPrinter" novalidate>
                   <div class="form-row">
-                    <div class="col-md-5 col-xs-12 col-lg-3">
+                    <div class="col-md-5 col-xs-12 col-lg-4
+                    ">
                       <div class="input-group mb-3">
                         <div class="input-group-prepend">
                           <span class="input-group-text">Cantidad</span>
@@ -229,7 +230,7 @@
                         <input type="number" id="addMore" class="form-control" value="1" min="1" aria-label="addMore" aria-describedby="basic-addon1" required>
                       </div>
                     </div>
-                    <div class="col-md-5 col-xs-12 col-lg-4">
+                    <div class="col-md-6 col-xs-12 col-lg-6">
                       <div class="input-group mb-3">
                         <div class="input-group-prepend">
                           <span class="input-group-text">Ubicacion</span>
@@ -247,7 +248,7 @@
                 </form>
 
                 <!-- Botones -->
-                <div class="container mb-4">
+                <div class="container">
                   <div class="btn-group" role="group" aria-label="btn-group-actions">
                     <button type="button" class="btn btn-warning" title="Actualizar" id="existUpdate"><span class='fas fa-wrench text-white'></span></button>
                     <button type="button" class="btn btn-danger" title="Eliminar" id="existDelete"><span class='fas fa-trash'></span></button>
@@ -256,7 +257,7 @@
               </div>
 
               <!-- Tabla -->
-              <div class="table-responsive col-md-12 col-xs-12" id="container-tableListConsumable">
+              <div class="table-responsive col-md-12 col-xs-12 mt-4" id="container-tableListConsumable">
                 <table class="table table-bordered text-center display nowrap" id="tableListConsumable" width="100%" cellspacing="0">
                   <thead>
                     <tr>

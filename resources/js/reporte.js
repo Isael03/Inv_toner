@@ -30,7 +30,11 @@ function reportGeneral() {
 
   let selectores = ["#inicio-gral", "#termino-gral"];
   validClass(selectores);
-  if (inicio.value != "" && termino.value != "") {
+  if (
+    inicio.value != "" &&
+    termino.value != "" &&
+    Date.parse(inicio.value) <= Date.parse(termino.value)
+  ) {
     var data = new FormData();
     data.append("inicio", inicio.value.trim() + " 00:00:00");
     data.append("termino", termino.value.trim() + " 23:59:59");
@@ -95,7 +99,12 @@ function reportGeneral() {
         alertError();
       });
   } else {
-    customAlertError("Especifique un rango de fechas");
+    document.getElementById("tbody-depart").innerHTML = "";
+    document.getElementById("tbody-model").innerHTML = "";
+    document.getElementById("linkToPdf").innerHTML = "";
+    inicio.classList.add("is-invalid");
+    termino.classList.add("is-invalid");
+    customAlertError("Especifique un rango de fechas válido");
   }
 }
 
@@ -111,10 +120,14 @@ function listDepart() {
 
   let selectores = ["#inicio_dep", "#termino_dep"];
   validClass(selectores);
-  if (inicio.value != "" && termino.value != "") {
+  if (
+    inicio.value != "" &&
+    termino.value != "" &&
+    Date.parse(inicio.value) <= Date.parse(termino.value)
+  ) {
     var data = new FormData();
-    data.append("inicio_dep", inicio.value.trim() + " 00:00:00");
-    data.append("termino_dep", termino.value.trim() + " 23:59:59");
+    data.append("fecha_inicio", inicio.value.trim() + " 00:00:00");
+    data.append("fecha_termino", termino.value.trim() + " 23:59:59");
     data.append("case", "dep");
 
     let config = {
@@ -132,16 +145,12 @@ function listDepart() {
         }
       })
       .then(json => {
-        console.table(json);
-
         if (json.status == "ok") {
           document.getElementById("tbody-dep").innerHTML = "";
 
           for (const dep of json.data) {
             Fechainicio = inicio.value + " 00:00:00";
             Fechatermino = termino.value + " 23:59:59";
-            /*  console.log(Fechainicio);
-            console.log(Fechatermino); */
 
             document.getElementById(
               "tbody-dep"
@@ -160,6 +169,9 @@ function listDepart() {
         alertError();
       });
   } else {
-    customAlertError("Especifique un rango de fechas");
+    inicio.classList.add("is-invalid");
+    termino.classList.add("is-invalid");
+    document.getElementById("tbody-dep").innerHTML = "";
+    customAlertError("Especifique un rango de fechas válido");
   }
 }

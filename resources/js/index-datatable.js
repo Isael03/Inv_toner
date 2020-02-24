@@ -11,6 +11,24 @@ document.addEventListener("DOMContentLoaded", function() {
     var tableStorages = listStorages();
     var tableAll = listALL();
 
+    //btn-groups
+
+    document
+      .getElementById("withdraw-Storage")
+      .addEventListener("click", () => {
+        getDataWithdraw(tableStorages);
+      });
+    document
+      .getElementById("transfer-Storage")
+      .addEventListener("click", () => {
+        transfer(tableStorages);
+      });
+    document
+      .getElementById("delete-Consumables")
+      .addEventListener("click", () => {
+        getDataDelete(tableStorages);
+      });
+
     document
       .querySelector("#change-storage")
       .addEventListener("input", function() {
@@ -379,7 +397,7 @@ function listALL() {
         className: "btn btn-success",
         title: "Total en existencia",
         customize: function(doc) {
-          doc.content[1].margin = [100, 10, 100, 0];
+          doc.content[1].margin = [50, 10, 50, 0];
           doc.defaultStyle.alignment = "center";
           doc.footer = function(currentPage, pageCount) {
             return currentPage.toString() + " de " + pageCount;
@@ -414,7 +432,7 @@ function listALL() {
 
       if (cantidad <= minimo) {
         $($(row).find("td")[5]).addClass("bg-danger text-white");
-      } else if (cantidad => maximo) {
+      } else if (cantidad >= maximo) {
         $($(row).find("td")[5]).addClass("bg-success text-white");
       } else {
         $($(row).find("td")[5]).addClass("bg-warning text-white");
@@ -543,33 +561,6 @@ function listStorages() {
       style: "os",
       selector: "td"
     },
-    /*  dom: "Bfrtip",
-    buttons: [
-      {
-        text: " <span class='fas fa-box-open text-white'></span>",
-        titleAttr: "Retirar",
-        className: "btn btn-info",
-        action: function() {
-          getDataWithdraw(table);
-        }
-      },
-      {
-        text: "<span class='fas fa-exchange-alt text-white'></span>",
-        titleAttr: "Trasladar",
-        className: "btn btn-dark",
-        action: function() {
-          transfer(table);
-        }
-      },
-      {
-        text: " <span class='fas fa-trash'></span>",
-        titleAttr: "Eliminar",
-        className: "btn btn-danger",
-        action: function() {
-          getDataDelete(table);
-        }
-      }
-    ], */
     columns: [
       {},
       { data: "Marca" },
