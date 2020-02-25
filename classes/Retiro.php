@@ -48,7 +48,7 @@ class Retiro
 
             $sql = "INSERT INTO Retiro (Usuario_retira, Usuario_recibe, Id_recibe, Id_departamento, Departamento, Marca, Modelo, Tipo, Cantidad, Impresora, Id_impresora, Id_direccion, Bodega, Id_bodega) VALUES ('$usuarioRetira','$usuarioRecibe', $idRecibe, $idDepRecibe,'$nombreDepartamento','$marca','$modelo', '$tipo', $cantidad, '$impresora', $Id_impresora,$idDirRecibe, '$nombreBodega', $bodega)";
 
-            $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+            $conn->autocommit(false);
 
             if ($conn->query($sql)) {
                 if ($this->consumible->deleteConsumables($cantidad, $bodega, $Id_consumible)) {
@@ -69,35 +69,7 @@ class Retiro
         return $valid;
     }
 
-    /**Filtrar retiros por mes */
-    /**@deprecated */
-    /*  public function filterByMonth(int $mes)
-    {
-    $conn = $this->conn->connect();
-    $año = (int) date('Y');
-
-    if (strlen($mes) === 1) {
-    $mes = (int) "0" . $mes;
-    }
-
-    $sql = "SELECT DATE_FORMAT(Fecha, '%d/%m/%Y %H:%i:%s') AS Fecha, Usuario_retira as Retira, Usuario_recibe AS Recibe, Departamento, Marca, Modelo, Tipo, Cantidad, Impresora FROM Retiro WHERE MONTH(Fecha)=$mes AND YEAR(Fecha)=$año ORDER BY Fecha DESC";
-
-    $result =  $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-    while ($data = mysqli_fetch_assoc($result)) {
-    $arreglo["data"][] = array_map("utf8_encode", $data);
-    }
-    //  echo json_encode($arreglo);
-    } else {
-    $arreglo["data"][] = ["Fecha" => "", "Retira" => "", "Recibe" => "", "Departamento" => "", "Marca" => "", "Modelo" => "", "Tipo" => "", "Cantidad" => "", "Impresora" => ""];
-    // die("Error");
-    }
-    echo json_encode($arreglo);
-    mysqli_free_result($result);
-
-    $conn->close();
-    } */
+    
 
     /**Filtrar retiros por rango de fecha */
     public function filterRangeHistorial(string $inicio, string $termino)
