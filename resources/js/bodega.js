@@ -105,7 +105,6 @@ function addStorage(table) {
 
     fetchURL("../api/bodega/bodegaPost.php", "POST", data)
       .then(res => {
-        console.log(res);
 
         if (res.status) {
           table.ajax.reload();

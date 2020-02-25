@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     switch ($case) {
         case 'general':
-            //echo "";
+           
             $inicio = $_POST['inicio'];
             $termino = $_POST['termino'];
 
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
         default:
-            # code...
+           
             break;
     }
 }

@@ -62,6 +62,7 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("myTabAdd").addEventListener("click", () => {
     table.rows().deselect();
     table.ajax.reload();
+    jQuery.noConflict();
     $("#form-and-buttons_exists").collapse("hide");
   });
 
@@ -136,6 +137,7 @@ async function sendData() {
 
       fetchURL("../api/consumible/insert_consumible.php", "POST", data)
         .then(res => {
+          
           if (res.status === "ok") {
             alertSuccess();
             document.getElementById("formNuevo").reset();
