@@ -116,8 +116,8 @@
           <!-- tab nuevo -->
           <div class="tab-pane fade" id="newConsumable" role="tabpanel" aria-labelledby="newConsumable-tab">
 
-            <div class="alert alert-warning text-center mt-3 " role="alert">
-              Recuerda: Antes de añadir un nuevo consumible, asegúrese que las bodegas e impresoras esten añadidas en el sistema.
+            <div class="alert alert-warning text-center mt-3" role="alert">      
+                Recuerda: Antes de añadir un nuevo consumible, asegúrese que las bodegas e impresoras esten añadidas en el sistema.
             </div>
             <!-- Form-->
             <div class="container">

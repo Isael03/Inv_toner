@@ -123,9 +123,7 @@ class Retiro
             while ($data = mysqli_fetch_assoc($result)) {
                 $arreglo["data"][] = array_map("utf8_encode", $data);
             }
-        } else {
-            // die("Error");
-        }
+        } 
         //mysqli_free_result($result);
 
         $conn->close();
