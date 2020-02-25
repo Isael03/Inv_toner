@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $res_Id_bodega = $bodega->checkStorageExistence($id_bodega, $nombre_bodega);
 
         $conn = $conn->connect();
-        $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+        $conn->autocommit(false);
 
         if ($res_Id_impresora !== "" && $res_Id_bodega !== "") {
             //insertar en la tabla consumible y borrar de la tabla retiro
