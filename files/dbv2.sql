@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS Impresora(
 
 CREATE TABLE if not EXISTS `Consumible` (
   `Id_consumible` int(11) AUTO_INCREMENT PRIMARY KEY,
-  `Fecha_ingreso` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `Fecha_ingreso` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `Marca` varchar(20) NOT NULL,
   `Modelo` varchar(20) NOT NULL,
   `Tipo` enum('Tambor','Fusor','Tinta', 'Toner', 'Tambor de residuo', 'Tambor de arrastre', 'Correa de arrastre') NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS Bodega_Consumible(
 
 Create table if not exists Retiro(
     Id_retiro int AUTO_INCREMENT PRIMARY KEY,
-    Fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
     Usuario_retira varchar(120) NOT NULL,
     Usuario_recibe varchar(120) not null,
     Id_recibe int not null,
