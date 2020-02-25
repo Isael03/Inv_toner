@@ -6,7 +6,7 @@ include "../../classes/Bodega.php";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $conn = new ConexionData();
-    //new Bodega($conn);
+    new Bodega($conn);
     $consumible = new Consumible($conn);
     header('Content-Type: application/json');
 
@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $rangoMaximo = (int) $_POST['rangoMaximo'];
 
             $res = $consumible->addPrinterConsumables($cantidad, $marca, $tipo, $modelo, $bodega, $impresora, $rangoMinimo, $rangoMaximo);
+
             ($res) ? $status = array("status" => "ok") : $status = array("status" => "bad");
             echo json_encode($status);
             break;

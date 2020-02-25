@@ -15,7 +15,7 @@ class Consumible
 
         $conn = $this->conn->connect();
         $valid = true;
-        $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+        $conn->autocommit(false);
 
         $sql2 = "INSERT INTO Bodega_Consumible (Id_bodega, Id_consumible) VALUES ($Id_bodega, $Id_consumible)";
         for ($i = 0; $i < $cantidad; $i++) {
@@ -45,7 +45,7 @@ class Consumible
                 $arreglo = array_map('utf8_encode', $data);
             }
 
-            $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+            $conn->autocommit(false);
 
             $last_idConsumible = $arreglo['Id_consumible'];
             $sql2 = "INSERT INTO Bodega_Consumible (Id_bodega, Id_consumible) VALUES ($bodega, $last_idConsumible)";
@@ -60,8 +60,8 @@ class Consumible
         } else {
             $sql = "INSERT INTO Consumible (Marca, Modelo, Tipo, Id_impresora, rango_stockMinimo, rango_stockMaximo) VALUES ('$marca', '$modelo', '$tipo', $Id_impresora, $rangoMinimo, $rangoMaximo)";
 
-            $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
-
+            // $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+            $conn->autocommit(false);
             if ($conn->query($sql)) {
                 $last_idConsumible = $conn->insert_id;
                 $sql2 = "INSERT INTO Bodega_Consumible (Id_bodega, Id_consumible) VALUES ($bodega, $last_idConsumible)";
@@ -75,7 +75,7 @@ class Consumible
                 }
             } else {
                 echo "Error: " . $sql . "<br>" . $conn->error;
-                // $conn->rollback();
+                $conn->rollback();
                 $valid = false;
             }
         }
@@ -192,7 +192,7 @@ class Consumible
 
         $sqlquery = "SELECT Id_ubicacion FROM Bodega_Consumible WHERE Id_consumible=$Id_consumible AND Id_bodega=$bodega LIMIT $cantidad";
 
-        $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+        $conn->autocommit(false);
 
         $result = $conn->query($sqlquery);
         $arreglo = [];
@@ -268,7 +268,7 @@ class Consumible
 
         $sqlquery = "SELECT Id_ubicacion FROM Bodega_Consumible WHERE Id_consumible=$Id_consumible AND Id_bodega=$bodega LIMIT $cantidad";
 
-        $conn->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+        $conn->autocommit(false);
 
         $arreglo = [];
         $result = $conn->query($sqlquery);
